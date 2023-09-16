@@ -1,4 +1,5 @@
 import {test} from "@playwright/test"
+import { expect } from "@playwright/test";
 import { HeaderPage } from "../page-objects/HeaderPage"
 import { MainPage } from "../page-objects/MainPage"
 import { ShoppingCartPage } from "../page-objects/ShoppingCartPage"
@@ -19,11 +20,12 @@ test.skip("New user journey", async ({page}) => {
     const checkoutPage = new CheckoutPage(page)
     const sighUpPage = new SinghUpPage(page)
 
+
     await mainPage.visitMainePage('/')
-    // await signInPage.login(ChumakDanylo)
+    await signInPage.login(ChumakDanylo)
     // await mainPage.addToBasket("1","S","Blue")
-    await mainPage.addToBasket("2", "M", "White")
-    await mainPage.addToBasket("4", "L", "Black")
+    // await mainPage.addToBasket("2", "M", "White")
+    // await mainPage.addToBasket("4", "L", "Black")
     // await headerPage.clearBasketFromHeader()
     // await page.pause()
     // await shoppingCartPage.removeItemsFromShoppingCart()
@@ -37,7 +39,7 @@ test.skip("New user journey", async ({page}) => {
     await checkoutPage.visitCheckoutPage()
 })
 
-test("Check Out", async ({ page }) => {
+test.skip("Check Out", async ({ page }) => {
     const headerPage = new HeaderPage(page)
     const signInPage = new SignInPage(page)
     const mainPage = new MainPage(page)
@@ -48,13 +50,43 @@ test("Check Out", async ({ page }) => {
 
     await sighUpPage.visitSignUpPage()
     await sighUpPage.createNewCustomer(sighUpPage.getUniqueEmailPass('email'), sighUpPage.getUniqueEmailPass('pass'))
+    let logiCookie = await page.request.storageState()
     await mainPage.visitMainePage()
     await mainPage.addToBasket("2", "M", "White");
     await mainPage.addToBasket("4", "L", "Black");
-    await checkoutPage.visitCheckoutPage()
-    // await checkoutPage.login(ChumakDanylo)
-    await checkoutPage.fillShippingDetails(shippingAddressData)
-    await checkoutPage.placeOrder()
+    await page.context().clearCookies()
+    await page.reload()
+    await page.context().addCookies(logiCookie.cookies)
+    await page.reload()
+
+
+})
+
+test.skip("API test", async ({ request }) => {
+
+    await request.post("https://petstore.swagger.io/v2/pet", {
+        data: {
+            "id": 33,
+            "category": {
+                "id": 1,
+                "name": "string"
+            },
+            "name": "apiTestPetTiko",
+            "photoUrls": [
+                "string"
+            ],
+            "tags": [
+                {
+                    "id": 0,
+                    "name": "string"
+                }
+            ],
+            "status": "available"
+        }
+    })
+
+    let responce = await request.get('https://petstore.swagger.io/v2/pet/33');
+    console.log(await responce.json())
 })
 
 

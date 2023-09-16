@@ -44,23 +44,21 @@ export class ShoppingCartPage{
 
     removeCheapestItem = async () => {
         await this.visitShoppingCartPage()
-        await this.page.waitForLoadState('domcontentloaded');
-
 
         const itemsBeforeRemoval = await this.basketCards.count()
+
         if (isNaN(itemsBeforeRemoval) || itemsBeforeRemoval === 0) {
             await expect(this.basketCards).toHaveCount(0)
         } else {
-        console.log({itemsBeforeRemoval})
-        const allPriceTexts = await this.basketItemPrice.allInnerTexts()
 
+        const allPriceTexts = await this.basketItemPrice.allInnerTexts()
         const justNumb = allPriceTexts.map((element) => {
             return parseInt(element.replace("$", ""), 10)
         })
-        const smallestPrice = Math.min(justNumb)
-        const smallestPriceIdx = justNumb.indexOf(smallestPrice)
-        await this.deleteItemButton.nth(smallestPriceIdx).click()
-        await expect(this.basketCards).toHaveCount(itemsBeforeRemoval-1)
+            const smallestPrice = Math.min(...justNumb)
+            const smallestPriceIdx = justNumb.indexOf(smallestPrice)
+            await this.deleteItemButton.nth(smallestPriceIdx).click()
+            await expect(this.basketCards).toHaveCount(itemsBeforeRemoval-1)
         }
 
     }

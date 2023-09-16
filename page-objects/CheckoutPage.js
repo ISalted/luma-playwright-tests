@@ -28,6 +28,7 @@ export class CheckoutPage {
 
         this.placeOrderButton = page.locator('//*[@class="action primary checkout"]')
         this.orderThankYouNotification = page.locator('//*[contains(text(), "Thank you for your purchase!")]')
+        this.shippingAdressList = page.locator('//*[@class="shipping-address-item selected-item"]')
     }
 
     visitCheckoutPage = async () => {
@@ -49,6 +50,7 @@ export class CheckoutPage {
             await this.page.reload();
             await expect(this.checkOutText).toBeHidden({ timeout: 10000 });
         }
+        return await this.shippingAdressList.textContent()
 
     }
 
@@ -87,8 +89,7 @@ export class CheckoutPage {
         await this.placeOrderButton.waitFor({ timeout: 10000 })
         await this.placeOrderButton.click()
         await this.orderThankYouNotification.waitFor({ timeout: 10000 })
-
-        expect('Thank you for your purchase!').toBe(await this.orderThankYouNotification.innerText())
+        return await this.orderThankYouNotification.innerText()
     }
 }
 

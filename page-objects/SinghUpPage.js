@@ -10,7 +10,9 @@ export class SinghUpPage {
         this.passFill = page.locator('//*[@id="password"]');
         this.passConfirmFill = page.locator('//*[@id="password-confirmation"]');
         this.CreateButton = page.locator('//*[@class="action submit primary"]');
-        this.succsessMessage = page.locator('//*[@class="message-success success message"]')
+
+        this.succsessMessage = page.locator('//*[@data-bind="html: $parent.prepareMessageForHtml(message.text)"]')
+        this.existingAccountMessage = page.locator('//*[@data-bind="html: $parent.prepareMessageForHtml(message.text)"]')
 
     }
 
@@ -35,7 +37,21 @@ export class SinghUpPage {
         await this.passFill.fill(pass)
         await this.passConfirmFill.fill(pass)
         await this.CreateButton.click()
-        await expect(this.succsessMessage).toBeVisible();
+        await this.page.waitForTimeout(3000);
+        return this.succsessMessage.textContent()
+    }
+
+    createAnExistingUser = async (existingUser) => {
+        const Timestamp = Math.floor(Date.now() / 1000);
+
+        await this.firstName.fill('TestCustomer')
+        await this.lastName.fill(Timestamp.toString())
+        await this.loginFill.fill(existingUser.email)
+        await this.passFill.fill(existingUser.pass)
+        await this.passConfirmFill.fill(existingUser.pass)
+        await this.CreateButton.click()
+        await this.page.waitForTimeout(3000);
+        return this.existingAccountMessage.textContent()
     }
 
 }

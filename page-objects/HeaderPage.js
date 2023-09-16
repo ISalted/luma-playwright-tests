@@ -3,8 +3,8 @@ import { expect } from "@playwright/test";
 export class HeaderPage {
     constructor(page) {
         this.page = page
-
-
+        this.authorizationButton = page.locator('(//*[@class="authorization-link"])[1]');
+        this.welcomeButton = page.locator('(//*[@class="greet welcome"])[1]/span');
 
         this.basketCounterButton = page.locator('//*[@class="counter-number"]');
         this.basketCards = page.locator('//*[@id="mini-cart"]/li')
@@ -13,14 +13,6 @@ export class HeaderPage {
         this.closeItemInCard = page.locator('//*[@class="action showcart active"]')
         this.deleteItemButton = page.locator('(//*[@class="action delete"])[1]');
         this.acceptDeleteItemButton = page.locator('//*[@class="action-primary action-accept"]');
-    }
-
-    login = async (email, pass) => {
-        await this.authorizationButton.click()
-        await this.loginFill.fill(email)
-        await this.passFill.fill(pass)
-        await this.signInButton.click()
-        await this.page.waitForLoadState('domcontentloaded');
     }
 
     getBasketCounter = async () => {
@@ -52,7 +44,6 @@ export class HeaderPage {
         const actualResult = await this.basketCards.count()
         expect(actualResult).toBe(expectedResult)
     }
-
 }
 
 
