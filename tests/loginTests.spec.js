@@ -48,7 +48,7 @@ test("LogIn with wrong data test", async ({ page }) => {
     expect(result).toContain("The account sign-in was incorrect")
 })
 
-test.only("LogIn From CheckOut Page", async ({ page }) => {
+test("LogIn From CheckOut Page", async ({ page }) => {
     const mainPage = new MainPage(page)
     const checkoutPage = new CheckoutPage(page)
 
