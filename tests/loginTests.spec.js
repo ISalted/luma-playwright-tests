@@ -28,7 +28,7 @@ test("LogIn test", async ({ page }) => {
     expect(result).toContain("Welcome")
 })
 
-test("LogIn with wrong data test", async ({ page }) => {
+test("LogIn with wrong data Test", async ({ page }) => {
     /*
     Check Sign In
     STR:
@@ -48,7 +48,7 @@ test("LogIn with wrong data test", async ({ page }) => {
     expect(result).toContain("The account sign-in was incorrect")
 })
 
-test("LogIn From CheckOut Page", async ({ page }) => {
+test("LogIn from checkOut page Test", async ({ page }) => {
     const mainPage = new MainPage(page)
     const checkoutPage = new CheckoutPage(page)
 

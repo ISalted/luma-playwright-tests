@@ -5,7 +5,7 @@ import { CheckoutPage } from "../page-objects/CheckoutPage"
 import { SinghUpPage } from "../page-objects/SinghUpPage"
 import { MagentoTestUserData } from "../data/signInData"
 
-test("Create new user test", async ({ page }) => {
+test("Create new user Test", async ({ page }) => {
     /*
     Check Sign In
     STR:
@@ -26,7 +26,7 @@ test("Create new user test", async ({ page }) => {
     expect(result).toContain("Thank you for registering")
 })
 
-test("Create an existing user test", async ({ page }) => {
+test("Create an existing user Test", async ({ page }) => {
     /*
     Check Sign In
     STR:

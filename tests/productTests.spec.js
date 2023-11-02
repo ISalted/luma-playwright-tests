@@ -41,7 +41,7 @@ test("Remove cheapest item test", async ({ page }) => {
     await shoppingCartPage.removeCheapestItem()
 })
 
-test ("Place order test", async ({page})=>{
+test ("Place order Test", async ({page})=>{
     const checkoutPage = new CheckoutPage(page)
     const mainPage = new MainPage(page)
     const sighUpPage = new SinghUpPage(page)
