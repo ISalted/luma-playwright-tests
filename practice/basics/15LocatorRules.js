@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
 
-test.skip('Locator syntax rules', async ({ page }) => {
+test('Locator syntax rules', async ({ page }) => {
     // by Tag name
     page.locator('input')
 
@@ -19,7 +19,7 @@ test.skip('Locator syntax rules', async ({ page }) => {
     // by Class value (full)
     page.locator('[class="input-full-width size-medium status-basic shape-rectangle nb-transition"]')
 
-    // combine different selectors (важливо без пробілів. Все зліплено має бути)
+    // combine different selectors (It's important without spaces. Everything is concatenated.)
     page.locator('input[placeholder="Email"].shape-rectangle[nbinput]')
 
     // xPath

@@ -1,18 +1,28 @@
-import { test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
+import { exec } from 'child_process';
 
-test.only('reusing test locator', async ({ page }) => {
-    await page.goto(('http://localhost:4200/pages/forms/layouts'))
-    // await page.getByLabel('Email address').fill('test@test@gmail.com')
-    // await page.locator('#exampleInputPassword1').fill("test111")
-    // await page.locator('form').filter({ hasText: 'Email addressPasswordCheck me outSubmit' }).getByRole('button').click()
+test.only('timeout', async ({ page }) => {
+/*  Global TimeOut - Time limit of the whole test run
+    * We're changing this parameter in playwright.config.js, the variable 'Global Timeout'.
 
-    const basicForm = page.locator('nb-card', { hasText: "Basic Form" })
+        Test TimeOut - Time limit for the single test
+        * We're changing this parameter in playwright.config.js, the variable 'timeout'.
+            Action TimeOut - time limit for the action command; Ex:click(), fill(), textContent(), etc
+            * We're changing this parameter in playwright.config.js, the variable in object: "use"
+            Navigation TimeOut - time limit for the action command; Ex: page.goto('/)
+            * We're changing this parameter in playwright.config.js, the variable in object: "use"
+            Expect TimeOut - time limit for "expect" locator asserions; Ex: expect(locator).toHaveText('HelloWorld)
+            * We're changing this parameter in playwright.config.js, the variable in object: "expect"
+*/
 
-    await basicForm.getByRole('textbox', { name: "Email" }).fill('test@test@gmail.com')
-    await basicForm.getByRole('textbox', { name: "Password" }).fill ("test111")
-    await basicForm.getByRole('button').click()
+    // In playwright.config.js
 
-    await page.locator('nb-card', { hasText: "Basic Form" }).getByRole('button', { name: "Submit" })
+    await page.goto(('http://uitestingplayground.com/ajax'))
+    test.setTimeout(10000)
+    test.slow() // increase will increase the default time out x3
+    const successButton = page.locator('.bg-success')
+    await page.getByRole('button', { name: 'Button Triggering AJAX Request' }).click()
+    await successButton.click()
 
 })
 

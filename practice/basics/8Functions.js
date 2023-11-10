@@ -26,7 +26,7 @@ function printName(name){
 }
 printName("John")
 
-// improt function потрібно додати в pacjage.json "type": "module",
+// improt function / need to add 'type': 'module' in package.json.
 import { printAge } from "../helpers/printHelper.js"
 printAge(5)
 

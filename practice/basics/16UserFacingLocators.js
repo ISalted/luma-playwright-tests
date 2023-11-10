@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-test.only('user facing locators', async ({ page }) => {
+test('user facing locators', async ({ page }) => {
     await page.goto(('http://localhost:4200/pages/forms/layouts'))
 
     await page.getByRole('textbox', { name: "Email" }).first().click()
@@ -13,7 +13,7 @@ test.only('user facing locators', async ({ page }) => {
 
     await page.getByText('Using the Grid')
 
-    await page.getByTestId('') // шукає локатор по унікальному ІД який вручну може додати розробник
+    await page.getByTestId('') // It searches for a locator using a unique ID that can be manually added by the developer.
 
     await page.getByTitle('IoT Dashboard')
 })

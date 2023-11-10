@@ -1,6 +1,6 @@
 import {test} from '@playwright/test';
 
-test.beforeAll.skip(async({page})=>{
+test.beforeAll(async({page})=>{
     await page.goto('http://google.com')
 })
 
