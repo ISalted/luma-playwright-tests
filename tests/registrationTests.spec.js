@@ -46,3 +46,6 @@ test("Create an existing user Test", async ({ page }) => {
 
     expect(result).toContain("There is already an account with this email address")
 })
+
+
+

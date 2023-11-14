@@ -4,14 +4,14 @@ test.beforeAll(async({page})=>{
     await page.goto('http://google.com')
 })
 
-test.beforeEach.skip(async({page}) => {
+test.beforeEach(async({page}) => {
     await page.goto('http://google.com')
 })
 
-test.afterEach.skip(async ({ page }) => {
+test.afterEach(async ({ page }) => {
 
 })
 
-test.afterAll.skip(async({page})=> {
+test.afterAll(async({page})=> {
 
 })
