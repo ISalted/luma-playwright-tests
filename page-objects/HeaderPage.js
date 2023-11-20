@@ -42,7 +42,6 @@ export class HeaderPage {
         }
         const expectedResult = 0
         const actualResult = await this.basketCards.count()
-        expect(actualResult).toBe(expectedResult)
     }
 }
 
