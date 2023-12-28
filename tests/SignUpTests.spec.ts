@@ -1,9 +1,14 @@
-import { test } from "@playwright/test"
-import { expect } from "@playwright/test";
-import { MainPage } from "../page-objects/MainPage"
-import { CheckoutPage } from "../page-objects/CheckoutPage"
-import { SinghUpPage } from "../page-objects/SinghUpPage"
+import { test, expect } from "@playwright/test"
+import { PageManager } from "../page-objects/helpers/pageManager";
+
 import { MagentoTestUserData } from "../data/signInData"
+
+test.beforeEach(async ({ page }) => {
+    const pm = new PageManager(page)
+
+    await pm.onSignUpPage().visitSignUpPage()
+    await pm.onSignUpPage().clearCookies()
+})
 
 test("Create new user Test", async ({ page }) => {
     /*
@@ -15,13 +20,10 @@ test("Create new user Test", async ({ page }) => {
     4. Press the "Create an Account" button.
     5. Check success message
     */
+    const pm = new PageManager(page)
 
-    const sighUpPage = new SinghUpPage(page)
 
-    await sighUpPage.visitSignUpPage()
-    await page.context().clearCookies()
-    await page.reload()
-    let result = await sighUpPage.createNewCustomer(sighUpPage.getUniqueEmailPass('email'), sighUpPage.getUniqueEmailPass('pass'))
+    let result = await pm.onSignUpPage().createNewCustomer(pm.onSignUpPage().getUniqueEmailPass('email'), pm.onSignUpPage().getUniqueEmailPass('pass'))
 
     expect(result).toContain("Thank you for registering")
 })
@@ -36,13 +38,9 @@ test("Create an existing user Test", async ({ page }) => {
     4. Press the "Create an Account" button.
     5. Check allert message
     */
+    const pm = new PageManager(page)
 
-    const sighUpPage = new SinghUpPage(page)
-
-    await sighUpPage.visitSignUpPage()
-    await page.context().clearCookies()
-    await page.reload()
-    let result = await sighUpPage.createAnExistingUser(MagentoTestUserData)
+    let result = await pm.onSignUpPage().createAnExistingUser(MagentoTestUserData)
 
     expect(result).toContain("There is already an account with this email address")
 })

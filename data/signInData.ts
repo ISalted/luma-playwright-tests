@@ -3,7 +3,7 @@ export const MagentoTestUserData = {
     pass: 'Ma1234567'
 }
 
-export const WrongUserData = {
+export const WrongUserData: { email: string; pass: string } = {
     email: 'wronguserdata@gmail.com',
     pass: 'Wrong1234567'
-}
+};

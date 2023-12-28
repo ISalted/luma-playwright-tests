@@ -1,8 +1,12 @@
-import { expect } from "@playwright/test";
+import { Page, expect } from "@playwright/test";
+import { HelperBase } from "./helpers/helperBase"
 
-export class ShoppingCartPage{
-    constructor (page){
-        this.page = page
+export class ShoppingCartPage extends HelperBase {
+    deleteItemButton: any;
+    basketCards: any;
+    basketItemPrice: any;
+    constructor (page: Page){
+        super(page)
 
         this.deleteItemButton = page.locator('(//*[@class= "action action-delete"])')
         this.basketCards = page.locator('//*[@class="cart item"]')
