@@ -2,10 +2,11 @@ import { Page } from "@playwright/test"
 // import { HeaderPage } from "../headerPage"
 import { MainPage } from "../mainPage"
 import { SignInPage } from "../signInPage"
-import { SinghUpPage } from "../singhUpPage"
+import { SinghUpPage } from "../signUpPage"
 import { CheckoutPage } from "../checkoutPage"
 import { MenJacketsPage } from "../menJacketsPage"
 import { ShoppingCartPage } from "../shoppingCartPage"
+import { MyAccountPage } from "../myAccountPage"
 
 export class PageManager {
 
@@ -17,13 +18,15 @@ export class PageManager {
     private readonly checkoutPage: CheckoutPage
     private readonly menJacketsPage: MenJacketsPage
     private readonly shoppingCartPage: ShoppingCartPage
+    private readonly myAccountPage: MyAccountPage
 
     constructor(page: Page) {
         this.page = page
-        // this.headerPage = new HeaderPage(this.page)
+
         this.mainPage = new MainPage(this.page)
         this.signInPage = new SignInPage(this.page)
         this.singhUpPage = new SinghUpPage(this.page)
+        this.myAccountPage = new MyAccountPage(this.page)
         this.checkoutPage = new CheckoutPage(this.page)
         this.menJacketsPage = new MenJacketsPage(this.page)
         this.shoppingCartPage = new ShoppingCartPage(this.page)
@@ -42,6 +45,9 @@ export class PageManager {
     onSignUpPage() {
         return this.singhUpPage
     }
+    onMyAccountPage() {
+        return this.myAccountPage
+    }
     onCheckoutPage() {
         return this.checkoutPage
     }
@@ -51,5 +57,6 @@ export class PageManager {
     onShoppingCartPage() {
         return this.shoppingCartPage
     }
+
 
 }

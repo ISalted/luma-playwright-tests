@@ -5,10 +5,11 @@ export class HeaderPage{
     public readonly welcomeButton: Locator;
     public readonly signInButton: Locator;
     public readonly createAnAccountButton: Locator;
-    public readonly basketCounterButton: any;
+    public readonly basketCounterData: any;
     public readonly basketCards: Locator;
     public readonly openItemInCard: Locator;
     public readonly closeItemInCard: Locator;
+    public readonly proceedToCheckoutButton: Locator;
     public readonly deleteItemButton: Locator;
     public readonly acceptDeleteItemButton: Locator;
     public readonly searchField: Locator;
@@ -26,11 +27,12 @@ export class HeaderPage{
         this.signInButton = page.locator('.header.links > li').filter({ hasText: "Sign In" }).first()
         this.createAnAccountButton = page.locator('.header.links > li').filter({ hasText: "Create an Account" }).first()
 
-        this.basketCounterButton = page.locator('.counter-number');
+        this.basketCounterData = page.locator('.counter-number')
         this.basketCards = page.locator('#mini-cart').locator('li')
 
         this.openItemInCard = page.locator('.action.showcart')
         this.closeItemInCard = page.locator('.action.showcart.active')
+        this.proceedToCheckoutButton = page.getByRole('button', { name: 'Proceed to Checkout' })
         this.deleteItemButton = page.locator('.action.delete').first()
         this.acceptDeleteItemButton = page.getByRole('button', { name: 'OK' })
 
@@ -50,13 +52,27 @@ export class HeaderPage{
         await this.createAnAccountButton.click()
     }
 
+    getWelcomeMessageFromHeader = async () => {
+        return await this.welcomeButton.textContent()
+    }
+
     searchEntireStore = async (searchData: string) => {
         await this.searchField.fill(searchData)
         await this.searchButoon.click()
     }
 
-    getBasketCounter = async () => {
-        return parseInt(await this.basketCounterButton.textContent(), 10)
+    getBasketCounter = async (actualCounterNumber?: number) => {
+        let counter = await this.basketCounterData.filter({ hasText: actualCounterNumber }).textContent()
+        if (counter === "") counter = 0
+        return parseInt(counter, 10)
+    }
+
+    proceedToCheckout = async () => {
+        await this.page.pause()
+        await this.basketCounterData.waitFor({ state: "attached" })
+        await this.openItemInCard.click()
+        await this.proceedToCheckoutButton.click()
+
     }
 
     clearBasketFromHeader = async () => {

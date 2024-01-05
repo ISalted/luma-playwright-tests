@@ -58,7 +58,7 @@ export class CheckoutPage extends HelperBase {
         await this.page.waitForURL(/\/checkout/gm, { timeout: 3000 })
     }
 
-    login = async (signInData, clearCookie?) => {
+    loginFromCheckout = async (signInData, clearCookie?) => {
         if (clearCookie == 'Clear Coockie'){
             await this.clearCookies()
         }
@@ -75,8 +75,11 @@ export class CheckoutPage extends HelperBase {
             await this.page.reload();
             await expect(this.checkOutText).toBeHidden();
         }
-        return await this.shippingAdressList.textContent()
 
+    }
+
+    getShippingAddressInformation = async () => {
+        return await this.shippingAdressList.textContent()
     }
 
     fillShippingDetails = async (shippingDetails) =>{

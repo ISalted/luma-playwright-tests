@@ -9,7 +9,6 @@ export class SinghUpPage extends HelperBase {
     passFill: any;
     passConfirmFill: any;
     CreateButton: any;
-    successMessage: any;
     existingAccountMessage: any;
     constructor(page: Page) {
         super(page);
@@ -20,9 +19,7 @@ export class SinghUpPage extends HelperBase {
         this.passConfirmFill = page.getByRole('textbox', { name: 'Confirm Password*', exact: true })
         this.CreateButton = page.locator('//*[@class="action submit primary"]');
 
-        this.successMessage = page.getByRole('alert').filter({ hasText: 'Thank you for registering' })
-        this.existingAccountMessage = page.getByRole('alert').filter({ hasText: 'There is already an account' })
-
+        this.existingAccountMessage = page.getByRole('alert').filter({ hasText: 'There is already an account with this email' })
     }
 
     visitSignUpPage = async () => {
@@ -39,13 +36,13 @@ export class SinghUpPage extends HelperBase {
 
     createNewCustomer = async (email, pass) => {
         const Timestamp = Math.floor(Date.now() / 1000);
+
         await this.firstName.fill('TestCustomer')
         await this.lastName.fill(Timestamp.toString())
         await this.loginFill.fill(email)
         await this.passFill.fill(pass)
         await this.passConfirmFill.fill(pass)
         await this.CreateButton.click()
-        return this.successMessage.textContent()
     }
 
     createAnExistingUser = async (existingUser) => {
@@ -57,7 +54,11 @@ export class SinghUpPage extends HelperBase {
         await this.passFill.fill(existingUser.pass)
         await this.passConfirmFill.fill(existingUser.pass)
         await this.CreateButton.click()
+    }
+
+    getUnsuccessfulMessageAfterRegistration = async () => {
         return this.existingAccountMessage.textContent()
+
     }
 
 }

@@ -6,8 +6,8 @@ import { MagentoTestUserData } from "../data/signInData"
 test.beforeEach(async ({ page }) => {
     const pm = new PageManager(page)
 
-    await pm.onSignUpPage().visitSignUpPage()
-    await pm.onSignUpPage().clearCookies()
+    await pm.onMainPage().visitMainPage()
+    await pm.onMainPage().clearCookies()
 })
 
 test("Create new user Test", async ({ page }) => {
@@ -20,12 +20,14 @@ test("Create new user Test", async ({ page }) => {
     4. Press the "Create an Account" button.
     5. Check success message
     */
+
     const pm = new PageManager(page)
 
+    await pm.onMainPage().inHeader.createAnAccountButtonClick()
+    await pm.onSignUpPage().createNewCustomer(pm.onSignUpPage().getUniqueEmailPass('email'), pm.onSignUpPage().getUniqueEmailPass('pass'))
+    let successMessageFromMyAccountPage = await pm.onMyAccountPage().getSuccessfulMessageAfterRegistration()
 
-    let result = await pm.onSignUpPage().createNewCustomer(pm.onSignUpPage().getUniqueEmailPass('email'), pm.onSignUpPage().getUniqueEmailPass('pass'))
-
-    expect(result).toContain("Thank you for registering")
+    expect(successMessageFromMyAccountPage).toContain("Thank you for registering")
 })
 
 test("Create an existing user Test", async ({ page }) => {
@@ -38,11 +40,14 @@ test("Create an existing user Test", async ({ page }) => {
     4. Press the "Create an Account" button.
     5. Check allert message
     */
+
     const pm = new PageManager(page)
 
-    let result = await pm.onSignUpPage().createAnExistingUser(MagentoTestUserData)
+    await pm.onMainPage().inHeader.createAnAccountButtonClick()
+    await pm.onSignUpPage().createAnExistingUser(MagentoTestUserData)
+    let unsuccessfulMessageFromSignUpPage = await pm.onSignUpPage().getUnsuccessfulMessageAfterRegistration()
 
-    expect(result).toContain("There is already an account with this email address")
+    expect(unsuccessfulMessageFromSignUpPage).toContain("There is already an account with this email address")
 })
 
 

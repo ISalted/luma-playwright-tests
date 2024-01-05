@@ -16,7 +16,7 @@ const { devices } = require('@playwright/test');
 const config = {
   testDir: './tests',
   /* Maximum time one test can run for. */
-  timeout: 100 * 1000,
+  timeout: 50 * 1000,
   // globalTimeout: 60000,
   expect: {
     /**
