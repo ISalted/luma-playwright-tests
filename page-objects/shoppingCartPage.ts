@@ -1,4 +1,4 @@
-import { Page, expect } from "@playwright/test";
+import { Page } from "@playwright/test";
 import { HelperBase } from "./helpers/helperBase"
 
 export class ShoppingCartPage extends HelperBase {
@@ -7,63 +7,57 @@ export class ShoppingCartPage extends HelperBase {
     basketItemPrice: any;
     constructor (page: Page){
         super(page)
+        this.basketCards = page.locator('.cart.item')
+        this.deleteItemButton = this.basketCards.locator('.action.action-delete')
+        this.basketItemPrice = this.basketCards.locator('.subtotal').locator('.price')
 
-        this.deleteItemButton = page.locator('(//*[@class= "action action-delete"])')
-        this.basketCards = page.locator('//*[@class="cart item"]')
-        this.basketItemPrice = page.locator('//*[@class="col subtotal"]//*[@class="price"]')
     }
 
-    visitShoppingCartPage = async () => {
+    visitShoppingCartPageByUrl = async () => {
         await this.page.goto("/checkout/cart/")
     }
 
-    removeItemsFromShoppingCart = async () => {
-        const inUrl = await this.page.url();
-        await this.visitShoppingCartPage()
+    removeAllItemsFromShoppingCart = async () => {
+        await this.basketCards.first().waitFor({ state: 'visible' })
+        let countOfItems = await this.basketCards.count()
 
-        await this.removeAllItems()
-        const expectedResult = 0
-        const actualResult = await this.basketCards.count()
-        await this.page.goto(inUrl)
-        expect(actualResult).toBe(expectedResult)
-    }
-
-    removeAllItems = async () => {
-        let itemsBeforeRemoval = await this.basketCards.count()
-
-        if (itemsBeforeRemoval === 0) {
-            await expect(this.basketCards).toHaveCount(0)
-        } else {
+        while (countOfItems !== 0) {
             await this.deleteItemButton.first().click()
-            itemsBeforeRemoval--;
+            countOfItems--;
             await this.page.waitForFunction(
                 (expectedCount) => {
-                    const liElements = Array.from(document.querySelectorAll('[class="cart item"]'));
+                    const liElements = Array.from(document.querySelectorAll('[id="mini-cart"] li'));
                     return liElements.length === expectedCount;
-                }, itemsBeforeRemoval
-            );
-            await this.removeAllItems()
+                }, countOfItems
+            )
         }
+        await this.basketCards.first().waitFor({ state: 'hidden' })
+        countOfItems = await this.basketCards.count()
+        return countOfItems
     }
 
     removeCheapestItem = async () => {
-        await this.visitShoppingCartPage()
+        await this.basketCards.first().waitFor({ state: 'visible' })
+        const countOfItems = await this.basketCards.count()
 
-        const itemsBeforeRemoval = await this.basketCards.count()
+        if (countOfItems !== 0) {
+            let allPriceTexts = await this.basketItemPrice.allInnerTexts()
+            let justNumb = allPriceTexts.map((element) => {
+                return parseInt(element.replace("$", ""), 10)
+            })
 
-        if (isNaN(itemsBeforeRemoval) || itemsBeforeRemoval === 0) {
-            await expect(this.basketCards).toHaveCount(0)
-        } else {
-
-        const allPriceTexts = await this.basketItemPrice.allInnerTexts()
-        const justNumb = allPriceTexts.map((element) => {
-            return parseInt(element.replace("$", ""), 10)
-        })
-            const smallestPrice = Math.min(...justNumb)
-            const smallestPriceIdx = justNumb.indexOf(smallestPrice)
+            let smallestPrice = Math.min(...justNumb)
+            let smallestPriceIdx = justNumb.indexOf(smallestPrice)
             await this.deleteItemButton.nth(smallestPriceIdx).click()
-            await expect(this.basketCards).toHaveCount(itemsBeforeRemoval-1)
-        }
 
+            allPriceTexts = await this.basketItemPrice.allInnerTexts()
+            justNumb = allPriceTexts.map((element) => {
+                return parseInt(element.replace("$", ""), 10)
+            })
+            smallestPrice = Math.min(...justNumb)
+
+            return smallestPrice
+
+        }
     }
 }

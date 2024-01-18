@@ -1,15 +1,16 @@
 import { Locator, Page } from "@playwright/test"
 
-export class HeaderPage{
+export class HeaderElements{
     public readonly logoButton: Locator;
     public readonly welcomeButton: Locator;
     public readonly signInButton: Locator;
     public readonly createAnAccountButton: Locator;
-    public readonly basketCounterData: any;
+    public readonly basketCounter: any;
     public readonly basketCards: Locator;
     public readonly openItemInCard: Locator;
     public readonly closeItemInCard: Locator;
     public readonly proceedToCheckoutButton: Locator;
+    public readonly viewAndEditCartButton: Locator;
     public readonly deleteItemButton: Locator;
     public readonly acceptDeleteItemButton: Locator;
     public readonly searchField: Locator;
@@ -27,12 +28,13 @@ export class HeaderPage{
         this.signInButton = page.locator('.header.links > li').filter({ hasText: "Sign In" }).first()
         this.createAnAccountButton = page.locator('.header.links > li').filter({ hasText: "Create an Account" }).first()
 
-        this.basketCounterData = page.locator('.counter-number')
+        this.basketCounter = page.locator('.counter-number')
         this.basketCards = page.locator('#mini-cart').locator('li')
 
         this.openItemInCard = page.locator('.action.showcart')
         this.closeItemInCard = page.locator('.action.showcart.active')
         this.proceedToCheckoutButton = page.getByRole('button', { name: 'Proceed to Checkout' })
+        this.viewAndEditCartButton = page.getByRole('link', { name: 'View and Edit Cart' })
         this.deleteItemButton = page.locator('.action.delete').first()
         this.acceptDeleteItemButton = page.getByRole('button', { name: 'OK' })
 
@@ -42,6 +44,7 @@ export class HeaderPage{
 
     logoButtonClick = async () => {
         await this.logoButton.click()
+        await this.logoButton.waitFor({state: 'visible'})
     }
 
     signInButtonClick = async () => {
@@ -62,39 +65,41 @@ export class HeaderPage{
     }
 
     getBasketCounter = async (actualCounterNumber?: number) => {
-        let counter = await this.basketCounterData.filter({ hasText: actualCounterNumber }).textContent()
+        let counter = await this.basketCounter.filter({ hasText: actualCounterNumber }).textContent()
         if (counter === "") counter = 0
         return parseInt(counter, 10)
     }
 
-    proceedToCheckout = async () => {
-        await this.page.pause()
-        await this.basketCounterData.waitFor({ state: "attached" })
+    goToCheckoutPageFromHeader = async () => {
+        await this.basketCounter.waitFor({ state: "attached" })
         await this.openItemInCard.click()
+        await this.proceedToCheckoutButton.waitFor()
         await this.proceedToCheckoutButton.click()
+    }
 
+    goToShoppingCartPageFromHeader = async () => {
+        await this.basketCounter.waitFor({ state: "attached" })
+        await this.openItemInCard.click()
+        await this.viewAndEditCartButton.click()
     }
 
     clearBasketFromHeader = async () => {
-        await this.page.waitForLoadState('domcontentloaded');
-        let itemsBeforeRemoval = await this.basketCards.count()
+        let countOfItems = await this.basketCards.count()
+        await this.openItemInCard.click()
+        await this.basketCards.first().waitFor( { state: 'visible' } )
 
-        if (itemsBeforeRemoval === 0) {
-            // skip
-        } else {
-            await this.openItemInCard.click()
+        while (countOfItems !== 0) {
             await this.deleteItemButton.click()
             await this.acceptDeleteItemButton.click()
-            await this.closeItemInCard.click()
-            itemsBeforeRemoval--;
-
+            countOfItems--
             await this.page.waitForFunction(
                 (expectedCount) => {
                     const liElements = Array.from(document.querySelectorAll('[id="mini-cart"] li'));
                     return liElements.length === expectedCount;
-                }, itemsBeforeRemoval
-            );
-            await this.clearBasketFromHeader()
+                }, countOfItems
+            )
         }
+        countOfItems = await this.basketCards.count()
+        return countOfItems
     }
 }

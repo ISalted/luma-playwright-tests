@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
 import { HelperBase } from "./helpers/helperBase"
 import { Page } from "@playwright/test";
 
@@ -26,15 +25,7 @@ export class SinghUpPage extends HelperBase {
         await this.page.goto("/customer/account/create/")
     }
 
-    getUniqueEmailPass(value){
-        if (value === 'email') {
-            return `${uuidv4()}@gmail.com`
-        } else if (value === 'pass') {
-            return uuidv4()
-        }
-    }
-
-    createNewCustomer = async (email, pass) => {
+    signUpAsANewCustomer = async (email, pass) => {
         const Timestamp = Math.floor(Date.now() / 1000);
 
         await this.firstName.fill('TestCustomer')
@@ -43,9 +34,10 @@ export class SinghUpPage extends HelperBase {
         await this.passFill.fill(pass)
         await this.passConfirmFill.fill(pass)
         await this.CreateButton.click()
+        await this.inHeader.welcomeButton.waitFor({ state: "visible" })
     }
 
-    createAnExistingUser = async (existingUser) => {
+    signUpAnExistingUser = async (existingUser) => {
         const Timestamp = Math.floor(Date.now() / 1000);
 
         await this.firstName.fill('TestCustomer')
@@ -54,11 +46,11 @@ export class SinghUpPage extends HelperBase {
         await this.passFill.fill(existingUser.pass)
         await this.passConfirmFill.fill(existingUser.pass)
         await this.CreateButton.click()
+        await this.inHeader.welcomeButton.waitFor({ state: "visible" })
     }
 
     getUnsuccessfulMessageAfterRegistration = async () => {
         return this.existingAccountMessage.textContent()
-
     }
 
 }

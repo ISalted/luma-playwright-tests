@@ -68,12 +68,11 @@ export class CheckoutPage extends HelperBase {
         await this.passFill.fill(signInData.pass)
         await this.firstNameField.waitFor()
         await this.LogInButton.click()
-        // await this.page.waitForSelector('(//*[@class="note])[2]', { state: 'hidden' });
         try {
-            await expect(this.checkOutText).toBeHidden({ timeout: 10000});
+            await this.checkOutText.waitFor({ state: 'hidden' })
         } catch (error) {
             await this.page.reload();
-            await expect(this.checkOutText).toBeHidden();
+            await this.checkOutText.waitFor({ state: 'hidden' })
         }
 
     }
@@ -96,7 +95,7 @@ export class CheckoutPage extends HelperBase {
         await this.phoneField.type(shippingDetails.phone)
         await this.loader.waitFor({ state: 'hidden' })
         await this.nextButton.click()
-        await expect(this.paymentMethodTitle).toBeVisible()
+        await this.paymentMethodTitle.waitFor({ state: 'visible' })
         await this.visitCheckoutPage()
 
         const selectCount = await this.allShippingInformationLocator.count()

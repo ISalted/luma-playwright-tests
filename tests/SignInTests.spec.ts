@@ -11,7 +11,7 @@ const pm = new PageManager(page)
     await pm.onMainPage().clearCookies()
 })
 
-test("LogIn test", async ({ page }) => {
+test("Sign In test", async ({ page }) => {
     /*
     Check Sign In
     STR:
@@ -25,16 +25,13 @@ test("LogIn test", async ({ page }) => {
     const pm = new PageManager(page)
 
     await pm.onMainPage().inHeader.signInButtonClick()
-    await pm.onSignInPage().loginFromHeader(MagentoTestUserData, 'Clear Coockie')
+    await pm.onSignInPage().signInFromHeader(MagentoTestUserData, 'Clear Coockie')
     let welcomeMessageFromHeader = await pm.onMainPage().inHeader.getWelcomeMessageFromHeader()
-
-    // const response = await page.waitForResponse(response => response.url().includes('') && response.status() === 200)
-    // console.log(response)
 
     expect(welcomeMessageFromHeader).toContain("Welcome")
 })
 
-test("LogIn with wrong data Test", async ({ page }) => {
+test("Sign In with wrong data Test", async ({ page }) => {
     /*
     Check Sign In
     STR:
@@ -48,19 +45,20 @@ test("LogIn with wrong data Test", async ({ page }) => {
     const pm = new PageManager(page)
 
     await pm.onMainPage().inHeader.signInButtonClick()
-    await pm.onSignInPage().loginWithWrongData(WrongUserData)
+    await pm.onSignInPage().signInWithWrongData(WrongUserData)
     let unsuccessfulMessage = await pm.onSignInPage().getUnsuccessfulMessageAfterSignIn()
     expect(unsuccessfulMessage).toContain("The account sign-in was incorrect")
 })
 
-test.only("LogIn from checkOut page Test", async ({ page }) => {
+test("Sign In from checkOut page Test", async ({ page }) => {
     const pm = new PageManager(page)
-
-    await pm.onMainPage().addToBasketFromMainPage(0, "M", "Blue", pm.onMainPage().inHeader.getBasketCounter())
     await page.pause()
-    await pm.onMainPage().addToBasketFromMainPage(1, "L", "White", pm.onMainPage().inHeader.getBasketCounter())
-    await pm.onMainPage().inHeader.proceedToCheckout()
+
+    await pm.onMainPage().addToBasketFromMainPage(0, "M", "Blue")
+    await pm.onMainPage().addToBasketFromMainPage(1, "L", "White")
+    await pm.onMainPage().inHeader.goToCheckoutPageFromHeader()
     await pm.onCheckoutPage().loginFromCheckout(MagentoTestUserData)
     const shippingAddressInformation = await pm.onCheckoutPage().getShippingAddressInformation()
+
     expect(shippingAddressInformation).toContain("Pennsylvania Avenue NW")
 })

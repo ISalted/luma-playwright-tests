@@ -11,7 +11,6 @@ export class MyAccountPage extends HelperBase {
     }
 
     getSuccessfulMessageAfterRegistration = async () => {
-        this.page.pause()
         return this.successMessage.textContent()
     }
 

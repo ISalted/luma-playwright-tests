@@ -28,29 +28,10 @@ export class MainPage extends HelperBase {
         await this.page.goto('/')
     }
 
-    addToBasketFromMainPage = async (inputLiNumb, inputSize, inputCollor, getBasketCounter) => {
+    addToBasketFromMainPage = async (inputLiNumb, inputSize, inputCollor) => {
         let counter = await this.inHeader.getBasketCounter();
-        await this.page.pause()
-
-        await this.sizeButton(inputLiNumb, inputSize).click()
-        await this.collorButton(inputLiNumb, inputCollor).click();
-        await this.addToCartButton(inputLiNumb).click();
+        await this.inProductGrid.addToBasketFromGrid(inputLiNumb, inputSize, inputCollor)
         counter++;
-        await this.alertMessage.waitFor()
         await this.inHeader.getBasketCounter(counter)
-
-        // await this.page.waitForFunction((value) => {
-        //     const counterElement = document.querySelector('[class="counter-number"]');
-
-        //     if (counterElement) {
-        //         return counterElement.textContent === value;
-        //     } else {
-        //         console.error("Element not found");
-        //         return false;
-        //     }
-        // }, counter.toString(), {timeout : 3000});
-        const actualResult = counter
-        const expectedResult = await this.inHeader.getBasketCounter()
-        expect(actualResult).toBe(expectedResult)
     }
 }

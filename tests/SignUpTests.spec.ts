@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
     await pm.onMainPage().clearCookies()
 })
 
-test("Create new user Test", async ({ page }) => {
+test("Sign Up new user Test", async ({ page }) => {
     /*
     Check Sign In
     STR:
@@ -24,13 +24,13 @@ test("Create new user Test", async ({ page }) => {
     const pm = new PageManager(page)
 
     await pm.onMainPage().inHeader.createAnAccountButtonClick()
-    await pm.onSignUpPage().createNewCustomer(pm.onSignUpPage().getUniqueEmailPass('email'), pm.onSignUpPage().getUniqueEmailPass('pass'))
+    await pm.onSignUpPage().signUpAsANewCustomer(pm.onSignUpPage().getUniqueEmailOrPass('email'), pm.onSignUpPage().getUniqueEmailOrPass('pass'))
     let successMessageFromMyAccountPage = await pm.onMyAccountPage().getSuccessfulMessageAfterRegistration()
 
     expect(successMessageFromMyAccountPage).toContain("Thank you for registering")
 })
 
-test("Create an existing user Test", async ({ page }) => {
+test("Sign Up existing user Test", async ({ page }) => {
     /*
     Check Sign In
     STR:
@@ -44,7 +44,7 @@ test("Create an existing user Test", async ({ page }) => {
     const pm = new PageManager(page)
 
     await pm.onMainPage().inHeader.createAnAccountButtonClick()
-    await pm.onSignUpPage().createAnExistingUser(MagentoTestUserData)
+    await pm.onSignUpPage().signUpAnExistingUser(MagentoTestUserData)
     let unsuccessfulMessageFromSignUpPage = await pm.onSignUpPage().getUnsuccessfulMessageAfterRegistration()
 
     expect(unsuccessfulMessageFromSignUpPage).toContain("There is already an account with this email address")

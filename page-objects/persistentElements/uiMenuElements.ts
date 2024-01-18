@@ -2,7 +2,7 @@ import { Locator, Page } from "@playwright/test"
 import { zeroLevelOfMenuItem, firstLevelOfMenuItem, secondLevelOfMenuItem } from "../../data/uiMenuData"
 
 
-export class UiMenuPage {
+export class UiMenuElements {
     page: Page;
     pageTitle: Locator;
     getItemFromLevel0: { WhatIsNew: string; Women: string; Men: string; Gear: string; Training: string; Sale: string; };

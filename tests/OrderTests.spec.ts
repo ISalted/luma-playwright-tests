@@ -13,41 +13,49 @@ test.beforeEach(async ({ page }) => {
 test("Clear basket from Shopping Cart test", async ({ page }) => {
     const pm = new PageManager(page)
 
-    await pm.onMainPage().addToBasketFromMainPage("1", "S", "Blue")
-    await pm.onMainPage().addToBasketFromMainPage("2", "M", "White")
-    await pm.onMainPage().addToBasketFromMainPage("4", "L", "Black")
-    await pm.onShoppingCartPage().removeItemsFromShoppingCart()
+    await pm.onMainPage().addToBasketFromMainPage("0", "S", "Blue")
+    await pm.onMainPage().addToBasketFromMainPage("1", "M", "White")
+    await pm.onMainPage().addToBasketFromMainPage("3", "L", "Black")
+    await pm.onMainPage().inHeader.goToShoppingCartPageFromHeader()
+
+    let countOfItemsInABasket = await pm.onShoppingCartPage().removeAllItemsFromShoppingCart()
+    expect(countOfItemsInABasket).toBe(0)
 })
 
 test("Clear basket from header test", async ({ page }) => {
     const pm = new PageManager(page)
 
-    await pm.onMainPage().addToBasketFromMainPage("1","S","Blue")
-    await pm.onMainPage().addToBasketFromMainPage("2", "M", "White")
-    await pm.onMainPage().addToBasketFromMainPage("4", "L", "Black")
-    await pm.onMainPage().inHeader.clearBasketFromHeader()
+    await pm.onMainPage().addToBasketFromMainPage("0","S","Blue")
+    await pm.onMainPage().addToBasketFromMainPage("1", "M", "White")
+    await pm.onMainPage().addToBasketFromMainPage("3", "L", "Black")
+    let countOfItemsInABasket = await pm.onMainPage().inHeader.clearBasketFromHeader()
+    expect(countOfItemsInABasket).toBe(0)
+
 })
 
 test("Remove cheapest item test", async ({ page }) => {
     const pm = new PageManager(page)
 
-    await pm.onMainPage().addToBasketFromMainPage("1", "S", "Blue")
-    await pm.onMainPage().addToBasketFromMainPage("2", "M", "White")
-    await pm.onMainPage().addToBasketFromMainPage("4", "L", "Black")
-    await pm.onShoppingCartPage().removeCheapestItem()
+    await pm.onMainPage().addToBasketFromMainPage("0", "S", "Blue")
+    await pm.onMainPage().addToBasketFromMainPage("1", "M", "White")
+    await pm.onMainPage().addToBasketFromMainPage("3", "L", "Black")
+    await pm.onMainPage().inHeader.goToShoppingCartPageFromHeader()
+
+    let cheapestItemInTheBasketAfterRemoval = await pm.onShoppingCartPage().removeCheapestItem()
+    expect(cheapestItemInTheBasketAfterRemoval).toBe(34)
+
 })
 
-test("Place order test", async ({page})=>{
+test.only("Place order test", async ({page})=>{
     const pm = new PageManager(page)
-    console.log(pm.onMainPage().inUiMenu.getItemFromLevel0.Gear)
     await pm.onMainPage().inHeader.createAnAccountButtonClick()
-    await pm.onSignUpPage().createNewCustomer(pm.onSignUpPage().getUniqueEmailPass('email'), pm.onSignUpPage().getUniqueEmailPass('pass'))
+    await pm.onSignUpPage().signUpAsANewCustomer(pm.onSignUpPage().getUniqueEmailOrPass('email'), pm.onSignUpPage().getUniqueEmailOrPass('pass'))
     await pm.onSignUpPage().inHeader.logoButtonClick()
 
-    await pm.onMainPage().addToBasketFromMainPage("2", "M", "White");
-    await pm.onMainPage().addToBasketFromMainPage("4", "L", "Black");
-    await pm.onCheckoutPage().visitCheckoutPage()
+    await pm.onMainPage().addToBasketFromMainPage("1", "M", "White");
+    await pm.onMainPage().addToBasketFromMainPage("3", "L", "Black");
+    await pm.onCheckoutPage().inHeader.goToCheckoutPageFromHeader()
     await pm.onCheckoutPage().fillShippingDetails(shippingAddressData)
     const result = await pm.onCheckoutPage().placeOrder()
-    expect(result).toBe('Thank you for your purchase!')
+    expect(result).toContain('Thank you for your purchase!')
 })

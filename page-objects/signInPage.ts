@@ -14,7 +14,7 @@ export class SignInPage extends HelperBase {
         this.alertMessage = page.getByRole('alert').filter({ hasText: 'The account sign-in was incorrect' })
     }
 
-    loginFromHeader = async (signInData, clearCookie?) => {
+    signInFromHeader = async (signInData, clearCookie?) => {
         if (clearCookie == 'Clear Coockie') {
             await this.clearCookies()
         }
@@ -24,7 +24,7 @@ export class SignInPage extends HelperBase {
         await this.inHeader.welcomeButton.waitFor({ state: "attached" })
     }
 
-    loginWithWrongData = async (signInData: { email: string; pass: string }, clearCookie?) => {
+    signInWithWrongData = async (signInData: { email: string; pass: string }, clearCookie?) => {
         if (clearCookie == 'Clear Coockie') {
             await this.clearCookies()
         }
