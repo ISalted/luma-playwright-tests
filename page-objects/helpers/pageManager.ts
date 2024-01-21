@@ -1,5 +1,4 @@
 import { Page } from "@playwright/test"
-// import { HeaderPage } from "../headerPage"
 import { MainPage } from "../mainPage"
 import { SignInPage } from "../signInPage"
 import { SinghUpPage } from "../signUpPage"
@@ -7,7 +6,6 @@ import { CheckoutPage } from "../checkoutPage"
 import { MenJacketsPage } from "../menJacketsPage"
 import { ShoppingCartPage } from "../shoppingCartPage"
 import { MyAccountPage } from "../myAccountPage"
-
 export class PageManager {
 
     private readonly page: Page

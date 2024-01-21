@@ -44,11 +44,28 @@ test("Sign Up existing user Test", async ({ page }) => {
     const pm = new PageManager(page)
 
     await pm.onMainPage().inHeader.createAnAccountButtonClick()
-    await pm.onSignUpPage().signUpAnExistingUser(MagentoTestUserData)
-    let unsuccessfulMessageFromSignUpPage = await pm.onSignUpPage().getUnsuccessfulMessageAfterRegistration()
+    let unsuccessfulMessageFromSignUpPage = await pm.onSignUpPage().signUpAnExistingUser(MagentoTestUserData)
 
     expect(unsuccessfulMessageFromSignUpPage).toContain("There is already an account with this email address")
 })
+
+// test("Sign up with an incorrect username/email", async ({ page }) => {
+
+// })
+
+// test("Sign up with an incorrect password", async ({ page }) => {
+
+// })
+
+// test("Successful user registration with valid information", async ({ page }) => {
+
+// })
+
+// test("Verify password strength validation during registration", async ({ page }) => {
+
+// })
+
+
 
 
 

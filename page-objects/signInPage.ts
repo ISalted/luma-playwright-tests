@@ -8,8 +8,8 @@ export class SignInPage extends HelperBase {
     alertMessage: any;
     constructor(page: Page) {
         super(page)
-        this.loginFill = page.getByLabel('Email')
-        this.passFill = page.getByLabel('Password')
+        this.loginFill = page.locator('.block-content').getByLabel('Email', { exact: true })
+        this.passFill = page.locator('.block-content').getByLabel('Password', { exact: true })
         this.signInButton = page.getByRole('button', { name: 'Sign In' })
         this.alertMessage = page.getByRole('alert').filter({ hasText: 'The account sign-in was incorrect' })
     }
@@ -25,12 +25,14 @@ export class SignInPage extends HelperBase {
     }
 
     signInWithWrongData = async (signInData: { email: string; pass: string }, clearCookie?) => {
+        await this.page.waitForTimeout(3000)
         if (clearCookie == 'Clear Coockie') {
             await this.clearCookies()
         }
         await this.loginFill.type(signInData.email, { delay: 30 })
         await this.passFill.type(signInData.pass, { delay: 30 })
         await this.signInButton.click()
+        // await this.page.reload()
     }
 
     getUnsuccessfulMessageAfterSignIn = async () => {

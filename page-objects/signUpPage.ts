@@ -46,11 +46,10 @@ export class SinghUpPage extends HelperBase {
         await this.passFill.fill(existingUser.pass)
         await this.passConfirmFill.fill(existingUser.pass)
         await this.CreateButton.click()
-        await this.inHeader.welcomeButton.waitFor({ state: "visible" })
+        await this.existingAccountMessage.waitFor({state:'visible'})
+        return this.existingAccountMessage.textContent()
+
     }
 
-    getUnsuccessfulMessageAfterRegistration = async () => {
-        return this.existingAccountMessage.textContent()
-    }
 
 }

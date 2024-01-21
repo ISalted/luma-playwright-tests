@@ -45,10 +45,11 @@ export class ShoppingCartPage extends HelperBase {
             let justNumb = allPriceTexts.map((element) => {
                 return parseInt(element.replace("$", ""), 10)
             })
-
             let smallestPrice = Math.min(...justNumb)
             let smallestPriceIdx = justNumb.indexOf(smallestPrice)
             await this.deleteItemButton.nth(smallestPriceIdx).click()
+            await this.basketItemPrice.filter({ hasText: justNumb }).waitFor({state: 'hidden'})
+            await this.page.reload()
 
             allPriceTexts = await this.basketItemPrice.allInnerTexts()
             justNumb = allPriceTexts.map((element) => {

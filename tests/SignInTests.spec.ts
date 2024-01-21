@@ -43,7 +43,6 @@ test("Sign In with wrong data Test", async ({ page }) => {
     */
 
     const pm = new PageManager(page)
-
     await pm.onMainPage().inHeader.signInButtonClick()
     await pm.onSignInPage().signInWithWrongData(WrongUserData)
     let unsuccessfulMessage = await pm.onSignInPage().getUnsuccessfulMessageAfterSignIn()
@@ -52,13 +51,30 @@ test("Sign In with wrong data Test", async ({ page }) => {
 
 test("Sign In from checkOut page Test", async ({ page }) => {
     const pm = new PageManager(page)
-    await page.pause()
 
-    await pm.onMainPage().addToBasketFromMainPage(0, "M", "Blue")
-    await pm.onMainPage().addToBasketFromMainPage(1, "L", "White")
+    await pm.onMainPage().addProductToTheBasketFromMainPage(0, "M", "Blue")
+    await pm.onMainPage().addProductToTheBasketFromMainPage(1, "L", "White")
     await pm.onMainPage().inHeader.goToCheckoutPageFromHeader()
     await pm.onCheckoutPage().loginFromCheckout(MagentoTestUserData)
     const shippingAddressInformation = await pm.onCheckoutPage().getShippingAddressInformation()
 
     expect(shippingAddressInformation).toContain("Pennsylvania Avenue NW")
 })
+
+// test("Check login with an incorrect username/email", async ({ page }) => {
+
+// })
+
+// test("Login with an incorrect password", async ({ page }) => {
+
+// })
+
+// test("Test login with empty data", async ({ page }) => {
+
+// })
+
+// test("Verify the 'LogOut' functionality", async ({ page }) => {
+
+// })
+
+
