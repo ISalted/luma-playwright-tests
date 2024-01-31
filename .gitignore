@@ -9,6 +9,7 @@ node_modules/
 /page-objects/helpers/wowinfo.ts
 /page-objects/helpers/.DS_Store
 /page-objects/.DS_Store
+.DS_Store/
 
 
 
