@@ -5,7 +5,9 @@ test.beforeEach(async ({ page }) => {
     const pm = new PageManager(page)
 
     await pm.onMainPage().visitMainPage()
+    await pm.onMainPage().inHeader.writeForUsLink.waitFor()
     await pm.onSignUpPage().clearCookies()
+
 })
 
 // test("Test the sorting options on the product listing page", async ({ page }) => {

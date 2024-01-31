@@ -2,15 +2,19 @@ import { test, expect } from "@playwright/test"
 import { PageManager } from "../page-objects/helpers/pageManager";
 
 import { shippingAddressData } from "../data/shippingAddressData"
+import { ExistingUsersData, UserDataWithWrongEmail, UserDataWithUniqueEmailAndPass } from "../data/userData"
+
 
 test.beforeEach(async ({ page }) => {
     const pm = new PageManager(page)
 
     await pm.onMainPage().visitMainPage()
+    await pm.onMainPage().inHeader.writeForUsLink.waitFor()
     await pm.onSignUpPage().clearCookies()
+
 })
 
-test("'Add to Cart' button works test", async ({ page }) => {
+test("AddToCart button works on main test", async ({ page }) => {
     const pm = new PageManager(page)
     let productNameFromTheGrid = await pm.onMainPage().addProductToTheBasketFromMainPage("3", "L", "Black")
     let productItemNameFromBasket = await pm.onMainPage().inHeader.getProductItemNameFromBasket(productNameFromTheGrid)
@@ -123,7 +127,7 @@ test("Remove cheapest item test", async ({ page }) => {
 test("Place order test", async ({page})=>{
     const pm = new PageManager(page)
     await pm.onMainPage().inHeader.createAnAccountButtonClick()
-    await pm.onSignUpPage().signUpAsANewCustomer(pm.onSignUpPage().getUniqueEmailOrPass('email'), pm.onSignUpPage().getUniqueEmailOrPass('pass'))
+    await pm.onSignUpPage().fillDataAndCreateAnAccount(UserDataWithUniqueEmailAndPass)
     await pm.onSignUpPage().inHeader.logoButtonClick()
 
     await pm.onMainPage().addProductToTheBasketFromMainPage("1", "M", "White");

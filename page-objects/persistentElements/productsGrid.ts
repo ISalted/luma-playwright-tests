@@ -3,11 +3,11 @@ import { Page } from "@playwright/test"
 export class ProductGrid {
     readonly page: Page
 
-    widgetProductGrid: any;
-    sizeButton: any;
-    collorButton: any;
-    addToCartButton: any;
-    productItemName: any;
+    readonly widgetProductGrid: any;
+    readonly sizeButton: any;
+    readonly collorButton: any;
+    readonly addToCartButton: any;
+    readonly productItemName: any;
 
     alertMessage: any;
 

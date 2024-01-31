@@ -1,14 +1,16 @@
 import { test, expect } from "@playwright/test"
 import { PageManager } from "../page-objects/helpers/pageManager";
 
-import { MagentoTestUserData } from "../data/signInData"
-import { WrongUserData } from "../data/signInData"
+import { ExistingUsersData, NonExistentUserData } from "../data/userData"
+
 
 test.beforeEach(async ({ page }) => {
 const pm = new PageManager(page)
 
     await pm.onMainPage().visitMainPage()
+    await pm.onMainPage().inHeader.writeForUsLink.waitFor()
     await pm.onMainPage().clearCookies()
+
 })
 
 test("Sign In test", async ({ page }) => {
@@ -25,7 +27,7 @@ test("Sign In test", async ({ page }) => {
     const pm = new PageManager(page)
 
     await pm.onMainPage().inHeader.signInButtonClick()
-    await pm.onSignInPage().signInFromHeader(MagentoTestUserData, 'Clear Coockie')
+    await pm.onSignInPage().signInFromHeader(ExistingUsersData, 'Clear Coockie')
     let welcomeMessageFromHeader = await pm.onMainPage().inHeader.getWelcomeMessageFromHeader()
 
     expect(welcomeMessageFromHeader).toContain("Welcome")
@@ -44,7 +46,7 @@ test("Sign In with wrong data Test", async ({ page }) => {
 
     const pm = new PageManager(page)
     await pm.onMainPage().inHeader.signInButtonClick()
-    await pm.onSignInPage().signInWithWrongData(WrongUserData)
+    await pm.onSignInPage().signInWithWrongData(NonExistentUserData)
     let unsuccessfulMessage = await pm.onSignInPage().getUnsuccessfulMessageAfterSignIn()
     expect(unsuccessfulMessage).toContain("The account sign-in was incorrect")
 })
@@ -55,7 +57,7 @@ test("Sign In from checkOut page Test", async ({ page }) => {
     await pm.onMainPage().addProductToTheBasketFromMainPage(0, "M", "Blue")
     await pm.onMainPage().addProductToTheBasketFromMainPage(1, "L", "White")
     await pm.onMainPage().inHeader.goToCheckoutPageFromHeader()
-    await pm.onCheckoutPage().loginFromCheckout(MagentoTestUserData)
+    await pm.onCheckoutPage().loginFromCheckout(ExistingUsersData)
     const shippingAddressInformation = await pm.onCheckoutPage().getShippingAddressInformation()
 
     expect(shippingAddressInformation).toContain("Pennsylvania Avenue NW")

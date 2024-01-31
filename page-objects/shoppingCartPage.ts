@@ -1,10 +1,10 @@
-import { Page } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
 import { HelperBase } from "./helpers/helperBase"
 
 export class ShoppingCartPage extends HelperBase {
-    deleteItemButton: any;
-    basketCards: any;
-    basketItemPrice: any;
+    readonly deleteItemButton: Locator;
+    readonly basketCards: Locator;
+    readonly basketItemPrice: any;
     constructor (page: Page){
         super(page)
         this.basketCards = page.locator('.cart.item')

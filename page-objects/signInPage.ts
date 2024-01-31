@@ -2,10 +2,10 @@ import { Locator, Page } from "@playwright/test";
 import { HelperBase } from "./helpers/helperBase"
 
 export class SignInPage extends HelperBase {
-    loginFill: Locator;
-    passFill: any;
-    signInButton: any;
-    alertMessage: any;
+    readonly loginFill: Locator;
+    readonly passFill: Locator;
+    readonly signInButton: Locator;
+    readonly alertMessage: Locator;
     constructor(page: Page) {
         super(page)
         this.loginFill = page.locator('.block-content').getByLabel('Email', { exact: true })

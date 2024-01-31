@@ -2,28 +2,28 @@ import { Locator, expect } from "@playwright/test";
 import { HelperBase } from "./helpers/helperBase"
 
 export class CheckoutPage extends HelperBase {
-    public readonly authorizationButton: Locator;
-    public readonly loginFill: Locator;
-    public readonly passFill: Locator;
-    public readonly LogInButton: Locator;
-    public readonly checkOutText: Locator;
-    public readonly loader: Locator;
-    public readonly firstNameField: Locator;
-    public readonly lastNameField: Locator;
-    public readonly companyField: Locator;
-    public readonly addressField: Locator;
-    public readonly cityField: Locator;
-    public readonly zipField: Locator;
-    public readonly countryField: Locator;
-    public readonly stateField: Locator;
-    public readonly shippingMethodsButton: Locator;
-    public readonly phoneField: Locator;
-    public readonly nextButton: Locator;
-    public readonly paymentMethodTitle: Locator;
-    public readonly allShippingInformationLocator: Locator;
-    public readonly placeOrderButton: Locator;
-    public readonly orderThankYouNotification: Locator;
-    public readonly shippingAdressList: Locator;
+    readonly authorizationButton: Locator;
+    readonly loginFill: Locator;
+    readonly passFill: Locator;
+    readonly LogInButton: Locator;
+    readonly checkOutText: Locator;
+    readonly loader: Locator;
+    readonly firstNameField: Locator;
+    readonly lastNameField: Locator;
+    readonly companyField: Locator;
+    readonly addressField: Locator;
+    readonly cityField: Locator;
+    readonly zipField: Locator;
+    readonly countryField: Locator;
+    readonly stateField: Locator;
+    readonly shippingMethodsButton: Locator;
+    readonly phoneField: Locator;
+    readonly nextButton: Locator;
+    readonly paymentMethodTitle: Locator;
+    readonly allShippingInformationLocator: Locator;
+    readonly placeOrderButton: Locator;
+    readonly orderThankYouNotification: Locator;
+    readonly shippingAdressList: Locator;
     constructor(page) {
         super(page)
 

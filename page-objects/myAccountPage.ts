@@ -1,8 +1,8 @@
-import { Page } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
 import { HelperBase } from "./helpers/helperBase"
 
 export class MyAccountPage extends HelperBase {
-    successMessage: any;
+    readonly successMessage: Locator;
 
     constructor(page: Page) {
         super(page)
@@ -11,6 +11,7 @@ export class MyAccountPage extends HelperBase {
     }
 
     getSuccessfulMessageAfterRegistration = async () => {
+        await this.inHeader.welcomeButton.waitFor({ state: "visible" })
         return this.successMessage.textContent()
     }
 

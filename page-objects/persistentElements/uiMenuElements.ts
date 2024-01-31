@@ -3,11 +3,11 @@ import { zeroLevelOfMenuItem, firstLevelOfMenuItem, secondLevelOfMenuItem } from
 
 
 export class UiMenuElements {
-    page: Page;
-    pageTitle: Locator;
-    getItemFromLevel0: { WhatIsNew: string; Women: string; Men: string; Gear: string; Training: string; Sale: string; };
-    getItemFromLevel1: { Tops: string; Bottoms: string; Bags: string; FitnessEquipment: string; Watches: string; VideoDownload: string; };
-    getItemFromLevel2: { Jackets: string; HoodiesAndSweatshirts: string; Tees: string; BrasAndTanks: string; Tanks: string; VideoDownload: string; Shorts: string; };
+    readonly page: Page;
+    readonly pageTitle: Locator;
+    readonly getItemFromLevel0: { WhatIsNew: string; Women: string; Men: string; Gear: string; Training: string; Sale: string; };
+    readonly getItemFromLevel1: { Tops: string; Bottoms: string; Bags: string; FitnessEquipment: string; Watches: string; VideoDownload: string; };
+    readonly getItemFromLevel2: { Jackets: string; HoodiesAndSweatshirts: string; Tees: string; BrasAndTanks: string; Tanks: string; VideoDownload: string; Shorts: string; };
 
     constructor(page: Page) {
         this.page = page

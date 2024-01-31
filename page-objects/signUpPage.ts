@@ -1,20 +1,25 @@
 import { HelperBase } from "./helpers/helperBase"
-import { Page } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
 
 export class SinghUpPage extends HelperBase {
-    firstName: any;
-    lastName: any;
-    loginFill: any;
-    passFill: any;
-    passConfirmFill: any;
-    CreateButton: any;
-    existingAccountMessage: any;
+    readonly firstName: Locator;
+    readonly lastName: Locator;
+    readonly emailFill: Locator;
+    readonly emailErrorMessage: Locator;
+    readonly passFill: Locator;
+    readonly passwordErrorMessage: Locator;
+    readonly passConfirmFill: Locator;
+    readonly CreateButton: Locator;
+    readonly existingAccountMessage: Locator;
+
     constructor(page: Page) {
         super(page);
         this.firstName = page.getByRole('textbox', { name: 'First Name*' })
         this.lastName = page.getByRole('textbox', { name: 'Last Name*' })
-        this.loginFill = page.getByRole('textbox', { name: 'Email*' })
+        this.emailFill = page.getByRole('textbox', { name: 'Email*' })
+        this.emailErrorMessage = page.locator('#email_address-error')
         this.passFill = page.getByRole('textbox', { name: 'Password*', exact: true })
+        this.passwordErrorMessage = page.locator('#password-error')
         this.passConfirmFill = page.getByRole('textbox', { name: 'Confirm Password*', exact: true })
         this.CreateButton = page.locator('//*[@class="action submit primary"]');
 
@@ -25,31 +30,30 @@ export class SinghUpPage extends HelperBase {
         await this.page.goto("/customer/account/create/")
     }
 
-    signUpAsANewCustomer = async (email, pass) => {
-        const Timestamp = Math.floor(Date.now() / 1000);
+    fillDataAndCreateAnAccount = async (userData) => {
+        const Timestamp = Math.floor(Date.now() / 1000)
 
         await this.firstName.fill('TestCustomer')
         await this.lastName.fill(Timestamp.toString())
-        await this.loginFill.fill(email)
-        await this.passFill.fill(pass)
-        await this.passConfirmFill.fill(pass)
+        await this.emailFill.fill(userData.email)
+        await this.passFill.fill(userData.pass)
+        await this.passConfirmFill.fill(userData.pass)
         await this.CreateButton.click()
-        await this.inHeader.welcomeButton.waitFor({ state: "visible" })
     }
 
-    signUpAnExistingUser = async (existingUser) => {
-        const Timestamp = Math.floor(Date.now() / 1000);
-
-        await this.firstName.fill('TestCustomer')
-        await this.lastName.fill(Timestamp.toString())
-        await this.loginFill.fill(existingUser.email)
-        await this.passFill.fill(existingUser.pass)
-        await this.passConfirmFill.fill(existingUser.pass)
-        await this.CreateButton.click()
-        await this.existingAccountMessage.waitFor({state:'visible'})
+    getExistingAccountMessage = async () => {
+        await this.existingAccountMessage.waitFor({ state: 'visible' })
         return this.existingAccountMessage.textContent()
-
     }
 
+    getInvalidEmailMessage = async () => {
+        await this.emailErrorMessage.waitFor({ state: 'visible' })
+        return this.emailErrorMessage.textContent()
+    }
+
+    getInvalidPasswordMessage = async () => {
+        await this.passwordErrorMessage.waitFor({ state: 'visible' })
+        return this.passwordErrorMessage.textContent()
+    }
 
 }

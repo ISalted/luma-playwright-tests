@@ -1,21 +1,22 @@
 import { Locator, Page } from "@playwright/test"
 
 export class HeaderElements{
-    public readonly logoButton: Locator;
-    public readonly welcomeButton: Locator;
-    public readonly signInButton: Locator;
-    public readonly createAnAccountButton: Locator;
-    public readonly basketCounter: any;
-    public readonly basketCards: Locator;
-    public readonly showBasketContentsButton: Locator;
-    public readonly hideBasketContentsButton: Locator;
-    public readonly proceedToCheckoutButton: Locator;
-    public readonly viewAndEditCartButton: Locator;
-    public readonly deleteItemButton: Function;
-    public readonly productItemName: Function
-    public readonly acceptDeleteItemButton: Locator;
-    public readonly searchField: Locator;
-    public readonly searchButoon: Locator;
+    readonly logoButton: Locator;
+    readonly writeForUsLink: Locator;
+    readonly welcomeButton: Locator;
+    readonly signInButton: Locator;
+    readonly createAnAccountButton: Locator;
+    readonly basketCounter: any;
+    readonly basketCards: Locator;
+    readonly showBasketContentsButton: Locator;
+    readonly hideBasketContentsButton: Locator;
+    readonly proceedToCheckoutButton: Locator;
+    readonly viewAndEditCartButton: Locator;
+    readonly deleteItemButton: Function;
+    readonly productItemName: Function
+    readonly acceptDeleteItemButton: Locator;
+    readonly searchField: Locator;
+    readonly searchButoon: Locator;
 
 
 
@@ -25,7 +26,8 @@ export class HeaderElements{
     constructor(page: Page) {
         this.page = page
 
-        this.welcomeButton = page.getByRole('banner').locator('.logged-in', { hasText: "Welcome, " });
+        this.welcomeButton = page.getByRole('banner').locator('.logged-in', { hasText: "Welcome, " })
+        this.writeForUsLink = page.getByRole('banner').locator('.not-logged-in', { hasText: "Write for us" })
         this.signInButton = page.locator('.header.links > li').filter({ hasText: "Sign In" }).first()
         this.createAnAccountButton = page.locator('.header.links > li').filter({ hasText: "Create an Account" }).first()
 

@@ -19,14 +19,6 @@ export abstract class HelperBase {
         await this.page.context().clearCookies()
         await this.page.reload()
     }
-
-    getUniqueEmailOrPass(value) {
-        if (value === 'email') {
-            return `${uuidv4()}@gmail.com`
-        } else if (value === 'pass') {
-            return uuidv4()
-        }
-    }
 }
 
 /*

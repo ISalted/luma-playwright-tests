@@ -1,11 +1,8 @@
-import { Page, expect } from "@playwright/test"
+import { Locator, Page, expect } from "@playwright/test"
 import { HelperBase } from "./helpers/helperBase"
 
 export class MainPage extends HelperBase {
-    sizeButton: any;
-    collorButton: any;
-    addToCartButton: any;
-    alertMessage: any;
+    readonly alertMessage: Locator;
 
     constructor(page: Page) {
         super(page)
@@ -18,6 +15,8 @@ export class MainPage extends HelperBase {
     }
 
     addProductToTheBasketFromMainPage = async (inputLiNumb, inputSize, inputCollor) => {
+        await this.page.waitForLoadState('networkidle');
+
         let counter = await this.inHeader.getBasketCounter();
         let producTitleName = await this.inProductGrid.addToBasketFromGridAndReturnHisName(inputLiNumb, inputSize, inputCollor)
         counter++;

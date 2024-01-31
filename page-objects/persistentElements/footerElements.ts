@@ -3,14 +3,14 @@ import { Locator, Page } from "@playwright/test"
 export class footerElements {
     readonly page: Page
 
-    writeForUsButton: Locator
-    subscribeToOurMailingListButton: Locator
-    contactUsButton: Locator
-    hireASofwareTestingButton: Locator
-    searchTermsButton: Locator
-    privacyAndCookiePolicyButton: Locator
-    advancedSearchButton: Locator
-    ordersAndReturnsButton: Locator
+    readonly writeForUsButton: Locator
+    readonly subscribeToOurMailingListButton: Locator
+    readonly contactUsButton: Locator
+    readonly hireASofwareTestingButton: Locator
+    readonly searchTermsButton: Locator
+    readonly privacyAndCookiePolicyButton: Locator
+    readonly advancedSearchButton: Locator
+    readonly ordersAndReturnsButton: Locator
 
     constructor(page: Page) {
         this.page = page
