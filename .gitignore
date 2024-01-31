@@ -6,7 +6,7 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-/page-objects/helpers/wowinfo.ts
+/page-objects/helpers/a.ts
 
 
 
