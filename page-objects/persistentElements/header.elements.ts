@@ -1,62 +1,44 @@
 import { Locator, Page } from "@playwright/test"
+// import { BasePage } from "../../page-objects/helpers/basePage"
 
-export class HeaderElements{
-    readonly logoButton: Locator;
-    readonly writeForUsLink: Locator;
-    readonly welcomeButton: Locator;
-    readonly signInButton: Locator;
-    readonly createAnAccountButton: Locator;
-    readonly basketCounter: any;
-    readonly basketCards: Locator;
-    readonly showBasketContentsButton: Locator;
-    readonly hideBasketContentsButton: Locator;
-    readonly proceedToCheckoutButton: Locator;
-    readonly viewAndEditCartButton: Locator;
-    readonly deleteItemButton: Function;
-    readonly productItemName: Function
-    readonly acceptDeleteItemButton: Locator;
-    readonly searchField: Locator;
-    readonly searchButoon: Locator;
+export abstract class BasePage {
+    constructor(protected page: Page) { }
+}
 
 
+export class HeaderElements extends BasePage {
 
-    readonly page: Page
+    readonly writeForUsLink = this.page.getByRole('banner').locator('.not-logged-in', { hasText: "Write for us" })
+    readonly welcomeButton = this.page.getByRole('banner').locator('.logged-in', { hasText: "Welcome, " })
+    readonly signInButton = this.page.locator('.header.links > li').filter({ hasText: "Sign In" }).first()
+    readonly createAnAccountButton = this.page.locator('.header.links > li').filter({ hasText: "Create an Account" }).first()
 
+    readonly logoButton = this.page.getByLabel('store logo')
+
+    readonly searchField = this.page.getByPlaceholder('Search entire store here...')
+    readonly searchButoon = this.page.getByRole('button', { name: 'Search' })
+
+    readonly basketCounter:any = this.page.locator('.counter-number')
+    readonly basketCards = this.page.locator('#mini-cart')
+
+    readonly showBasketContentsButton = this.page.locator('.action.showcart')
+    readonly hideBasketContentsButton = this.page.locator('.action.showcart.active')
+
+    readonly productItemName = (inputProductName?: string) => {
+        return this.basketCards.locator('li', { hasText: inputProductName }).locator('.product-item-name')
+    }
+    readonly deleteItemButton = (inputProductName?: string) => {
+        return this.basketCards.locator('li', { hasText: inputProductName }).locator('.action.delete')
+    }
+
+
+    readonly proceedToCheckoutButton = this.page.getByRole('button', { name: 'Proceed to Checkout' })
+    readonly viewAndEditCartButton = this.page.getByRole('link', { name: 'View and Edit Cart' })
+
+    readonly acceptDeleteItemButton = this.page.getByRole('button', { name: 'OK' })
 
     constructor(page: Page) {
-        this.page = page
-
-        this.welcomeButton = page.getByRole('banner').locator('.logged-in', { hasText: "Welcome, " })
-        this.writeForUsLink = page.getByRole('banner').locator('.not-logged-in', { hasText: "Write for us" })
-        this.signInButton = page.locator('.header.links > li').filter({ hasText: "Sign In" }).first()
-        this.createAnAccountButton = page.locator('.header.links > li').filter({ hasText: "Create an Account" }).first()
-
-        this.logoButton = page.getByLabel('store logo')
-
-        this.searchField = page.getByPlaceholder('Search entire store here...')
-        this.searchButoon = page.getByRole('button', { name: 'Search' })
-
-        this.basketCounter = page.locator('.counter-number')
-        this.basketCards = page.locator('#mini-cart')
-
-        this.showBasketContentsButton = page.locator('.action.showcart')
-        this.hideBasketContentsButton = page.locator('.action.showcart.active')
-
-        this.productItemName = (inputProductName?: string) => {
-            return this.basketCards.locator('li', { hasText: inputProductName }).locator('.product-item-name')
-        }
-        this.deleteItemButton = (inputProductName?: string) => {
-            return this.basketCards.locator('li', { hasText: inputProductName }).locator('.action.delete')
-        }
-
-
-
-
-        this.acceptDeleteItemButton = page.getByRole('button', { name: 'OK' })
-        this.proceedToCheckoutButton = page.getByRole('button', { name: 'Proceed to Checkout' })
-        this.viewAndEditCartButton = page.getByRole('link', { name: 'View and Edit Cart' })
-
-
+        super(page)
     }
 
     logoButtonClick = async () => {
@@ -83,7 +65,7 @@ export class HeaderElements{
 
     getBasketCounter = async (actualCounterNumber?: number) => {
         let counter = await this.basketCounter.filter({ hasText: actualCounterNumber }).textContent()
-        if (counter === "") counter = 0
+        if (counter === undefined) counter = 0
         return parseInt(counter, 10)
     }
 

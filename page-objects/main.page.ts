@@ -1,13 +1,11 @@
 import { Locator, Page, expect } from "@playwright/test"
-import { HelperBase } from "./helpers/helperBase"
+import { BasePage } from "./helpers/basePage"
 
-export class MainPage extends HelperBase {
-    readonly alertMessage: Locator;
+export class MainPage extends BasePage {
+    readonly alertMessage = this.page.getByRole('alert').filter({ hasText: 'You added ' })
 
     constructor(page: Page) {
         super(page)
-
-        this.alertMessage = page.getByRole('alert').filter({ hasText: 'You added ' })
     }
 
     visitMainPage = async () => {

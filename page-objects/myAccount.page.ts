@@ -1,13 +1,11 @@
 import { Locator, Page } from "@playwright/test";
-import { HelperBase } from "./helpers/helperBase"
+import { BasePage } from "./helpers/basePage"
 
-export class MyAccountPage extends HelperBase {
-    readonly successMessage: Locator;
+export class MyAccountPage extends BasePage {
+    readonly successMessage = this.page.getByRole('alert').filter({ hasText: 'Thank you for registering' })
 
     constructor(page: Page) {
         super(page)
-
-        this.successMessage = page.getByRole('alert').filter({ hasText: 'Thank you for registering' })
     }
 
     getSuccessfulMessageAfterRegistration = async () => {

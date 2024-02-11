@@ -1,56 +1,33 @@
 import { Locator, expect } from "@playwright/test";
-import { HelperBase } from "./helpers/helperBase"
+import { BasePage } from "./helpers/basePage"
 
-export class CheckoutPage extends HelperBase {
-    readonly authorizationButton: Locator;
-    readonly loginFill: Locator;
-    readonly passFill: Locator;
-    readonly LogInButton: Locator;
-    readonly checkOutText: Locator;
-    readonly loader: Locator;
-    readonly firstNameField: Locator;
-    readonly lastNameField: Locator;
-    readonly companyField: Locator;
-    readonly addressField: Locator;
-    readonly cityField: Locator;
-    readonly zipField: Locator;
-    readonly countryField: Locator;
-    readonly stateField: Locator;
-    readonly shippingMethodsButton: Locator;
-    readonly phoneField: Locator;
-    readonly nextButton: Locator;
-    readonly paymentMethodTitle: Locator;
-    readonly allShippingInformationLocator: Locator;
-    readonly placeOrderButton: Locator;
-    readonly orderThankYouNotification: Locator;
-    readonly shippingAdressList: Locator;
+export class CheckoutPage extends BasePage {
+    readonly loginFill = this.page.getByRole('textbox', { name: 'Email Address *' })
+    readonly passFill = this.page.getByRole('textbox', { name: 'Password' })
+    readonly logInButton = this.page.getByRole('button', { name: 'Login' })
+    readonly checkOutText = this.page.getByText('You already have an account with us')
+
+    readonly loader = this.page.locator('.loader', { hasText: "Please wait..." })
+    readonly firstNameField = this.page.getByLabel('First Name')
+    readonly lastNameField = this.page.getByLabel('Last Name')
+    readonly companyField = this.page.getByLabel('Company')
+    readonly addressField = this.page.getByLabel('Street Address: Line 1')
+    readonly cityField = this.page.getByLabel('City')
+    readonly zipField = this.page.getByLabel('Zip/Postal Code')
+    readonly countryField = this.page.getByLabel('Country')
+    readonly stateField = this.page.locator('//*[@name="region_id"]')
+    readonly shippingMethodsButton = this.page.getByLabel('Table Rate')
+    readonly phoneField = this.page.getByLabel('Phone Number')
+    readonly nextButton = this.page.getByRole('button', { name: 'Next' })
+    readonly paymentMethodTitle = this.page.locator('.step-title', { hasText: 'Payment Method' })
+    readonly allShippingInformationLocator = this.page.locator('//*[@id="checkout-step-shipping"]//*[contains(@class, "input-text") or @class="select"]')
+
+    readonly placeOrderButton = this.page.getByRole('button', { name: 'Place Order' })
+    readonly orderThankYouNotification = this.page.locator('.page-title', { hasText: 'Thank you' })
+    readonly shippingAdressList = this.page.locator('//*[@class="shipping-address-item selected-item"]')
+
     constructor(page) {
         super(page)
-
-        this.loginFill = page.getByRole('textbox', { name: 'Email Address *' })
-        this.passFill = page.getByRole('textbox', { name: 'Password' })
-        this.LogInButton = page.getByRole('button', { name: 'Login' })
-        this.checkOutText = page.getByText('You already have an account with us')
-
-
-        this.loader = page.locator('.loader', { hasText: "Please wait..." })
-        this.firstNameField = page.getByLabel('First Name')
-        this.lastNameField = page.getByLabel('Last Name')
-        this.companyField = page.getByLabel('Company')
-        this.addressField = page.getByLabel('Street Address: Line 1')
-        this.cityField = page.getByLabel('City')
-        this.zipField = page.getByLabel('Zip/Postal Code')
-        this.countryField = page.getByLabel('Country')
-        this.stateField = page.locator('//*[@name="region_id"]')
-        this.shippingMethodsButton = page.getByLabel('Table Rate')
-        this.phoneField = page.getByLabel('Phone Number')
-        this.nextButton = page.getByRole('button', { name: 'Next' })
-        this.paymentMethodTitle = page.locator('.step-title', { hasText: 'Payment Method' })
-        this.allShippingInformationLocator = page.locator('//*[@id="checkout-step-shipping"]//*[contains(@class, "input-text") or @class="select"]')
-
-        this.placeOrderButton = page.getByRole('button', { name: 'Place Order' })
-        this.orderThankYouNotification = page.locator('.page-title', { hasText: 'Thank you' })
-        this.shippingAdressList = page.locator('//*[@class="shipping-address-item selected-item"]')
     }
 
     visitCheckoutPage = async () => {
@@ -67,7 +44,7 @@ export class CheckoutPage extends HelperBase {
         await this.passFill.waitFor()
         await this.passFill.fill(signInData.pass)
         await this.firstNameField.waitFor()
-        await this.LogInButton.click()
+        await this.logInButton.click()
         try {
             await this.checkOutText.waitFor({ state: 'hidden' })
         } catch (error) {

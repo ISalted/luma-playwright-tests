@@ -1,11 +1,11 @@
 import { Page } from "@playwright/test"
-import { MainPage } from "../mainPage"
-import { SignInPage } from "../signInPage"
-import { SinghUpPage } from "../signUpPage"
-import { CheckoutPage } from "../checkoutPage"
-import { MenJacketsPage } from "../menJacketsPage"
-import { ShoppingCartPage } from "../shoppingCartPage"
-import { MyAccountPage } from "../myAccountPage"
+import { MainPage } from "../main.page"
+import { SignInPage } from "../signIn.page"
+import { SinghUpPage } from "../signUp.page"
+import { CheckoutPage } from "../checkout.page"
+import { MenJacketsPage } from "../menJackets.page"
+import { ShoppingCartPage } from "../shoppingCart.page"
+import { MyAccountPage } from "../myAccount.page"
 export class PageManager {
 
     private readonly page: Page

@@ -1,13 +1,13 @@
 import { Page } from "@playwright/test"
-import { HeaderElements } from "../persistentElements/headerElements"
-import { UiMenuElements } from "../persistentElements/uiMenuElements"
-import { ProductGrid } from "../persistentElements/productsgrid"
-import { footerElements } from "../persistentElements/footerElements"
+import { HeaderElements } from "../persistentElements/header.elements"
+import { UiMenuElements } from "../persistentElements/uiMenu.elements"
+import { ProductGrid } from "../persistentElements/products.grid"
+import { footerElements } from "../persistentElements/footer.elements"
 
 import { v4 as uuidv4 } from "uuid";
 
 
-export abstract class HelperBase {
+export abstract class BasePage {
     constructor(protected page: Page) { }
 
     inHeader = new HeaderElements(this.page)

@@ -1,17 +1,14 @@
-import { Locator, Page } from "@playwright/test";
-import { HelperBase } from "./helpers/helperBase"
+import { Page } from "@playwright/test";
+import { BasePage } from "./helpers/basePage"
 
-export class SignInPage extends HelperBase {
-    readonly loginFill: Locator;
-    readonly passFill: Locator;
-    readonly signInButton: Locator;
-    readonly alertMessage: Locator;
+export class SignInPage extends BasePage {
+    readonly loginFill = this.page.locator('.block-content').getByLabel('Email', { exact: true });
+    readonly passFill = this.page.locator('.block-content').getByLabel('Password', { exact: true });
+    readonly signInButton = this.page.getByRole('button', { name: 'Sign In' });
+    readonly alertMessage = this.page.getByRole('alert').filter({ hasText: 'The account sign-in was incorrect' });
+    
     constructor(page: Page) {
         super(page)
-        this.loginFill = page.locator('.block-content').getByLabel('Email', { exact: true })
-        this.passFill = page.locator('.block-content').getByLabel('Password', { exact: true })
-        this.signInButton = page.getByRole('button', { name: 'Sign In' })
-        this.alertMessage = page.getByRole('alert').filter({ hasText: 'The account sign-in was incorrect' })
     }
 
     signInFromHeader = async (signInData, clearCookie?) => {

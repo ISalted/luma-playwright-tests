@@ -1,16 +1,13 @@
 import { Locator, Page } from "@playwright/test";
-import { HelperBase } from "./helpers/helperBase"
+import { BasePage } from "./helpers/basePage"
 
-export class ShoppingCartPage extends HelperBase {
-    readonly deleteItemButton: Locator;
-    readonly basketCards: Locator;
-    readonly basketItemPrice: any;
+export class ShoppingCartPage extends BasePage {
+    readonly basketCards = this.page.locator('.cart.item')
+    readonly deleteItemButton = this.basketCards.locator('.action.action-delete')
+    readonly basketItemPrice = this.basketCards.locator('.subtotal').locator('.price')
+
     constructor (page: Page){
         super(page)
-        this.basketCards = page.locator('.cart.item')
-        this.deleteItemButton = this.basketCards.locator('.action.action-delete')
-        this.basketItemPrice = this.basketCards.locator('.subtotal').locator('.price')
-
     }
 
     visitShoppingCartPageByUrl = async () => {
@@ -48,7 +45,7 @@ export class ShoppingCartPage extends HelperBase {
             let smallestPrice = Math.min(...justNumb)
             let smallestPriceIdx = justNumb.indexOf(smallestPrice)
             await this.deleteItemButton.nth(smallestPriceIdx).click()
-            await this.basketItemPrice.filter({ hasText: justNumb }).waitFor({state: 'hidden'})
+            await this.basketItemPrice.filter({ hasText: `${justNumb}` }).waitFor({state: 'hidden'})
             await this.page.reload()
 
             allPriceTexts = await this.basketItemPrice.allInnerTexts()

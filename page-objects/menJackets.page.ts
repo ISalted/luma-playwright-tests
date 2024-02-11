@@ -1,13 +1,12 @@
 import { Locator, Page, expect } from "@playwright/test";
-import { HelperBase } from "./helpers/helperBase"
+import { BasePage } from "./helpers/basePage"
 
-export class MenJacketsPage extends HelperBase {
-    readonly sortByDropdownButton: Locator;
-    readonly productTitle: Locator;
+export class MenJacketsPage extends BasePage {
+    readonly sortByDropdownButton = this.page.locator('(//*[@class="sorter-options"])[1]')
+    readonly productTitle = this.page.locator('(//*[@class="product-item-link"])')
+    
     constructor(page: Page) {
         super(page)
-        this.sortByDropdownButton = page.locator('(//*[@class="sorter-options"])[1]')
-        this.productTitle = page.locator('(//*[@class="product-item-link"])')
     }
 
     visitMenJacketsPage = async () => {

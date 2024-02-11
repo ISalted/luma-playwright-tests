@@ -1,18 +1,9 @@
-import { test, expect } from "@playwright/test"
-import { PageManager } from "../page-objects/helpers/pageManager";
+import { test, expect } from "../fixtures/baseFixtures"
 
 import { ExistingUsersData, UserDataWithWrongEmail, UserDataWithUniqueEmailAndPass, UserDataWithWrongPass } from "../data/userData"
 
-test.beforeEach(async ({ page }) => {
-    const pm = new PageManager(page)
 
-    await pm.onMainPage().visitMainPage()
-    await pm.onMainPage().inHeader.writeForUsLink.waitFor()
-    await pm.onMainPage().clearCookies()
-
-})
-
-test("Sign Up new user Test", async ({ page }) => {
+test("Sign Up new user Test", async ({ pm }) => {
     /*
     Check Sign In
     STR:
@@ -23,7 +14,6 @@ test("Sign Up new user Test", async ({ page }) => {
     5. Check success message
     */
 
-    const pm = new PageManager(page)
 
     await pm.onMainPage().inHeader.createAnAccountButtonClick()
     await pm.onSignUpPage().fillDataAndCreateAnAccount(UserDataWithUniqueEmailAndPass)
@@ -32,7 +22,7 @@ test("Sign Up new user Test", async ({ page }) => {
     expect(successMessageFromMyAccountPage).toContain("Thank you for registering")
 })
 
-test("Sign Up existing user Test", async ({ page }) => {
+test("Sign Up existing user Test", async ({ pm }) => {
     /*
     Check Sign In
     STR:
@@ -43,16 +33,13 @@ test("Sign Up existing user Test", async ({ page }) => {
     5. Check allert message
     */
 
-    const pm = new PageManager(page)
-
     await pm.onMainPage().inHeader.createAnAccountButtonClick()
     await pm.onSignUpPage().fillDataAndCreateAnAccount(ExistingUsersData)
     let unsuccessfulMessageFromSignUpPage = await pm.onSignUpPage().getExistingAccountMessage()
     expect(unsuccessfulMessageFromSignUpPage).toContain("There is already an account with this email address")
 })
 
-test("Sign Up with an incorrect email", async ({ page }) => {
-    const pm = new PageManager(page)
+test("Sign Up with an incorrect email", async ({ pm }) => {
 
     await pm.onMainPage().inHeader.createAnAccountButtonClick()
     await pm.onSignUpPage().fillDataAndCreateAnAccount(UserDataWithWrongEmail)
@@ -61,8 +48,7 @@ test("Sign Up with an incorrect email", async ({ page }) => {
 
 })
 
-test.only("Sign up with an incorrect password", async ({ page }) => {
-    const pm = new PageManager(page)
+test("Sign up with an incorrect password", async ({ pm }) => {
 
     await pm.onMainPage().inHeader.createAnAccountButtonClick()
     await pm.onSignUpPage().fillDataAndCreateAnAccount(UserDataWithWrongPass)
@@ -71,11 +57,43 @@ test.only("Sign up with an incorrect password", async ({ page }) => {
 
 })
 
-// test("Successful user registration with valid information", async ({ page }) => {
+test("Successful user registration with valid information", async ({ page }) => {
+    var Fruit = (function () {
+        var types = {};
+        function Fruit() { };
 
-// })
+        // count own properties in object
+        function count(love) {
+            return Object.keys(love).length;
+        }
 
-// test("Verify password strength validation during registration", async ({ page }) => {
+        var _static = {
+            getFruit: function (type) {
+                if (typeof types[type] == 'undefined') {
+                    types[type] = new Fruit;
+                }
+                return types[type];
+            },
+            printCurrentTypes: function () {
+                console.log('Number of instances made: ' + count(types));
+                for (var type in types) {
+                    console.log(type);
+                }
+            }
+        };
+
+        return _static;
+
+    })();
+
+    Fruit.getFruit('Apple');
+    Fruit.printCurrentTypes();
+})
+
+
+
+
+// test("Verify password strength validation during registration", async ({ pm }) => {
 
 // })
 

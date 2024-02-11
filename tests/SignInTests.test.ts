@@ -1,19 +1,8 @@
-import { test, expect } from "@playwright/test"
-import { PageManager } from "../page-objects/helpers/pageManager";
+import { test, expect } from "../fixtures/baseFixtures"
 
 import { ExistingUsersData, NonExistentUserData } from "../data/userData"
 
-
-test.beforeEach(async ({ page }) => {
-const pm = new PageManager(page)
-
-    await pm.onMainPage().visitMainPage()
-    await pm.onMainPage().inHeader.writeForUsLink.waitFor()
-    await pm.onMainPage().clearCookies()
-
-})
-
-test("Sign In test", async ({ page }) => {
+test.only("Sign In test", async ({ pm, page }) => {
     /*
     Check Sign In
     STR:
@@ -24,8 +13,6 @@ test("Sign In test", async ({ page }) => {
     5. Check the welcome text
     */
 
-    const pm = new PageManager(page)
-
     await pm.onMainPage().inHeader.signInButtonClick()
     await pm.onSignInPage().signInFromHeader(ExistingUsersData, 'Clear Coockie')
     let welcomeMessageFromHeader = await pm.onMainPage().inHeader.getWelcomeMessageFromHeader()
@@ -33,7 +20,7 @@ test("Sign In test", async ({ page }) => {
     expect(welcomeMessageFromHeader).toContain("Welcome")
 })
 
-test("Sign In with wrong data Test", async ({ page }) => {
+test.only("Sign In with wrong data Test", async ({ pm }) => {
     /*
     Check Sign In
     STR:
@@ -44,16 +31,13 @@ test("Sign In with wrong data Test", async ({ page }) => {
     5. Check allert message
     */
 
-    const pm = new PageManager(page)
     await pm.onMainPage().inHeader.signInButtonClick()
     await pm.onSignInPage().signInWithWrongData(NonExistentUserData)
     let unsuccessfulMessage = await pm.onSignInPage().getUnsuccessfulMessageAfterSignIn()
     expect(unsuccessfulMessage).toContain("The account sign-in was incorrect")
 })
 
-test("Sign In from checkOut page Test", async ({ page }) => {
-    const pm = new PageManager(page)
-
+test.only("Sign In from checkOut page Test", async ({ pm }) => {
     await pm.onMainPage().addProductToTheBasketFromMainPage(0, "M", "Blue")
     await pm.onMainPage().addProductToTheBasketFromMainPage(1, "L", "White")
     await pm.onMainPage().inHeader.goToCheckoutPageFromHeader()
@@ -63,19 +47,19 @@ test("Sign In from checkOut page Test", async ({ page }) => {
     expect(shippingAddressInformation).toContain("Pennsylvania Avenue NW")
 })
 
-// test("Check login with an incorrect username/email", async ({ page }) => {
+// test("Check login with an incorrect username/email", async ({ pm }) => {
 
 // })
 
-// test("Login with an incorrect password", async ({ page }) => {
+// test("Login with an incorrect password", async ({ pm }) => {
 
 // })
 
-// test("Test login with empty data", async ({ page }) => {
+// test("Test login with empty data", async ({ pm }) => {
 
 // })
 
-// test("Verify the 'LogOut' functionality", async ({ page }) => {
+// test("Verify the 'LogOut' functionality", async ({ pm }) => {
 
 // })
 
