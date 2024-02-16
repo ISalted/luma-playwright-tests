@@ -1,12 +1,7 @@
 import { test, expect } from "../fixtures/baseFixtures"
 
-test.beforeEach(async ({ pm }) => {
+test.describe('Product Listing tests', () => {
 
-    await pm.onMainPage().visitMainPage()
-    await pm.onMainPage().inHeader.writeForUsLink.waitFor()
-    await pm.onSignUpPage().clearCookies()
-
-})
 
 // test("Test the sorting options on the product listing page", async ({ pm }) => {
 
@@ -16,6 +11,7 @@ test.beforeEach(async ({ pm }) => {
 
 // })
 
-// test("Test filtering products by category", async ({ pm }) => {
-
+// test("Test filtering products by category", async ({ pm }) =>
 // })
+
+})

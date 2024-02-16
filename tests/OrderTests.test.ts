@@ -1,29 +1,19 @@
 import { test, expect } from "../fixtures/baseFixtures"
-import { PageManager } from "../page-objects/helpers/pageManager";
 import { UserDataWithUniqueEmailAndPass, shippingAddressData } from "../data/userData"
 
+test.describe('Order tests', () => {
 
-test.beforeEach(async ({ pm }) => {
+test("AddToCart button works on main @order", async ({ pm }) => {
 
-    await pm.onMainPage().visitMainPage()
-    await pm.onMainPage().inHeader.writeForUsLink.waitFor()
-    await pm.onSignUpPage().clearCookies()
-
-})
-
-test("AddToCart button works on main test", async ({ pm }) => {
-
-    let productNameFromTheGrid = await pm.onMainPage().addProductToTheBasketFromMainPage("3", "L", "Black")
-    let productItemNameFromBasket = await pm.onMainPage().inHeader.getProductItemNameFromBasket(productNameFromTheGrid)
+    let productNameFromTheGrid = await pm.onMainPage.addProductToTheBasketFromMainPage("3", "L", "Black")
+    let productItemNameFromBasket = await pm.onMainPage.inHeader.getProductItemNameFromBasket(productNameFromTheGrid)
     expect(productNameFromTheGrid).toContain(productItemNameFromBasket)
 
-
 })
 
-test("‘Remove’ button in the shopping cart test", async ({ pm }) => {
-    
-    let productNameFromTheGrid = await pm.onMainPage().addProductToTheBasketFromMainPage("3", "L", "Black")
-    let presenceOfDeletedItemInTheBasket = await pm.onMainPage().inHeader.deleteItemFromTheBasket(productNameFromTheGrid)
+test.only("Remove button in the shopping cart @order", async ({ pm }) => {
+    let productNameFromTheGrid = await pm.onMainPage.addProductToTheBasketFromMainPage("3", "L", "Black")
+    let presenceOfDeletedItemInTheBasket = await pm.onMainPage.inHeader.deleteItemFromTheBasket(productNameFromTheGrid)
     expect(presenceOfDeletedItemInTheBasket).toBeFalsy()
 })
 
@@ -73,46 +63,47 @@ test("‘Remove’ button in the shopping cart test", async ({ pm }) => {
 // })
 
 
-test("Clear basket from shopping cart test", async ({ pm }) => {
-    await pm.onMainPage().addProductToTheBasketFromMainPage("0", "S", "Blue")
-    await pm.onMainPage().addProductToTheBasketFromMainPage("1", "XL", "White")
-    await pm.onMainPage().addProductToTheBasketFromMainPage("3", "L", "Black")
+test("Clear basket from shopping cart @order", async ({ pm }) => {
+    await pm.onMainPage.addProductToTheBasketFromMainPage("0", "S", "Blue")
+    await pm.onMainPage.addProductToTheBasketFromMainPage("1", "XL", "White")
+    await pm.onMainPage.addProductToTheBasketFromMainPage("3", "L", "Black")
 
-    await pm.onMainPage().inHeader.goToShoppingCartPageFromHeader()
+    await pm.onMainPage.inHeader.goToShoppingCartPageFromHeader()
 
-    let countOfItemsInABasket = await pm.onShoppingCartPage().removeAllItemsFromShoppingCart()
+    let countOfItemsInABasket = await pm.onShoppingCartPage.removeAllItemsFromShoppingCart()
     expect(countOfItemsInABasket).toBe(0)
 })
 
-test("Clear basket from header test", async ({ pm }) => {
-    await pm.onMainPage().addProductToTheBasketFromMainPage("0","S","Blue")
-    await pm.onMainPage().addProductToTheBasketFromMainPage("1", "M", "White")
-    await pm.onMainPage().addProductToTheBasketFromMainPage("3", "L", "Black")
-    let countOfItemsInABasket = await pm.onMainPage().inHeader.clearBasketFromHeader()
+test("Clear basket from header @order", async ({ pm }) => {
+    await pm.onMainPage.addProductToTheBasketFromMainPage("0","S","Blue")
+    await pm.onMainPage.addProductToTheBasketFromMainPage("1", "M", "White")
+    await pm.onMainPage.addProductToTheBasketFromMainPage("3", "L", "Black")
+    let countOfItemsInABasket = await pm.onMainPage.inHeader.clearBasketFromHeader()
     expect(countOfItemsInABasket).toBe(0)
-
 })
 
-test("Remove cheapest item test", async ({ pm }) => {
-    await pm.onMainPage().addProductToTheBasketFromMainPage("0", "S", "Blue")
-    await pm.onMainPage().addProductToTheBasketFromMainPage("1", "M", "White")
-    await pm.onMainPage().addProductToTheBasketFromMainPage("3", "L", "Black")
-    await pm.onMainPage().inHeader.goToShoppingCartPageFromHeader()
+test("Remove cheapest item @order", async ({ pm }) => {
+    await pm.onMainPage.addProductToTheBasketFromMainPage("0", "S", "Blue")
+    await pm.onMainPage.addProductToTheBasketFromMainPage("1", "M", "White")
+    await pm.onMainPage.addProductToTheBasketFromMainPage("3", "L", "Black")
+    await pm.onMainPage.inHeader.goToShoppingCartPageFromHeader()
 
-    let cheapestItemInTheBasketAfterRemoval = await pm.onShoppingCartPage().removeCheapestItem()
+    let cheapestItemInTheBasketAfterRemoval = await pm.onShoppingCartPage.removeCheapestItem()
     expect(cheapestItemInTheBasketAfterRemoval).toBe(34)
 
 })
 
-test("Place order test", async ({ pm })=>{
-    await pm.onMainPage().inHeader.createAnAccountButtonClick()
-    await pm.onSignUpPage().fillDataAndCreateAnAccount(UserDataWithUniqueEmailAndPass)
-    await pm.onSignUpPage().inHeader.logoButtonClick()
+test("Place order @order", async ({ pm })=>{
+    await pm.onMainPage.inHeader.createAnAccountButtonClick()
+    await pm.onSignUpPage.fillDataAndCreateAnAccount(UserDataWithUniqueEmailAndPass)
+    await pm.onSignUpPage.inHeader.logoButtonClick()
 
-    await pm.onMainPage().addProductToTheBasketFromMainPage("1", "M", "White");
-    await pm.onMainPage().addProductToTheBasketFromMainPage("3", "L", "Black");
-    await pm.onCheckoutPage().inHeader.goToCheckoutPageFromHeader()
-    await pm.onCheckoutPage().fillShippingDetails(shippingAddressData)
-    const SuccessNotificationAfterPlacingOrder = await pm.onCheckoutPage().placeOrder()
+    await pm.onMainPage.addProductToTheBasketFromMainPage("1", "M", "White");
+    await pm.onMainPage.addProductToTheBasketFromMainPage("3", "L", "Black");
+    await pm.onCheckoutPage.inHeader.goToCheckoutPageFromHeader()
+    await pm.onCheckoutPage.fillShippingDetails(shippingAddressData)
+    const SuccessNotificationAfterPlacingOrder = await pm.onCheckoutPage.placeOrder()
     expect(SuccessNotificationAfterPlacingOrder).toContain('Thank you for your purchase!')
+})
+
 })

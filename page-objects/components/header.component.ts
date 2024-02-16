@@ -1,94 +1,96 @@
-import { Locator, Page } from "@playwright/test"
-// import { BasePage } from "../../page-objects/helpers/basePage"
+import { Page } from "@playwright/test"
+import { step } from "../helpers/step";
 
-export abstract class BasePage {
+export class HeaderElements {
     constructor(protected page: Page) { }
-}
 
+    public writeForUsLink = this.page.getByRole('banner').locator('.not-logged-in', { hasText: "Write for us" })
+    public welcomeButton = this.page.getByRole('banner').locator('.logged-in', { hasText: "Welcome, " })
+    public signInButton = this.page.getByRole('link', { name: 'Sign In' })
+    public createAnAccountButton = this.page.getByRole('link', { name: 'Create an Account' })
 
-export class HeaderElements extends BasePage {
+    public logoButton = this.page.getByLabel('store logo')
 
-    readonly writeForUsLink = this.page.getByRole('banner').locator('.not-logged-in', { hasText: "Write for us" })
-    readonly welcomeButton = this.page.getByRole('banner').locator('.logged-in', { hasText: "Welcome, " })
-    readonly signInButton = this.page.locator('.header.links > li').filter({ hasText: "Sign In" }).first()
-    readonly createAnAccountButton = this.page.locator('.header.links > li').filter({ hasText: "Create an Account" }).first()
+    public searchField = this.page.getByPlaceholder('Search entire store here...')
+    public searchButoon = this.page.getByRole('button', { name: 'Search' })
 
-    readonly logoButton = this.page.getByLabel('store logo')
+    public basketCounter:any = this.page.locator('.counter-number')
+    public basketCards = this.page.locator('#mini-cart')
 
-    readonly searchField = this.page.getByPlaceholder('Search entire store here...')
-    readonly searchButoon = this.page.getByRole('button', { name: 'Search' })
+    public showBasketContentsButton = this.page.locator('.action.showcart')
+    public hideBasketContentsButton = this.page.locator('.action.showcart.active')
 
-    readonly basketCounter:any = this.page.locator('.counter-number')
-    readonly basketCards = this.page.locator('#mini-cart')
-
-    readonly showBasketContentsButton = this.page.locator('.action.showcart')
-    readonly hideBasketContentsButton = this.page.locator('.action.showcart.active')
-
-    readonly productItemName = (inputProductName?: string) => {
+    private productItemName = (inputProductName?: string) => {
         return this.basketCards.locator('li', { hasText: inputProductName }).locator('.product-item-name')
     }
-    readonly deleteItemButton = (inputProductName?: string) => {
+    private deleteItemButton = (inputProductName?: string) => {
         return this.basketCards.locator('li', { hasText: inputProductName }).locator('.action.delete')
     }
 
 
-    readonly proceedToCheckoutButton = this.page.getByRole('button', { name: 'Proceed to Checkout' })
-    readonly viewAndEditCartButton = this.page.getByRole('link', { name: 'View and Edit Cart' })
+    public proceedToCheckoutButton = this.page.getByRole('button', { name: 'Proceed to Checkout' })
+    public viewAndEditCartButton = this.page.getByRole('link', { name: 'View and Edit Cart' })
 
-    readonly acceptDeleteItemButton = this.page.getByRole('button', { name: 'OK' })
+    public acceptDeleteItemButton = this.page.getByRole('button', { name: 'OK' })
 
-    constructor(page: Page) {
-        super(page)
-    }
-
-    logoButtonClick = async () => {
+    @step()
+    async logoButtonClick () {
         await this.logoButton.click()
         await this.logoButton.waitFor({state: 'visible'})
     }
 
-    signInButtonClick = async () => {
+    @step()
+    async signInButtonClick () {
         await this.signInButton.click()
     }
 
-    createAnAccountButtonClick = async () => {
+    @step()
+    async createAnAccountButtonClick () {
         await this.createAnAccountButton.click()
     }
 
-    getWelcomeMessageFromHeader = async () => {
+    @step()
+    async getWelcomeMessageFromHeader () {
         return await this.welcomeButton.textContent()
     }
 
-    searchEntireStore = async (searchData: string) => {
+    @step()
+    async searchEntireStore (searchData: string) {
         await this.searchField.fill(searchData)
         await this.searchButoon.click()
     }
 
-    getBasketCounter = async (actualCounterNumber?: number) => {
+    @step()
+    async getBasketCounter (actualCounterNumber?: number) {
         let counter = await this.basketCounter.filter({ hasText: actualCounterNumber }).textContent()
         if (counter === undefined) counter = 0
         return parseInt(counter, 10)
     }
 
-    getProductItemNameFromBasket = async (inputProductName: string) => {
+    @step()
+    async getProductItemNameFromBasket (inputProductName: string) {
         await this.showBasketContentsButton.click()
         let getProductNameInTheBasket = await this.productItemName(inputProductName).textContent()
         return getProductNameInTheBasket?.replace(/^[^a-zA-Z]*([a-zA-Z].*[a-zA-Z])[^a-zA-Z]*$/, '$1')
     }
 
-    goToCheckoutPageFromHeader = async () => {
+    @step()
+    async goToCheckoutPageFromHeader () {
         await this.basketCounter.waitFor({ state: "attached" })
         await this.showBasketContentsButton.click()
         await this.proceedToCheckoutButton.waitFor()
         await this.proceedToCheckoutButton.click()
     }
 
-    goToShoppingCartPageFromHeader = async () => {
+    @step()
+    async goToShoppingCartPageFromHeader (){
         await this.basketCounter.waitFor({ state: "attached" })
         await this.showBasketContentsButton.click()
         await this.viewAndEditCartButton.click()
     }
 
-    deleteItemFromTheBasket = async (inputProductName?: string) => {
+    @step()
+    async deleteItemFromTheBasket (inputProductName?: string) {
         await this.showBasketContentsButton.click()
         await this.deleteItemButton(inputProductName).click()
         await this.acceptDeleteItemButton.click()
@@ -96,7 +98,8 @@ export class HeaderElements extends BasePage {
         return await this.productItemName(inputProductName).isVisible()
     }
 
-    clearBasketFromHeader = async () => {
+    @step()
+    async clearBasketFromHeader () {
         let countOfItems = await this.basketCards.locator('li').count()
         await this.showBasketContentsButton.click()
         await this.basketCards.first().waitFor( { state: 'visible' } )

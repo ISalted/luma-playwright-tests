@@ -1,24 +1,19 @@
 import { Locator, Page } from "@playwright/test"
+import { step } from "../helpers/step";
+
 import { zeroLevelOfMenuItem, firstLevelOfMenuItem, secondLevelOfMenuItem } from "../../data/uiMenuData"
 
 
 export class UiMenuElements {
-    readonly page: Page;
-    readonly pageTitle: Locator;
-    readonly getItemFromLevel0: { WhatIsNew: string; Women: string; Men: string; Gear: string; Training: string; Sale: string; };
-    readonly getItemFromLevel1: { Tops: string; Bottoms: string; Bags: string; FitnessEquipment: string; Watches: string; VideoDownload: string; };
-    readonly getItemFromLevel2: { Jackets: string; HoodiesAndSweatshirts: string; Tees: string; BrasAndTanks: string; Tanks: string; VideoDownload: string; Shorts: string; };
+    public pageTitle = this.page.locator('.page-title')
+    public getItemFromLevel0: { WhatIsNew: string; Women: string; Men: string; Gear: string; Training: string; Sale: string; } = zeroLevelOfMenuItem
+    public getItemFromLevel1: { Tops: string; Bottoms: string; Bags: string; FitnessEquipment: string; Watches: string; VideoDownload: string; } = firstLevelOfMenuItem
+    public getItemFromLevel2: { Jackets: string; HoodiesAndSweatshirts: string; Tees: string; BrasAndTanks: string; Tanks: string; VideoDownload: string; Shorts: string; } = secondLevelOfMenuItem
 
-    constructor(page: Page) {
-        this.page = page
-        this.pageTitle = this.page.locator('.page-title')
-        this.getItemFromLevel0 = zeroLevelOfMenuItem
-        this.getItemFromLevel1 = firstLevelOfMenuItem
-        this.getItemFromLevel2 = secondLevelOfMenuItem
+    constructor(protected page: Page) { }
 
-    }
-
-    selectMenuItem = async (zeroLevelOfMenuItem: string, firstLevelOfMenuItem?: string, secondLevelOfMenuItem?: string) => {
+    @step()
+    async selectMenuItem (zeroLevelOfMenuItem: string, firstLevelOfMenuItem?: string, secondLevelOfMenuItem?: string) {
         let pageTitleWrapper: Locator
 
 
@@ -39,7 +34,8 @@ export class UiMenuElements {
         await pageTitleWrapper.waitFor()
     }
 
-    getWhatIsNewPage = async () => {
+    @step()
+    async getWhatIsNewPage () {
         await this.selectMenuItem(this.getItemFromLevel0.WhatIsNew)
     }
 

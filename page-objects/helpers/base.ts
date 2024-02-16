@@ -1,13 +1,10 @@
 import { Page } from "@playwright/test"
-import { HeaderElements } from "../persistentElements/header.elements"
-import { UiMenuElements } from "../persistentElements/uiMenu.elements"
-import { ProductGrid } from "../persistentElements/products.grid"
-import { footerElements } from "../persistentElements/footer.elements"
+import { HeaderElements } from "../components/header.component"
+import { UiMenuElements } from "../components/uiMenu.component"
+import { ProductGrid } from "../components/products.component"
+import { footerElements } from "../components/footer.component"
 
-import { v4 as uuidv4 } from "uuid";
-
-
-export abstract class BasePage {
+export abstract class Base {
     constructor(protected page: Page) { }
 
     inHeader = new HeaderElements(this.page)
@@ -19,4 +16,6 @@ export abstract class BasePage {
         await this.page.context().clearCookies()
         await this.page.reload()
     }
+
 }
+

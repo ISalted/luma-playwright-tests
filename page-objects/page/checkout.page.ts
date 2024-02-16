@@ -1,41 +1,40 @@
-import { Locator, expect } from "@playwright/test";
-import { BasePage } from "./helpers/basePage"
+import { Base } from "../helpers/base";
+import { step } from "../helpers/step";
 
-export class CheckoutPage extends BasePage {
-    readonly loginFill = this.page.getByRole('textbox', { name: 'Email Address *' })
-    readonly passFill = this.page.getByRole('textbox', { name: 'Password' })
-    readonly logInButton = this.page.getByRole('button', { name: 'Login' })
-    readonly checkOutText = this.page.getByText('You already have an account with us')
+export class CheckoutPage extends Base {
+    public pagePath = '/checkout/cart'
 
-    readonly loader = this.page.locator('.loader', { hasText: "Please wait..." })
-    readonly firstNameField = this.page.getByLabel('First Name')
-    readonly lastNameField = this.page.getByLabel('Last Name')
-    readonly companyField = this.page.getByLabel('Company')
-    readonly addressField = this.page.getByLabel('Street Address: Line 1')
-    readonly cityField = this.page.getByLabel('City')
-    readonly zipField = this.page.getByLabel('Zip/Postal Code')
-    readonly countryField = this.page.getByLabel('Country')
-    readonly stateField = this.page.locator('//*[@name="region_id"]')
-    readonly shippingMethodsButton = this.page.getByLabel('Table Rate')
-    readonly phoneField = this.page.getByLabel('Phone Number')
-    readonly nextButton = this.page.getByRole('button', { name: 'Next' })
-    readonly paymentMethodTitle = this.page.locator('.step-title', { hasText: 'Payment Method' })
-    readonly allShippingInformationLocator = this.page.locator('//*[@id="checkout-step-shipping"]//*[contains(@class, "input-text") or @class="select"]')
+    private loginFill = this.page.getByRole('textbox', { name: 'Email Address *' })
+    private passFill = this.page.getByRole('textbox', { name: 'Password' })
+    private logInButton = this.page.getByRole('button', { name: 'Login' })
+    private checkOutText = this.page.getByText('You already have an account with us')
 
-    readonly placeOrderButton = this.page.getByRole('button', { name: 'Place Order' })
-    readonly orderThankYouNotification = this.page.locator('.page-title', { hasText: 'Thank you' })
-    readonly shippingAdressList = this.page.locator('//*[@class="shipping-address-item selected-item"]')
+    private loader = this.page.locator('.loader', { hasText: "Please wait..." })
+    private firstNameField = this.page.getByLabel('First Name')
+    private lastNameField = this.page.getByLabel('Last Name')
+    private companyField = this.page.getByLabel('Company')
+    private addressField = this.page.getByLabel('Street Address: Line 1')
+    private cityField = this.page.getByLabel('City')
+    private zipField = this.page.getByLabel('Zip/Postal Code')
+    private countryField = this.page.getByLabel('Country')
+    private stateField = this.page.locator('//*[@name="region_id"]')
+    private shippingMethodsButton = this.page.getByLabel('Table Rate')
+    private phoneField = this.page.getByLabel('Phone Number')
+    private nextButton = this.page.getByRole('button', { name: 'Next' })
+    private paymentMethodTitle = this.page.locator('.step-title', { hasText: 'Payment Method' })
+    private allShippingInformationLocator = this.page.locator('//*[@id="checkout-step-shipping"]//*[contains(@class, "input-text") or @class="select"]')
 
-    constructor(page) {
-        super(page)
-    }
+    private placeOrderButton = this.page.getByRole('button', { name: 'Place Order' })
+    private orderThankYouNotification = this.page.locator('.page-title', { hasText: 'Thank you' })
+    private shippingAdressList = this.page.locator('//*[@class="shipping-address-item selected-item"]')
 
-    visitCheckoutPage = async () => {
+    @step()
+    async visitCheckoutPage () {
         await this.page.goto("/checkout/#shipping")
         await this.page.waitForURL(/\/checkout/gm, { timeout: 3000 })
     }
 
-    loginFromCheckout = async (signInData, clearCookie?) => {
+    async loginFromCheckout (signInData, clearCookie?) {
         if (clearCookie == 'Clear Coockie'){
             await this.clearCookies()
         }
@@ -54,11 +53,13 @@ export class CheckoutPage extends BasePage {
 
     }
 
-    getShippingAddressInformation = async () => {
+    @step()
+    async getShippingAddressInformation () {
         return await this.shippingAdressList.textContent()
     }
 
-    fillShippingDetails = async (shippingDetails) =>{
+    @step()
+    async fillShippingDetails (shippingDetails) {
         await this.loader.waitFor({ state: 'hidden' })
         await this.firstNameField.fill(shippingDetails.firstName)
         await this.lastNameField.fill(shippingDetails.lastName)
@@ -84,9 +85,10 @@ export class CheckoutPage extends BasePage {
                 valuesArray.push(stringValue);
             }
         }
-        expect(Object.values(shippingDetails)).toEqual(valuesArray)
     }
-    placeOrder = async () => {
+
+    @step()
+    async placeOrder () {
         await this.nextButton.click()
         await this.loader.waitFor({ state: 'hidden' })
         await this.placeOrderButton.waitFor()

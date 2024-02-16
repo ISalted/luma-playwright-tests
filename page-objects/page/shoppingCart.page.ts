@@ -1,20 +1,20 @@
-import { Locator, Page } from "@playwright/test";
-import { BasePage } from "./helpers/basePage"
+import { step } from "../helpers/step";
+import { Base } from "../helpers/base"
 
-export class ShoppingCartPage extends BasePage {
-    readonly basketCards = this.page.locator('.cart.item')
-    readonly deleteItemButton = this.basketCards.locator('.action.action-delete')
-    readonly basketItemPrice = this.basketCards.locator('.subtotal').locator('.price')
+export class ShoppingCartPage extends Base {
+    public pagePath = '/checkout/cart'
 
-    constructor (page: Page){
-        super(page)
+    private basketCards = this.page.locator('.cart.item')
+    private deleteItemButton = this.basketCards.locator('.action.action-delete')
+    private basketItemPrice: any = this.basketCards.locator('.subtotal').locator('.price')
+
+    @step()
+    async visitShoppingCartPageByUrl () {
+        await this.page.goto("/checkout/cart")
     }
 
-    visitShoppingCartPageByUrl = async () => {
-        await this.page.goto("/checkout/cart/")
-    }
-
-    removeAllItemsFromShoppingCart = async () => {
+    @step()
+    async removeAllItemsFromShoppingCart () {
         await this.basketCards.first().waitFor({ state: 'visible' })
         let countOfItems = await this.basketCards.count()
 
@@ -33,7 +33,8 @@ export class ShoppingCartPage extends BasePage {
         return countOfItems
     }
 
-    removeCheapestItem = async () => {
+    @step()
+    async removeCheapestItem () {
         await this.basketCards.first().waitFor({ state: 'visible' })
         const countOfItems = await this.basketCards.count()
 
@@ -45,7 +46,7 @@ export class ShoppingCartPage extends BasePage {
             let smallestPrice = Math.min(...justNumb)
             let smallestPriceIdx = justNumb.indexOf(smallestPrice)
             await this.deleteItemButton.nth(smallestPriceIdx).click()
-            await this.basketItemPrice.filter({ hasText: `${justNumb}` }).waitFor({state: 'hidden'})
+            await this.basketItemPrice.filter({ hasText: justNumb }).waitFor({state: 'hidden'})
             await this.page.reload()
 
             allPriceTexts = await this.basketItemPrice.allInnerTexts()

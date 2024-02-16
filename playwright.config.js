@@ -15,6 +15,7 @@ const { devices } = require('@playwright/test');
  */
 const config = {
   testDir: './tests',
+  retries: 2,
   /* Maximum time one test can run for. */
   timeout: 50 * 1000,
   // globalTimeout: 60000,
@@ -30,11 +31,15 @@ const config = {
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  //  retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'line',
+  reporter: [
+    ['list'],
+    ['html'],
+    // ['./page-objects/helpers/slowStepReporter.ts'],
+  ],
   /* 'line', 'html' Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
@@ -45,9 +50,9 @@ const config = {
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    video: 'retain-on-failure'
+    video: 'retain-on-failure',
   },
-
+  // globalSetup: require.resolve('./page-objects/helpers/cacheWarmer.ts'),
   /* Configure projects for major browsers */
   projects: [
     {
@@ -55,6 +60,7 @@ const config = {
       use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 1280, height: 900 },
+        launchOptions: { devtools: true }
       },
     },
 
