@@ -15,7 +15,6 @@ const { devices } = require('@playwright/test');
  */
 const config = {
   testDir: './tests',
-  retries: 2,
   /* Maximum time one test can run for. */
   timeout: 50 * 1000,
   // globalTimeout: 60000,
@@ -31,7 +30,7 @@ const config = {
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  //  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 2 : 1,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
@@ -59,8 +58,15 @@ const config = {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
-        viewport: { width: 1280, height: 900 },
-        launchOptions: { devtools: true }
+        viewport: {
+          width: 1280,
+          height: 900
+        },
+        ignoreHTTPSErrors: true,
+
+        // launchOptions: {
+        //   devtools: true,
+        // }
       },
     },
 

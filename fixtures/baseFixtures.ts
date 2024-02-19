@@ -13,7 +13,6 @@ export const test = baseFixture.extend<{ pm: PageManager }>({
         await pm.onMainPage.visitMainPage()
         await pm.onMainPage.inHeader.writeForUsLink.waitFor()
         await pm.onMainPage.clearCookies()
-        await page.waitForTimeout(1000)
 
         await use(pm);
     }

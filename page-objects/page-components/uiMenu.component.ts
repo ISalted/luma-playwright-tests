@@ -1,16 +1,16 @@
-import { Locator, Page } from "@playwright/test"
+import { Locator } from "@playwright/test"
 import { step } from "../helpers/step";
 
 import { zeroLevelOfMenuItem, firstLevelOfMenuItem, secondLevelOfMenuItem } from "../../data/uiMenuData"
+import { BasePage } from "../helpers/basePage";
 
 
-export class UiMenuElements {
+export class UiMenuElements extends BasePage {
     public pageTitle = this.page.locator('.page-title')
     public getItemFromLevel0: { WhatIsNew: string; Women: string; Men: string; Gear: string; Training: string; Sale: string; } = zeroLevelOfMenuItem
     public getItemFromLevel1: { Tops: string; Bottoms: string; Bags: string; FitnessEquipment: string; Watches: string; VideoDownload: string; } = firstLevelOfMenuItem
     public getItemFromLevel2: { Jackets: string; HoodiesAndSweatshirts: string; Tees: string; BrasAndTanks: string; Tanks: string; VideoDownload: string; Shorts: string; } = secondLevelOfMenuItem
 
-    constructor(protected page: Page) { }
 
     @step()
     async selectMenuItem (zeroLevelOfMenuItem: string, firstLevelOfMenuItem?: string, secondLevelOfMenuItem?: string) {
@@ -18,17 +18,17 @@ export class UiMenuElements {
 
 
         if (secondLevelOfMenuItem !== undefined) {
-            await this.page.locator(`//*[@role="presentation"]//*[contains(text(),"${zeroLevelOfMenuItem}")]`).hover()
+            await this.page.getByRole('menuitem', { name: zeroLevelOfMenuItem }).hover()
             await this.page.getByRole('menuitem', { name: firstLevelOfMenuItem }).hover()
             await this.page.getByRole('menuitem', { name: secondLevelOfMenuItem }).click()
             pageTitleWrapper = this.pageTitle.filter({ hasText: secondLevelOfMenuItem })
         } else if (firstLevelOfMenuItem !== undefined){
-            await this.page.locator(`//*[@role="presentation"]//*[contains(text(),"${zeroLevelOfMenuItem}")]`).hover()
+            await this.page.getByRole('menuitem', { name: zeroLevelOfMenuItem }).hover()
             await this.page.getByRole('menuitem', { name: zeroLevelOfMenuItem }).hover()
             await this.page.getByRole('menuitem', { name: firstLevelOfMenuItem }).click()
             pageTitleWrapper = this.pageTitle.filter({ hasText: firstLevelOfMenuItem })
         } else {
-            await this.page.locator(`//*[@role="presentation"]//*[contains(text(),"${zeroLevelOfMenuItem}")]`).click()
+            await this.page.getByRole('menuitem', { name: zeroLevelOfMenuItem }).click()
             pageTitleWrapper = this.pageTitle.filter({ hasText: zeroLevelOfMenuItem })
         }
         await pageTitleWrapper.waitFor()

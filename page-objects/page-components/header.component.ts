@@ -1,8 +1,7 @@
-import { Page } from "@playwright/test"
-import { step } from "../helpers/step";
+import { step } from "../helpers/step"
+import { BasePage } from "../helpers/basePage"
 
-export class HeaderElements {
-    constructor(protected page: Page) { }
+export class HeaderElements extends BasePage {
 
     public writeForUsLink = this.page.getByRole('banner').locator('.not-logged-in', { hasText: "Write for us" })
     public welcomeButton = this.page.getByRole('banner').locator('.logged-in', { hasText: "Welcome, " })
@@ -62,8 +61,8 @@ export class HeaderElements {
 
     @step()
     async getBasketCounter (actualCounterNumber?: number) {
-        let counter = await this.basketCounter.filter({ hasText: actualCounterNumber }).textContent()
-        if (counter === undefined) counter = 0
+        let counter = await this.basketCounter.filter({ hasText: actualCounterNumber }).textContent({ timeout: 5000 })
+        if (counter === '') counter = 0
         return parseInt(counter, 10)
     }
 

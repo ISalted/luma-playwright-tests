@@ -1,7 +1,7 @@
 import { step } from "../helpers/step";
-import { Base } from "../helpers/base"
+import { Components } from "../page-components/components";
 
-export class MenJacketsPage extends Base {
+export class MenJacketsPage extends Components {
     public pagePath = '/men/tops-men/jackets-men.html'
 
     private sortByDropdownButton = this.page.locator('(//*[@class="sorter-options"])[1]')

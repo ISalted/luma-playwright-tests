@@ -1,7 +1,7 @@
 import { step } from "../helpers/step";
-import { Base } from "../helpers/base"
+import { Components } from "../page-components/components";
 
-export class SignInPage extends Base {
+export class SignInPage extends Components {
     public pagePath = '/customer/account/login'
 
     private loginFill = this.page.getByRole('textbox', {name: 'Email'})

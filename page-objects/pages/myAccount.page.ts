@@ -1,8 +1,7 @@
-import { Locator, Page } from "@playwright/test";
 import { step } from "../helpers/step";
-import { Base } from "../helpers/base"
+import { Components } from "../page-components/components";
 
-export class MyAccountPage extends Base {
+export class MyAccountPage extends Components {
     public pagePath = '/customer/account'
 
     private successMessage = this.page.getByRole('alert').filter({ hasText: 'Thank you for registering' })

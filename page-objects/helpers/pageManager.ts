@@ -1,14 +1,13 @@
-import { Page } from "@playwright/test"
-import { MainPage } from "../page/main.page"
-import { SignInPage } from "../page/signIn.page"
-import { SinghUpPage } from "../page/signUp.page"
-import { CheckoutPage } from "../page/checkout.page"
-import { MenJacketsPage } from "../page/menJackets.page"
-import { ShoppingCartPage } from "../page/shoppingCart.page"
-import { MyAccountPage } from "../page/myAccount.page"
+import { MainPage } from "../pages/main.page"
+import { SignInPage } from "../pages/signIn.page"
+import { SinghUpPage } from "../pages/signUp.page"
+import { CheckoutPage } from "../pages/checkout.page"
+import { MenJacketsPage } from "../pages/menJackets.page"
+import { ShoppingCartPage } from "../pages/shoppingCart.page"
+import { MyAccountPage } from "../pages/myAccount.page"
+import { BasePage } from "./basePage"
 
-export class PageManager {
-    constructor(protected page: Page) { }
+export class PageManager extends BasePage{
 
     public onMainPage = new MainPage(this.page)
     public onSignInPage = new SignInPage(this.page)

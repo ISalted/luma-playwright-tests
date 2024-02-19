@@ -1,7 +1,7 @@
-import { Base } from "../helpers/base"
 import { step } from "../helpers/step";
+import { Components } from "../page-components/components";
 
-export class SinghUpPage extends Base {
+export class SinghUpPage extends Components {
     public pagePath = '/customer/account/create/'
 
     private firstName = this.page.getByRole('textbox', { name: 'First Name*' })

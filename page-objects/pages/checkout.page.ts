@@ -1,7 +1,7 @@
-import { Base } from "../helpers/base";
 import { step } from "../helpers/step";
+import { Components } from "../page-components/components";
 
-export class CheckoutPage extends Base {
+export class CheckoutPage extends Components {
     public pagePath = '/checkout/cart'
 
     private loginFill = this.page.getByRole('textbox', { name: 'Email Address *' })
@@ -64,7 +64,7 @@ export class CheckoutPage extends Base {
         await this.firstNameField.fill(shippingDetails.firstName)
         await this.lastNameField.fill(shippingDetails.lastName)
         await this.companyField.fill(shippingDetails.company)
-        await this.addressField.fill(shippingDetails.address)
+        await this.addressField.fill(`C${shippingDetails.address}`)
         await this.cityField.fill(shippingDetails.city)
         await this.zipField.fill(shippingDetails.zip)
         await this.countryField.selectOption(shippingDetails.country)

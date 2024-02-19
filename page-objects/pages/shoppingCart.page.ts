@@ -1,7 +1,7 @@
 import { step } from "../helpers/step";
-import { Base } from "../helpers/base"
+import { Components } from "../page-components/components";
 
-export class ShoppingCartPage extends Base {
+export class ShoppingCartPage extends Components {
     public pagePath = '/checkout/cart'
 
     private basketCards = this.page.locator('.cart.item')

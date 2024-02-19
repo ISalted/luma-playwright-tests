@@ -1,8 +1,7 @@
-import { Page } from "@playwright/test"
 import { step } from "../helpers/step";
+import { BasePage } from "../helpers/basePage";
 
-export class footerElements {
-    constructor(protected page: Page) { }
+export class footerElements extends BasePage{
 
     public writeForUsButton = this.page.locator('.footer.content').getByRole('link', { name: 'Write for us' })
     public subscribeToOurMailingListButton =  this.page.locator('.footer.content').getByRole('link', { name: 'Subscribe to our mailing list' })

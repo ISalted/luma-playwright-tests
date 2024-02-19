@@ -1,7 +1,7 @@
 import { test, expect } from "../fixtures/baseFixtures"
 import { ExistingUsersData as ExistingUserData, NonExistentUserData } from "../data/userData"
 
-test("Sign In from main @signin", async ({ pm, page }) => {
+test("Sign In from main @signin", async ({ pm,page }) => {
 
     /*
     Check Sign In
@@ -12,8 +12,11 @@ test("Sign In from main @signin", async ({ pm, page }) => {
     4. Log in as a registered user
     5. Check the welcome text
     */
+    // const snapshot = await page.accessibility.snapshot();
+    // console.log(snapshot);
 
     await pm.onMainPage.inHeader.signInButtonClick()
+    await pm.onMainPage.faker.color.space()
     await pm.onSignInPage.signInFromHeader(ExistingUserData, 'Clear Coockie')
     let welcomeMessageFromHeader = await pm.onMainPage.inHeader.getWelcomeMessageFromHeader()
 
@@ -21,6 +24,8 @@ test("Sign In from main @signin", async ({ pm, page }) => {
 })
 
 test("Sign In with wrong data @signin", async ({ pm }) => {
+
+
 
     /*
     Check Sign In
@@ -39,8 +44,9 @@ test("Sign In with wrong data @signin", async ({ pm }) => {
 })
 
 test("Sign In from checkOut page @signin", async ({ pm }) => {
-    await pm.onMainPage.addProductToTheBasketFromMainPage(0, "M", "Blue")
-    await pm.onMainPage.addProductToTheBasketFromMainPage(1, "L", "White")
+
+    await pm.onMainPage.inProductGrid.addToBasketAndReturnHisName(0, 2, 0)
+    await pm.onMainPage.inProductGrid.addToBasketAndReturnHisName(1, 3, 1)
     await pm.onMainPage.inHeader.goToCheckoutPageFromHeader()
     await pm.onCheckoutPage.loginFromCheckout(ExistingUserData)
     const shippingAddressInformation = await pm.onCheckoutPage.getShippingAddressInformation()
