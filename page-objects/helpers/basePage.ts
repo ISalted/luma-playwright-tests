@@ -3,7 +3,12 @@ import { faker as oldFaker } from '@faker-js/faker'
 
 
 export abstract class BasePage {
-    constructor(protected page: Page) { }
+    // constructor(protected page: Page) { }
+    page: Page
+    constructor(page: Page) {
+        this.page = page;
+    }
+
 
     faker = oldFaker
 

@@ -7,7 +7,7 @@
     "test": "playwright test",
     "headed": "playwright test --headed",
     "ui": "playwright test --ui",
-    "grep": "playwright test --headed --grep",
+    "grep": "playwright test --grep",
     "debug": "playwright test --debug" },
   "keywords": [],
   "author": "",

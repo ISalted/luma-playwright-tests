@@ -8,19 +8,36 @@ export class ProductGrid extends BasePage {
     private widgetProductGrid: any = this.page.locator('.product-items').locator('li')
 
     public sizeButtons = (productIndex:number) => {
-        return this.page.locator('.product-items').locator('li').nth(productIndex).getByRole('listbox', { name: 'Size' }).getByRole('option')
+        return this.page
+                .locator('.product-items')
+                .locator('li').nth(productIndex)
+                .getByRole('listbox', { name: 'Size' })
+                .getByRole('option')
     };
 
     public collorButtons = (productIndex: number) => {
-        return this.page.locator('.product-items').locator('li').nth(productIndex).getByRole('listbox', { name: 'Color' }).getByRole('option')
+        return this.page
+                .locator('.product-items')
+                .locator('li')
+                .nth(productIndex)
+                .getByRole('listbox', { name: 'Color' })
+                .getByRole('option')
     }
 
     public addToCartButton = (productIndex: number) => {
-        return this.page.locator('.product-items').locator('li').nth(productIndex).getByRole('button', { name: 'Add to Cart' })
+        return this.page
+                .locator('.product-items')
+                .locator('li')
+                .nth(productIndex)
+                .getByRole('button', { name: 'Add to Cart' })
     }
 
     public productItemName: any = (inputLiNumb: number) => {
-        return this.page.locator('.product-items').locator('li').nth(inputLiNumb).locator('.product-item-name')
+        return this.page
+                .locator('.product-items')
+                .locator('li')
+                .nth(inputLiNumb)
+                .locator('.product-item-name')
     }
 
 

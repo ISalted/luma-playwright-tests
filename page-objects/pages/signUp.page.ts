@@ -10,8 +10,9 @@ export class SinghUpPage extends Components {
     private emailErrorMessage = this.page.locator('#email_address-error')
     private passFill = this.page.getByRole('textbox', { name: 'Password*', exact: true })
     private passwordErrorMessage = this.page.locator('#password-error')
+    private passwordStrengthMeter = this.page.locator('#password-strength-meter-label')
     private passConfirmFill = this.page.getByRole('textbox', { name: 'Confirm Password*', exact: true })
-    private CreateButton = this.page.locator('//*[@class="action submit primary"]');
+    private createButton = this.page.locator('//*[@class="action submit primary"]');
     private existingAccountMessage = this.page.getByRole('alert').filter({ hasText: 'There is already an account with this email' })
 
     @step()
@@ -26,8 +27,8 @@ export class SinghUpPage extends Components {
         await this.lastName.fill(Timestamp.toString())
         await this.emailFill.fill(userData.email)
         await this.passFill.fill(userData.pass)
-        await this.passConfirmFill.fill(userData.pass)
-        await this.CreateButton.click()
+        await this.passConfirmFill.fill(userData.confirmPass)
+        await this.createButton.click()
     }
 
     @step()
@@ -46,6 +47,12 @@ export class SinghUpPage extends Components {
     async getInvalidPasswordMessage () {
         await this.passwordErrorMessage.waitFor({ state: 'visible' })
         return this.passwordErrorMessage.textContent()
+    }
+
+    @step()
+    async getPasswordStrengthMeter() {
+        await this.passwordStrengthMeter.waitFor({ state: 'visible' })
+        return this.passwordStrengthMeter.textContent()
     }
 
 }

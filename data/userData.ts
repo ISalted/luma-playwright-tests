@@ -2,34 +2,65 @@ import { v4 as uuidv4 } from "uuid";
 import { faker } from '@faker-js/faker'
 
 
-export const ExistingUsersData: { email: string; pass: string } = {
+export const ExistingUsersData: { email: string; pass: string, confirmPass: string } = {
     email: 'magentotestuserdan@gmail.com',
-    pass: 'Ma1234567'
+    pass: 'Ma1234567',
+    confirmPass:'Ma1234567'
 }
 
-export const UserDataWithWrongEmail: { email: string; pass: string } = {
+export const UserDataWithWrongEmail: { email: string; pass: string, confirmPass: string } = {
     email: 'magentotestuserdan@gmail',
-    pass: 'Ma1234567'
+    pass: 'Ma1234567',
+    confirmPass: 'Ma1234567'
 }
 
-export const UserDataWithWrongPass: { email: string; pass: string } = {
+export const UserDataWithWrongPass: { email: string; pass: string, confirmPass: string } = {
     email: 'magentotestuserdan@gmail.com',
-    pass: '1234567'
+    pass: '1234567',
+    confirmPass: 'Ma1234567'
 }
 
-export const NonExistentUserData: { email: string; pass: string } = {
+export const NonExistentUserData: { email: string; pass: string, confirmPass: string } = {
     email: 'wronguserdata@gmail.com',
-    pass: 'Wrong1234567'
+    pass: 'Wrong1234567',
+    confirmPass: 'Wrong1234567'
 };
 
-export const UserDataWithUniqueEmailAndPass: { email: string; pass: string } = {
+const uniqPass = `${uuidv4()}`
+export const UserDataWithUniqueEmailAndPass: { email: string; pass: string, confirmPass: string } = {
     email: `${uuidv4()}@gmail.com`,
-    pass: uuidv4()
+    pass: uniqPass,
+    confirmPass: uniqPass
 }
 
-export const UserDataWithUniqueEmailAndPass2: { email: string; pass: string } = {
+export const UserDataWithUniqueEmailAndPass2: { email: string; pass: string, confirmPass: string } = {
     email: `${uuidv4()}@gmail.com`,
-    pass: uuidv4()
+    pass: uniqPass,
+    confirmPass: uniqPass
+}
+
+export const UserDataWithWeakPass: { email: string; pass: string, confirmPass: string } = {
+    email: 'magentotestuserdan@gmail.com',
+    pass: '123',
+    confirmPass: ''
+}
+
+export const UserDataWithMediumPass: { email: string; pass: string, confirmPass: string } = {
+    email: 'magentotestuserdan@gmail.com',
+    pass: 'Pass1234',
+    confirmPass: ''
+}
+
+export const UserDataWithStrongPass: { email: string; pass: string, confirmPass: string } = {
+    email: 'magentotestuserdan@gmail.com',
+    pass: 'Pass1234!',
+    confirmPass: ''
+}
+
+export const UserDataWithVeryStrongPass: { email: string; pass: string, confirmPass: string } = {
+    email: 'magentotestuserdan@gmail.com',
+    pass: 'Password1234',
+    confirmPass: ''
 }
 
 export const shippingAddressData = {

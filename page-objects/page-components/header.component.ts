@@ -20,10 +20,14 @@ export class HeaderElements extends BasePage {
     public hideBasketContentsButton = this.page.locator('.action.showcart.active')
 
     private productItemName = (inputProductName?: string) => {
-        return this.basketCards.locator('li', { hasText: inputProductName }).locator('.product-item-name')
+        return this.basketCards
+                .locator('li', { hasText: inputProductName })
+                .locator('.product-item-name')
     }
     private deleteItemButton = (inputProductName?: string) => {
-        return this.basketCards.locator('li', { hasText: inputProductName }).locator('.action.delete')
+        return this.basketCards
+                .locator('li', { hasText: inputProductName })
+                .locator('.action.delete')
     }
 
 
