@@ -11,8 +11,9 @@ export const test = baseFixture.extend<{ pm: PageManager }>({
         // });
 
         await pm.onMainPage.visitMainPage()
-        await pm.onMainPage.inHeader.writeForUsLink.waitFor()
+        await pm.onMainPage.inHeader.writeForUsBtn.waitFor()
         await pm.onMainPage.clearCookies()
+        await pm.onMainPage.inHeader.writeForUsBtn.waitFor({state: 'visible'})
 
         await use(pm);
     }

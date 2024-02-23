@@ -4,34 +4,52 @@ import { Components } from "../page-components/components";
 export class SignInPage extends Components {
     public pagePath = '/customer/account/login'
 
-    private loginFill = this.page.getByRole('textbox', {name: 'Email'})
-    private passFill = this.page.getByRole('textbox', { name: 'Password*' })
-    private signInButton = this.page.getByRole('button', { name: 'Sign In' })
-    private alertMessage = this.page.getByRole('alert').filter({ hasText: 'The account sign-in was incorrect' })
+    private loginFld = this.page.getByRole('textbox', {name: 'Email'})
+    private passFld = this.page.getByRole('textbox', { name: 'Password*' })
+    private signInBtn = this.page.getByRole('button', { name: 'Sign In' })
+    private alertMsg = this.page.getByRole('alert').filter({ hasText: 'The account sign-in was incorrect' })
+    private emailErrorMsg = this.page.locator('#email-error')
+    private passErrorMsg = this.page.locator('#pass-error')
 
 
     @step()
-    async signInFromHeader (signInData, clearCookie?) {
+    async fillDataAndSignIn (signInData, clearCookie?) {
         if (clearCookie == 'Clear Coockie') {
             await this.clearCookies()
         }
-        await this.loginFill.type(signInData.email, { delay: 30 })
-        await this.passFill.type(signInData.pass, { delay: 30 })
-        await this.signInButton.click()
-        await this.inHeader.welcomeButton.waitFor({ state: "attached" })
+        await this.loginFld.type(signInData.email, { delay: 30 })
+        await this.passFld.type(signInData.pass, { delay: 30 })
+        await this.signInBtn.click()
+
+        await this.inHeader.welcomeBtn.waitFor({ state: "attached" })
     }
+
     @step()
-    async signInWithWrongData (signInData: { email: string; pass: string }, clearCookie?) {
+    async fillWrongData (signInData, clearCookie?) {
         if (clearCookie == 'Clear Coockie') {
             await this.clearCookies()
         }
-        await this.loginFill.type(signInData.email, { delay: 30 })
-        await this.passFill.type(signInData.pass, { delay: 30 })
-        await this.signInButton.click()
+        await this.loginFld.type(signInData.email, { delay: 30 })
+        await this.passFld.type(signInData.pass, { delay: 30 })
+        await this.signInBtn.click()
     }
+
     @step()
-    async getUnsuccessfulMessageAfterSignIn () {
-        return await this.alertMessage.textContent()
+    async getUnsuccessfulMsg () {
+        await this.alertMsg.waitFor({ state: 'visible' })
+        return await this.alertMsg.textContent()
+    }
+
+    @step()
+    async getEmailErrorMsg() {
+        await this.emailErrorMsg.waitFor({ state: 'visible' })
+        return await this.emailErrorMsg.textContent()
+    }
+
+    @step()
+    async getPassErrorMsg() {
+        await this.passErrorMsg.waitFor({ state: 'visible' })
+        return await this.passErrorMsg.textContent()
     }
 
 

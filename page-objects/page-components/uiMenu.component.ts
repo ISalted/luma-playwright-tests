@@ -1,35 +1,35 @@
 import { Locator } from "@playwright/test"
 import { step } from "../helpers/step";
 
-import { zeroLevelOfMenuItem, firstLevelOfMenuItem, secondLevelOfMenuItem } from "../../data/uiMenuData"
+import { ZERO_LEVEL_OF_MENU_ITEM, FIRST_LEVEL_OF_MENU_ITEM, SECOND_LEVEL_OF_MENU_ITEM } from "../../data/uiMenuData"
 import { BasePage } from "../helpers/basePage";
 
 
 export class UiMenuElements extends BasePage {
     public pageTitle = this.page.locator('.page-title')
-    public getItemFromLevel0: { WhatIsNew: string; Women: string; Men: string; Gear: string; Training: string; Sale: string; } = zeroLevelOfMenuItem
-    public getItemFromLevel1: { Tops: string; Bottoms: string; Bags: string; FitnessEquipment: string; Watches: string; VideoDownload: string; } = firstLevelOfMenuItem
-    public getItemFromLevel2: { Jackets: string; HoodiesAndSweatshirts: string; Tees: string; BrasAndTanks: string; Tanks: string; VideoDownload: string; Shorts: string; } = secondLevelOfMenuItem
+    public getItemFromLevel0: { WhatIsNew: string; Women: string; Men: string; Gear: string; Training: string; Sale: string; } = ZERO_LEVEL_OF_MENU_ITEM
+    public getItemFromLevel1: { Tops: string; Bottoms: string; Bags: string; FitnessEquipment: string; Watches: string; VideoDownload: string; } = FIRST_LEVEL_OF_MENU_ITEM
+    public getItemFromLevel2: { Jackets: string; HoodiesAndSweatshirts: string; Tees: string; BrasAndTanks: string; Tanks: string; VideoDownload: string; Shorts: string; } = SECOND_LEVEL_OF_MENU_ITEM
 
 
     @step()
-    async selectMenuItem (zeroLevelOfMenuItem: string, firstLevelOfMenuItem?: string, secondLevelOfMenuItem?: string) {
+    async selectMenuItem (zeroLevelOfMenuItems: string, firstLevelOfMenuItems?: string, secondLevelOfMenuItems?: string) {
         let pageTitleWrapper: Locator
 
 
-        if (secondLevelOfMenuItem !== undefined) {
-            await this.page.getByRole('menuitem', { name: zeroLevelOfMenuItem }).hover()
-            await this.page.getByRole('menuitem', { name: firstLevelOfMenuItem }).hover()
-            await this.page.getByRole('menuitem', { name: secondLevelOfMenuItem }).click()
-            pageTitleWrapper = this.pageTitle.filter({ hasText: secondLevelOfMenuItem })
-        } else if (firstLevelOfMenuItem !== undefined){
-            await this.page.getByRole('menuitem', { name: zeroLevelOfMenuItem }).hover()
-            await this.page.getByRole('menuitem', { name: zeroLevelOfMenuItem }).hover()
-            await this.page.getByRole('menuitem', { name: firstLevelOfMenuItem }).click()
-            pageTitleWrapper = this.pageTitle.filter({ hasText: firstLevelOfMenuItem })
+        if (secondLevelOfMenuItems !== undefined) {
+            await this.page.getByRole('menuitem', { name: zeroLevelOfMenuItems }).hover()
+            await this.page.getByRole('menuitem', { name: firstLevelOfMenuItems }).hover()
+            await this.page.getByRole('menuitem', { name: secondLevelOfMenuItems }).click()
+            pageTitleWrapper = this.pageTitle.filter({ hasText: secondLevelOfMenuItems })
+        } else if (firstLevelOfMenuItems !== undefined){
+            await this.page.getByRole('menuitem', { name: zeroLevelOfMenuItems }).hover()
+            await this.page.getByRole('menuitem', { name: zeroLevelOfMenuItems }).hover()
+            await this.page.getByRole('menuitem', { name: firstLevelOfMenuItems }).click()
+            pageTitleWrapper = this.pageTitle.filter({ hasText: firstLevelOfMenuItems })
         } else {
-            await this.page.getByRole('menuitem', { name: zeroLevelOfMenuItem }).click()
-            pageTitleWrapper = this.pageTitle.filter({ hasText: zeroLevelOfMenuItem })
+            await this.page.getByRole('menuitem', { name: zeroLevelOfMenuItems }).click()
+            pageTitleWrapper = this.pageTitle.filter({ hasText: zeroLevelOfMenuItems })
         }
         await pageTitleWrapper.waitFor()
     }

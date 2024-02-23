@@ -3,122 +3,198 @@ import { BasePage } from "../helpers/basePage"
 
 export class HeaderElements extends BasePage {
 
-    public writeForUsLink = this.page.getByRole('banner').locator('.not-logged-in', { hasText: "Write for us" })
-    public welcomeButton = this.page.getByRole('banner').locator('.logged-in', { hasText: "Welcome, " })
-    public signInButton = this.page.getByRole('link', { name: 'Sign In' })
-    public createAnAccountButton = this.page.getByRole('link', { name: 'Create an Account' })
+    public writeForUsBtn = this.page.getByRole('banner').locator('.not-logged-in', { hasText: "Write for us" })
+    public welcomeBtn = this.page.getByRole('banner').locator('.logged-in', { hasText: "Welcome, " })
+    private signInBtn = this.page.getByRole('link', { name: 'Sign In' })
+    private signOutBtn = this.page.getByRole('link', { name: 'Sign Out' })
+    private createAnAccountBtn = this.page.getByRole('link', { name: 'Create an Account' })
+    private changeDropDownBtn = this.page.locator('.customer-name').getByRole('button', { name: 'Change' })
 
-    public logoButton = this.page.getByLabel('store logo')
+    private logoBtn = this.page.getByLabel('store logo')
 
-    public searchField = this.page.getByPlaceholder('Search entire store here...')
-    public searchButoon = this.page.getByRole('button', { name: 'Search' })
+    private searchFld = this.page.getByPlaceholder('Search entire store here...')
+    private searchBtn = this.page.getByRole('button', { name: 'Search' })
 
-    public basketCounter:any = this.page.locator('.counter-number')
-    public basketCards = this.page.locator('#mini-cart')
+    private basketCounter: any = this.page.locator('.counter-number')
+    private basketCards: any = this.page.locator('#mini-cart')
+    private basketCartSubtotal: any = this.page.locator('.subtotal').locator('.price-wrapper')
 
-    public showBasketContentsButton = this.page.locator('.action.showcart')
-    public hideBasketContentsButton = this.page.locator('.action.showcart.active')
+    private showBasketBtn = this.page.locator('.action.showcart')
+    private hideBasketBtn = this.page.locator('.action.showcart.active')
 
-    private productItemName = (inputProductName?: string) => {
+    public proceedToCheckoutBtn = this.page.getByRole('button', { name: 'Proceed to Checkout' })
+    public viewAndEditCartBtn = this.page.getByRole('link', { name: 'View and Edit Cart' })
+
+    public acceptDeleteProductBtn = this.page.getByRole('button', { name: 'OK' })
+
+    private basketProductName: any = (index) => {
         return this.basketCards
-                .locator('li', { hasText: inputProductName })
-                .locator('.product-item-name')
+            .locator('.product-item-name').nth(index)
     }
-    private deleteItemButton = (inputProductName?: string) => {
+
+    private basketProductPrice: any = (index) => {
+        return this.basketCards
+            .locator('.price').nth(index)
+    }
+
+    private basketProductQuantity: any = (index) => {
+        return this.basketCards
+            .getByRole('spinbutton').nth(index)
+    }
+
+    private deleteProductBtn = (inputProductName?: string) => {
         return this.basketCards
                 .locator('li', { hasText: inputProductName })
                 .locator('.action.delete')
     }
 
-
-    public proceedToCheckoutButton = this.page.getByRole('button', { name: 'Proceed to Checkout' })
-    public viewAndEditCartButton = this.page.getByRole('link', { name: 'View and Edit Cart' })
-
-    public acceptDeleteItemButton = this.page.getByRole('button', { name: 'OK' })
-
     @step()
-    async logoButtonClick () {
-        await this.logoButton.click()
-        await this.logoButton.waitFor({state: 'visible'})
+    async clickLogoBtn () {
+        await this.logoBtn.click()
+        await this.page.waitForLoadState('networkidle')
+
     }
 
     @step()
-    async signInButtonClick () {
-        await this.signInButton.click()
+    async clickSignInBtn () {
+        await this.signInBtn.click()
     }
 
     @step()
-    async createAnAccountButtonClick () {
-        await this.createAnAccountButton.click()
+    async clickCreateAccountBtn () {
+        await this.createAnAccountBtn.click()
+        await this.writeForUsBtn.waitFor({state: 'visible'})
     }
 
     @step()
-    async getWelcomeMessageFromHeader () {
-        return await this.welcomeButton.textContent()
+    async signOut() {
+        if (await this.signOutBtn.isHidden({timeout:500})){
+            await this.changeDropDownBtn.click()
+        }
+        await this.signOutBtn.click()
+    }
+
+    @step()
+    async openBasket() {
+        await this.basketCounter.waitFor({ state: 'visible' })
+        if (await this.proceedToCheckoutBtn.isHidden({timeout:500}))
+            await this.showBasketBtn.click()
+    }
+
+    @step()
+    async getWelcomeMsg () {
+        return await this.welcomeBtn.textContent()
     }
 
     @step()
     async searchEntireStore (searchData: string) {
-        await this.searchField.fill(searchData)
-        await this.searchButoon.click()
+        await this.searchFld.fill(searchData)
+        await this.searchBtn.click()
     }
 
     @step()
-    async getBasketCounter (actualCounterNumber?: number) {
+    async getBasketProductName(index) {
+        await this.openBasket()
+        return (await this.basketProductName(index).textContent()).replace(/^[^a-zA-Z]*([a-zA-Z].*[a-zA-Z])[^a-zA-Z]*$/, '$1')
+    }
+
+    @step()
+    async getBasketProductPrice(index) {
+        await this.openBasket()
+        return await this.basketProductPrice(index).textContent()
+    }
+
+    @step()
+    async getBasketProductQuantity(index) {
+        await this.openBasket()
+        return await this.basketProductQuantity(index).getAttribute('data-item-qty')
+    }
+
+    @step()
+    async getBasketCounter(actualCounterNumber?: number) {
         let counter = await this.basketCounter.filter({ hasText: actualCounterNumber }).textContent({ timeout: 5000 })
         if (counter === '') counter = 0
         return parseInt(counter, 10)
     }
 
     @step()
-    async getProductItemNameFromBasket (inputProductName: string) {
-        await this.showBasketContentsButton.click()
-        let getProductNameInTheBasket = await this.productItemName(inputProductName).textContent()
-        return getProductNameInTheBasket?.replace(/^[^a-zA-Z]*([a-zA-Z].*[a-zA-Z])[^a-zA-Z]*$/, '$1')
+    async getCartSubtotalFromBasket() {
+        return parseFloat((await this.basketCartSubtotal.textContent()).replace("$", ""))
     }
 
     @step()
-    async goToCheckoutPageFromHeader () {
-        await this.basketCounter.waitFor({ state: "attached" })
-        await this.showBasketContentsButton.click()
-        await this.proceedToCheckoutButton.waitFor()
-        await this.proceedToCheckoutButton.click()
+    async getBasketData() {
+        await this.openBasket()
+
+        let itemInCart = await this.page.locator('.items-total .count').textContent()
+        let cartSubtotal = await this.getCartSubtotalFromBasket()
+
+        const productsData: {
+            name: any;
+            price: any;
+            quantity: any;
+        }[] = [];
+
+        let i = 0
+        let productsCount = await this.page.locator('#mini-cart li').locator('.product-item-name').count()
+
+        do {
+            const product = {
+            name: await this.getBasketProductName(i),
+            price: await this.getBasketProductPrice(i),
+            quantity: await this.getBasketProductQuantity(i)
+            }
+            productsData.push(product);
+            i++
+        } while (i < productsCount);
+
+        return {
+            itemInCart: itemInCart,
+            cartSubtotal: cartSubtotal,
+            ItemsData: productsData
+        }
     }
 
     @step()
-    async goToShoppingCartPageFromHeader (){
-        await this.basketCounter.waitFor({ state: "attached" })
-        await this.showBasketContentsButton.click()
-        await this.viewAndEditCartButton.click()
+    async navigateToCheckoutPage () {
+        await this.openBasket()
+        await this.proceedToCheckoutBtn.waitFor()
+        await this.proceedToCheckoutBtn.click({delay: 500})
     }
 
     @step()
-    async deleteItemFromTheBasket (inputProductName?: string) {
-        await this.showBasketContentsButton.click()
-        await this.deleteItemButton(inputProductName).click()
-        await this.acceptDeleteItemButton.click()
-        await this.productItemName(inputProductName).waitFor({ state: 'hidden' })
-        return await this.productItemName(inputProductName).isVisible()
+    async navigateToShoppingCartPage (){
+        await this.openBasket()
+        await this.viewAndEditCartBtn.click({ delay: 500 })
     }
 
     @step()
-    async clearBasketFromHeader () {
-        let countOfItems = await this.basketCards.locator('li').count()
-        await this.showBasketContentsButton.click()
-        await this.basketCards.first().waitFor( { state: 'visible' } )
+    async deleteProductFromTheBasket (inputProductName?: string) {
+        await this.showBasketBtn.click()
+        await this.deleteProductBtn(inputProductName).click()
+        await this.acceptDeleteProductBtn.click()
+        await this.basketProductName(inputProductName).waitFor({ state: 'hidden' })
+        return await this.basketProductName(inputProductName).isVisible()
+    }
 
-        while (countOfItems !== 0) {
-            await this.deleteItemButton().first().click()
-            await this.acceptDeleteItemButton.click()
-            countOfItems--
+    @step()
+    async clearBasket () {
+        let countOfProducts = await this.basketCards.locator('li').count()
+        await this.showBasketBtn.click()
+        await this.basketCards.first().waitFor({ state: 'visible' })
+
+        while (countOfProducts !== 0) {
+            await this.deleteProductBtn().first().click()
+            await this.acceptDeleteProductBtn.click()
+            countOfProducts--
             await this.page.waitForFunction(
                 (expectedCount) => {
                     const liElements = Array.from(document.querySelectorAll('[id="mini-cart"] li'));
                     return liElements.length === expectedCount;
-                }, countOfItems
+                }, countOfProducts
             )
         }
-        countOfItems = await this.basketCards.count()
-        return countOfItems
+        countOfProducts = await this.basketCards.count()
+        return countOfProducts
     }
 }

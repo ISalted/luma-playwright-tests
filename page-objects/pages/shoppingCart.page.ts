@@ -5,21 +5,21 @@ export class ShoppingCartPage extends Components {
     public pagePath = '/checkout/cart'
 
     private basketCards = this.page.locator('.cart.item')
-    private deleteItemButton = this.basketCards.locator('.action.action-delete')
+    private deleteItemBtn = this.basketCards.locator('.action.action-delete')
     private basketItemPrice: any = this.basketCards.locator('.subtotal').locator('.price')
 
     @step()
-    async visitShoppingCartPageByUrl () {
+    async visitPageByUrl () {
         await this.page.goto("/checkout/cart")
     }
 
     @step()
-    async removeAllItemsFromShoppingCart () {
+    async clearShoppingCart () {
         await this.basketCards.first().waitFor({ state: 'visible' })
         let countOfItems = await this.basketCards.count()
 
         while (countOfItems !== 0) {
-            await this.deleteItemButton.first().click()
+            await this.deleteItemBtn.first().click()
             countOfItems--;
             await this.page.waitForFunction(
                 (expectedCount) => {
@@ -45,7 +45,7 @@ export class ShoppingCartPage extends Components {
             })
             let smallestPrice = Math.min(...justNumb)
             let smallestPriceIdx = justNumb.indexOf(smallestPrice)
-            await this.deleteItemButton.nth(smallestPriceIdx).click()
+            await this.deleteItemBtn.nth(smallestPriceIdx).click()
             await this.basketItemPrice.filter({ hasText: justNumb }).waitFor({state: 'hidden'})
             await this.page.reload()
 

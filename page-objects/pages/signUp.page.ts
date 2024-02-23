@@ -4,16 +4,19 @@ import { Components } from "../page-components/components";
 export class SinghUpPage extends Components {
     public pagePath = '/customer/account/create/'
 
-    private firstName = this.page.getByRole('textbox', { name: 'First Name*' })
-    private lastName = this.page.getByRole('textbox', { name: 'Last Name*' })
-    private emailFill = this.page.getByRole('textbox', { name: 'Email*' })
-    private emailErrorMessage = this.page.locator('#email_address-error')
-    private passFill = this.page.getByRole('textbox', { name: 'Password*', exact: true })
-    private passwordErrorMessage = this.page.locator('#password-error')
+    private firstNameFld = this.page.getByRole('textbox', { name: 'First Name*' })
+    private lastNameFld = this.page.getByRole('textbox', { name: 'Last Name*' })
+    private emailFld = this.page.getByRole('textbox', { name: 'Email*' })
+    private emailErrorMsg = this.page.locator('#email_address-error')
+    private passFld = this.page.getByRole('textbox', { name: 'Password*', exact: true })
+    private passwordErrorMsg = this.page.locator('#password-error')
+    private passwordCorfirmErrorMsg = this.page.locator('#password-confirmation-error')
     private passwordStrengthMeter = this.page.locator('#password-strength-meter-label')
-    private passConfirmFill = this.page.getByRole('textbox', { name: 'Confirm Password*', exact: true })
-    private createButton = this.page.locator('//*[@class="action submit primary"]');
-    private existingAccountMessage = this.page.getByRole('alert').filter({ hasText: 'There is already an account with this email' })
+    private passConfirmFld = this.page.getByRole('textbox', { name: 'Confirm Password*', exact: true })
+    private createBtn = this.page.locator('//*[@class="action submit primary"]');
+    private existingAccountMsg = this.page.getByRole('alert').filter({ hasText: 'There is already an account with this email' })
+
+
 
     @step()
     async visitSignUpPage () {
@@ -23,35 +26,48 @@ export class SinghUpPage extends Components {
     async fillDataAndCreateAnAccount (userData) {
         const Timestamp = Math.floor(Date.now() / 1000)
 
-        await this.firstName.fill('TestCustomer')
-        await this.lastName.fill(Timestamp.toString())
-        await this.emailFill.fill(userData.email)
-        await this.passFill.fill(userData.pass)
-        await this.passConfirmFill.fill(userData.confirmPass)
-        await this.createButton.click()
+        await this.firstNameFld.fill('TestCustomer')
+        await this.lastNameFld.fill(Timestamp.toString())
+        await this.emailFld.fill(userData.email)
+        await this.passFld.fill(userData.pass)
+        await this.passConfirmFld.fill(userData.confirmPass)
+        await this.createBtn.click()
+        await this.page.waitForLoadState('networkidle')
+
+    }
+
+    async fillOnlyPass(userData) {
+        await this.passFld.fill(userData.pass)
+        await this.passConfirmFld.fill(userData.confirmPass)
     }
 
     @step()
     async getExistingAccountMessage () {
-        await this.existingAccountMessage.waitFor({ state: 'visible' })
-        return this.existingAccountMessage.textContent()
+        await this.existingAccountMsg.waitFor({ state: 'visible' })
+        return this.existingAccountMsg.textContent()
     }
 
     @step()
     async getInvalidEmailMessage () {
-        await this.emailErrorMessage.waitFor({ state: 'visible' })
-        return this.emailErrorMessage.textContent()
+        await this.emailErrorMsg.waitFor({ state: 'visible' })
+        return this.emailErrorMsg.textContent()
     }
 
     @step()
     async getInvalidPasswordMessage () {
-        await this.passwordErrorMessage.waitFor({ state: 'visible' })
-        return this.passwordErrorMessage.textContent()
+        await this.passwordErrorMsg.waitFor({ state: 'visible' })
+        return this.passwordErrorMsg.textContent()
     }
 
     @step()
-    async getPasswordStrengthMeter() {
-        await this.passwordStrengthMeter.waitFor({ state: 'visible' })
+    async getInvalidConfirmPasswordMessage() {
+        await this.passwordCorfirmErrorMsg.waitFor({ state: 'visible' })
+        return this.passwordCorfirmErrorMsg.textContent()
+    }
+
+    @step()
+    async getPasswordStrengthMeter(expectedStrengt) {
+        await this.passwordStrengthMeter.getByText(expectedStrengt).waitFor({ state: 'visible' })
         return this.passwordStrengthMeter.textContent()
     }
 

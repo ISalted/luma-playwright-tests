@@ -1,4 +1,4 @@
-export const zeroLevelOfMenuItem = {
+export const ZERO_LEVEL_OF_MENU_ITEM = {
     WhatIsNew: "What's New",
     Women: "Women",
     Men: "Men",
@@ -7,7 +7,7 @@ export const zeroLevelOfMenuItem = {
     Sale: "Sale"
 };
 
-export const firstLevelOfMenuItem = {
+export const FIRST_LEVEL_OF_MENU_ITEM = {
     Tops: "Tops",
     Bottoms: "Bottoms",
     Bags: "Bags",
@@ -16,7 +16,7 @@ export const firstLevelOfMenuItem = {
     VideoDownload: "Video Download"
 };
 
-export const secondLevelOfMenuItem = {
+export const SECOND_LEVEL_OF_MENU_ITEM = {
     Jackets: "Jackets",
     HoodiesAndSweatshirts: "Hoodies & Sweatshirts",
     Tees: "Tees",

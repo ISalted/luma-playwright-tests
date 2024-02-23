@@ -4,7 +4,7 @@ import { Components } from "../page-components/components";
 export class MainPage extends Components {
     public pagePath = '/'
 
-    private alertMessage = this.page.getByRole('alert').filter({ hasText: 'You added ' })
+    private alertMse = this.page.getByRole('alert').filter({ hasText: 'You added ' })
 
     @step()
     async visitMainPage () {
