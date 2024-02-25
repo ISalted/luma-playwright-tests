@@ -2,7 +2,8 @@ import { test, expect } from "../fixtures/baseFixtures"
 import * as userData from "../data/userData";
 
 /**
- * @testCase Sign In from Main Header with Existing User
+ * @testCase Sign In from Main Header with Existing User @signin
+ * @description Validates the sign-in process from the main header using existing user credentials.
  * STR:
  *  0. "Before" steps are stored in the pm fixture
  *  1. Click "Sign In" button in the header
@@ -20,7 +21,8 @@ test('Sign In from Main Header Validation @signin', async ({ pm }) => {
 })
 
 /**
- * @testCase Sign In from Checkout Page Validation
+ * @testCase Sign In from Checkout Page Validation @signin
+ * @description Validates the sign-in process from the checkout page using existing user credentials.
  * STR:
  *  0. Before steps are stored in the pm fixture
  *  1. Add products to the basket from the product grid.
@@ -41,7 +43,8 @@ test("Sign In from Checkout Page Validation @signin", async ({ pm }) => {
 })
 
 /**
- * @testCase Sign In with Incorrect Email Validation
+ * @testCase Sign In with Incorrect Email Validation @signin
+ * @description Validates the sign-in process with incorrect email data.
  * STR:
  *  0. "Before" steps are stored in the pm fixture
  *  1. Click "Sign In" button in the header
@@ -58,7 +61,8 @@ test("Sign In with Unregistered Email Validation @signin", async ({ pm }) => {
 })
 
 /**
- * @testCase Sign In with Incorrect Email Validation
+ * @testCase Sign In with Incorrect Email Validation @signin
+ * @description Validates the sign-in process with invalid email data.
  * STR:
  *  0. "Before" steps are stored in the pm fixture
  *  1. Click "Sign In" button in the header
@@ -76,11 +80,12 @@ test("Sign In with Invalid Email Validation @signin", async ({ pm }) => {
 })
 
 /**
- * @testCase Sign In with Incorrect Pass Validation
+ * @testCase Sign In with Incorrect Pass Validation @signin
+ * @description Validates the sign-in process with incorrect password data.
  * STR:
  *  0. "Before" steps are stored in the pm fixture
  *  1. Click "Sign In" button in the header
- *  2. Attempt to sign in with incorrect pass data
+ *  2. Attempt to sign in with incorrect password data
  *  3. Get unsuccessful message after sign-in
  *  4. Verify that the unsuccessful message contains "The account sign-in was incorrect"
  */
@@ -93,7 +98,8 @@ test("Sign In with Incorrect Pass Validation @signin", async ({ pm }) => {
 })
 
 /**
- * @testCase Test login with empty email
+ * @testCase Test login with empty email @signin
+ * @description Validates the sign-in process with an empty email field.
  * STR:
  *  0. "Before" steps are stored in the pm fixture
  *  1. Click the "Sign In" button in the header
@@ -109,12 +115,13 @@ test("Test login with empty email @signin", async ({ pm }) => {
 })
 
 /**
- * @testCase Test login with empty email
+ * @testCase Test login with empty password @signin
+ * @description Validates the sign-in process with an empty password field.
  * STR:
  *  0. "Before" steps are stored in the pm fixture
  *  1. Click the "Sign In" button in the header
- *  2. Attempt to sign in with an empty pass
- *  3. Get the error message for the empty email
+ *  2. Attempt to sign in with an empty password
+ *  3. Get the error message for the empty password
  *  4. Verify that the error message contains the expected text
  */
 test("Test Login with Empty Pass @signin", async ({ pm }) => {

@@ -27,26 +27,10 @@ export class HeaderElements extends BasePage {
 
     public acceptDeleteProductBtn = this.page.getByRole('button', { name: 'OK' })
 
-    private basketProductName: any = (index) => {
-        return this.basketCards
-            .locator('.product-item-name').nth(index)
-    }
-
-    private basketProductPrice: any = (index) => {
-        return this.basketCards
-            .locator('.price').nth(index)
-    }
-
-    private basketProductQuantity: any = (index) => {
-        return this.basketCards
-            .getByRole('spinbutton').nth(index)
-    }
-
-    private deleteProductBtn = (inputProductName?: string) => {
-        return this.basketCards
-                .locator('li', { hasText: inputProductName })
-                .locator('.action.delete')
-    }
+    private basketProductName: any = (index) =>  this.basketCards.locator('.product-item-name').nth(index)
+    private basketProductPrice: any = (index) => this.basketCards.locator('.price').nth(index)
+    private basketProductQuantity: any = (index) => this.basketCards.getByRole('spinbutton').nth(index)
+    private deleteProductBtn: any = (inputProductName?: string) =>  this.basketCards.locator('li', { hasText: inputProductName }).locator('.action.delete')
 
     @step()
     async clickLogoBtn () {

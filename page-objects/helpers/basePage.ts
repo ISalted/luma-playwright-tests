@@ -30,8 +30,12 @@ export abstract class BasePage {
         return numbers.reduce((a, b) => a + b, 0);
     }
 
-    public toNumber(str): number {
+    public stringToNumb(str): number {
         return parseFloat(str.replace("$", ""));
+    }
+
+    public stringArrToNumbArr(stringArr: string[]): number[] {
+        return stringArr.map(str => parseFloat(str.replace('$', '')));
     }
 
     // const Timestamp = Math.floor(Date.now() / 1000)

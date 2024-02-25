@@ -2,7 +2,8 @@ import { test, expect } from "../fixtures/baseFixtures"
 import * as userData from "../data/userData";
 
 /**
- * @testCase Successful User Registration with Valid Information
+ * @testCase Successful User Registration with Valid Information @signup
+ * @description Verifies that a user can successfully register with valid information.
  * STR:
  *  0. "Before" steps are stored in the pm fixture
  *  1. Click "Create an Account" button in the header
@@ -10,8 +11,7 @@ import * as userData from "../data/userData";
  *  3. Get success message after registration from My Account page
  *  4. Verify that the success message contains "Thank you for registering"
  */
-
-test("Successful User Registration with Valid Information @signup", async ({ pm }) => {
+test("Sign Up with Valid Information @signup", async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
     await pm.onSignUpPage.fillDataAndCreateAnAccount(userData.UNIQUE_EMAIL_AND_PASS_USER())
@@ -21,15 +21,15 @@ test("Successful User Registration with Valid Information @signup", async ({ pm 
 })
 
 /**
-* @testCase Sign Up Existing User Validation
-* STR:
-*   0. "Before" steps are stored in the pm fixture
-*   1. Click "Create an Account" button in the header
-*   2. Fill in registration data and attempt to create an account with existing user data
-*   3. Get unsuccessful message from sign up page indicating existing account
-*   4. Verify that the unsuccessful message contains "There is already an account with this email address"
-*/
-
+ * @testCase Sign Up Existing User Validation @signup
+ * @description Verifies that existing users cannot sign up again with the same email address.
+ * STR:
+ *   0. "Before" steps are stored in the pm fixture
+ *   1. Click "Create an Account" button in the header
+ *   2. Fill in registration data and attempt to create an account with existing user data
+ *   3. Get unsuccessful message from sign up page indicating existing account
+ *   4. Verify that the unsuccessful message contains "There is already an account with this email address"
+ */
 test("Sign Up Existing User Validation @signup", async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
@@ -40,14 +40,14 @@ test("Sign Up Existing User Validation @signup", async ({ pm }) => {
 })
 
 /**
-* @testCase Sign Up with Incorrect Email Validation
-* STR:
-*   0. "Before" steps are stored in the pm fixture
-*   1. Click "Create an Account" button in the header
-*   2. Fill in data and create an account with incorrect email
-*   3. Check for invalid email message
-*/
-
+ * @testCase Sign Up with Incorrect Email Validation @signup
+ * @description Verifies that users cannot sign up with an incorrect email format.
+ * STR:
+ *   0. "Before" steps are stored in the pm fixture
+ *   1. Click "Create an Account" button in the header
+ *   2. Fill in data and create an account with incorrect email
+ *   3. Check for invalid email message
+ */
 test("Sign Up with Incorrect Email Validation @signup", async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
@@ -58,15 +58,15 @@ test("Sign Up with Incorrect Email Validation @signup", async ({ pm }) => {
 })
 
 /**
-* @testCase Sign Up with Incorrect Password Validation
-* STR:
-*   0. "Before" steps are stored in the pm fixture
-*   1. Click "Create an Account" button in the header
-*   2. Fill in registration data and attempt to create an account with an invalid password
-*   3. Get invalid password message from sign up page
-*   4. Verify that the invalid password message contains the expected text
-*/
-
+ * @testCase Sign Up with Incorrect Password Validation @signup
+ * @description Verifies that users cannot sign up with an incorrect password format.
+ * STR:
+ *   0. "Before" steps are stored in the pm fixture
+ *   1. Click "Create an Account" button in the header
+ *   2. Fill in registration data and attempt to create an account with an invalid password
+ *   3. Get invalid password message from sign up page
+ *   4. Verify that the invalid password message contains the expected text
+ */
 test("Sign Up with Incorrect Password Validation @signup", async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
@@ -77,15 +77,15 @@ test("Sign Up with Incorrect Password Validation @signup", async ({ pm }) => {
 })
 
 /**
- * @testCase Sign Up with Non-Same Value Validation
+ * @testCase Sign Up with Non-Same Value Validation @signup
+ * @description Verifies that users cannot sign up when the password and confirm password fields have different values.
  * STR:
- *  0. "Before" steps are stored in the pm fixture
- *  1. Click "Create an Account" button in the header
- *  2. Fill in registration data and create an account with different password and confirm password values
- *  3. Get the invalid confirm password message from the sign-up page
- *  4. Verify that the invalid confirm password message contains the expected text
+ *   0. "Before" steps are stored in the pm fixture
+ *   1. Click "Create an Account" button in the header
+ *   2. Fill in registration data and create an account with different password and confirm password values
+ *   3. Get the invalid confirm password message from the sign-up page
+ *   4. Verify that the invalid confirm password message contains the expected text
  */
-
 test("Sign Up with Non same value Validation @signup", async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
@@ -96,15 +96,15 @@ test("Sign Up with Non same value Validation @signup", async ({ pm }) => {
 })
 
 /**
- * @testCase Sign Up with Empty Email Validation
+ * @testCase Sign Up with Empty Email Validation @signup
+ * @description Verifies that users cannot sign up when the email field is empty.
  * STR:
- *  0. "Before" steps are stored in the pm fixture
- *  1. Click "Create an Account" button in the header
- *  2. Fill in registration data with an empty email address and attempt to create an account
- *  3. Get the invalid email message from the sign-up page
- *  4. Verify that the invalid email message contains the expected text
+ *   0. "Before" steps are stored in the pm fixture
+ *   1. Click "Create an Account" button in the header
+ *   2. Fill in registration data with an empty email address and attempt to create an account
+ *   3. Get the invalid email message from the sign-up page
+ *   4. Verify that the invalid email message contains the expected text
  */
-
 test("Sign Up with Empty Email Validation @signup", async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
@@ -114,15 +114,15 @@ test("Sign Up with Empty Email Validation @signup", async ({ pm }) => {
 })
 
 /**
- * @testCase Sign Up with Empty Password Validation
+ * @testCase Sign Up with Empty Password Validation @signup
+ * @description Verifies that users cannot sign up when the password field is empty.
  * STR:
- *  0. "Before" steps are stored in the pm fixture
- *  1. Click "Create an Account" button in the header
- *  2. Fill in registration data with an empty password and attempt to create an account
- *  3. Get the invalid password message from the sign-up page
- *  4. Verify that the invalid password message contains the expected text
+ *   0. "Before" steps are stored in the pm fixture
+ *   1. Click "Create an Account" button in the header
+ *   2. Fill in registration data with an empty password and attempt to create an account
+ *   3. Get the invalid password message from the sign-up page
+ *   4. Verify that the invalid password message contains the expected text
  */
-
 test("Sign Up with Empty Password Validation @signup", async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
@@ -132,21 +132,21 @@ test("Sign Up with Empty Password Validation @signup", async ({ pm }) => {
 })
 
 /**
-* @testCase Password Strength Validation During Registration
-* STR:
-*   0. "Before" steps are stored in the pm fixture
-*   1. Click "Create an Account" button in the header
-*   2. Get initial password strength meter value and verify it contains 'No Password'
-*   3. Fill in registration data and create an account with a weak password
-*   4. Get password strength meter value and verify it contains 'Weak'
-*   5. Fill in registration data and create an account with a medium password
-*   6. Get password strength meter value and verify it contains 'Medium'
-*   7. Fill in registration data and create an account with a strong password
-*   8. Get password strength meter value and verify it contains 'Strong'
-*   9. Fill in registration data and create an account with a very strong password
-*   10. Get password strength meter value and verify it contains 'Very Strong'
-*/
-
+ * @testCase Password Strength Validation During Registration @signup
+ * @description Verifies that password strength is validated during the registration process.
+ * STR:
+ *   0. "Before" steps are stored in the pm fixture
+ *   1. Click "Create an Account" button in the header
+ *   2. Get initial password strength meter value and verify it contains 'No Password'
+ *   3. Fill in registration data and create an account with a weak password
+ *   4. Get password strength meter value and verify it contains 'Weak'
+ *   5. Fill in registration data and create an account with a medium password
+ *   6. Get password strength meter value and verify it contains 'Medium'
+ *   7. Fill in registration data and create an account with a strong password
+ *   8. Get password strength meter value and verify it contains 'Strong'
+ *   9. Fill in registration data and create an account with a very strong password
+ *   10. Get password strength meter value and verify it contains 'Very Strong'
+ */
 test("Password Strength Validation During Registration @signup", async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
