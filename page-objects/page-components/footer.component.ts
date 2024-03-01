@@ -3,14 +3,16 @@ import { BasePage } from "../helpers/basePage";
 
 export class FooterElements extends BasePage{
 
-    public writeForUsButton = this.page.locator('.footer.content').getByRole('link', { name: 'Write for us' })
-    public subscribeToOurMailingListButton =  this.page.locator('.footer.content').getByRole('link', { name: 'Subscribe to our mailing list' })
-    public contactUsButton =  this.page.locator('.footer.content').getByRole('link', { name: 'Contact us' })
-    public hireASofwareTestingButton =  this.page.locator('.footer.content').getByRole('link', { name: 'Hire a Sofware Testing/QA Company' })
-    public searchTermsButton =  this.page.locator('.footer.content').getByRole('link', { name: 'Search Terms' })
-    public privacyAndCookiePolicyButton =  this.page.locator('.footer.content').getByRole('link', { name: 'Privacy and Cookie Policy' })
-    public advancedSearchButton =  this.page.locator('.footer.content').getByRole('link', { name: 'Advanced Search' })
-    public ordersAndReturnsButton =  this.page.locator('.footer.content').getByRole('link', { name: 'Orders and Returns' })
+    private root = this.page.locator('.footer.content')
+
+    public writeForUsButton = this.root.getByRole('link', { name: 'Write for us' })
+    public subscribeToOurMailingListButton = this.root.getByRole('link', { name: 'Subscribe to our mailing list' })
+    public contactUsButton = this.root.getByRole('link', { name: 'Contact us' })
+    public hireASofwareTestingButton =  this.root.getByRole('link', { name: 'Hire a Sofware Testing/QA Company' })
+    public searchTermsButton =  this.root.getByRole('link', { name: 'Search Terms' })
+    public privacyAndCookiePolicyButton =  this.root.getByRole('link', { name: 'Privacy and Cookie Policy' })
+    public advancedSearchButton =  this.root.getByRole('link', { name: 'Advanced Search' })
+    public ordersAndReturnsButton =  this.root.getByRole('link', { name: 'Orders and Returns' })
 
     @step()
     async writeForUsButtonClick () {

@@ -8,7 +8,7 @@ export class MyAccountPage extends Components {
 
     @step()
     async getRegistrationSuccessMsg () {
-        await this.inHeader.welcomeBtn.waitFor({ state: "visible" })
+        await this.inHeader.welcomeBtn.waitFor()
         return this.successMsg.textContent()
     }
 

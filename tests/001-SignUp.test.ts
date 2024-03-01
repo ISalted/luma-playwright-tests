@@ -54,7 +54,6 @@ test("Sign Up with Incorrect Email Validation @signup", async ({ pm }) => {
     await pm.onSignUpPage.fillDataAndCreateAnAccount(userData.INVALID_EMAIL)
     let invalidEmailMessage = await pm.onSignUpPage.getInvalidEmailMessage()
     expect(invalidEmailMessage).toContain("Please enter a valid email address (Ex: johndoe@domain.com).")
-
 })
 
 /**

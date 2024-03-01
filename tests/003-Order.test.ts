@@ -14,10 +14,11 @@ import { th } from "@faker-js/faker";
  */
 test("AddToBasket Button Functionality @order", async ({ pm }) => {
 
-    let productDataCollectorFromGrid = await pm.onMainPage.inProductGrid.addToBasketReturnItsData(3, 3, 0)
-    let basketProductName = await pm.onMainPage.inHeader.getBasketProductName(0)
+    const listProductData = await pm.onMainPage.inProductList.getProductData()
+    await pm.onMainPage.inProductList.addToCart(listProductData[3])
+    const basketProductData = await pm.onMainPage.inHeader.getProductData()
 
-    expect(productDataCollectorFromGrid.name).toContain(basketProductName)
+    expect(listProductData[3].name).toContain(basketProductData.basketItems[0].name)
 
 })
 
@@ -32,10 +33,14 @@ test("AddToBasket Button Functionality @order", async ({ pm }) => {
  *  4. Verify that the product name retrieved from the grid contains the product name from the basket.
  */
 test("Remove Button Functionality in the Shopping Cart @order", async ({ pm }) => {
-    let productDataCollectorFromGrid = await pm.onMainPage.inProductGrid.addToBasketReturnItsData(3, 3, 0 )
-    let isProductInBasket = await pm.onMainPage.inHeader.deleteProductFromTheBasket(productDataCollectorFromGrid.name)
+    const listProductData = await pm.onMainPage.inProductList.getProductData()
 
-    expect(isProductInBasket).toBeFalsy()
+    await pm.onMainPage.inProductList.addToCart(listProductData[3])
+    await pm.onMainPage.inHeader.removeProductFromBasket(listProductData[3].name)
+    const basketCounter = await pm.onShoppingCartPage.inHeader.getBasketCounter()
+
+    expect(basketCounter).toBe(0)
+    //expect(pm.onMainPage.inHeader.basketProductName.filter({ hasText: listProductData[3].name })).not.toBeVisible()
 })
 
 /**
@@ -56,12 +61,14 @@ test("Place order @order", async ({ pm }) => {
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
     await pm.onSignUpPage.fillDataAndCreateAnAccount(userData.UNIQUE_EMAIL_AND_PASS_USER())
     await pm.onSignUpPage.inHeader.clickLogoBtn()
-    await pm.onMainPage.inProductGrid.addToBasketReturnItsData(0, 1, 0);
-    await pm.onMainPage.inProductGrid.addToBasketReturnItsData(1, 2, 1);
+
+    const listProductData = await pm.onMainPage.inProductList.getProductData()
+
+    await pm.onMainPage.inProductList.addToCart(listProductData[0]);
+    await pm.onMainPage.inProductList.addToCart(listProductData[1], 2, 1);
     await pm.onCheckoutPage.inHeader.navigateToCheckoutPage()
     await pm.onCheckoutPage.fillShippingDetailsAndRerurnItsData(userData.STANDART_SHIPPING_ADDRESS_DATA)
     const SuccessNotificationAfterPlacingOrder = await pm.onCheckoutPage.placeOrder()
-
 
     expect(SuccessNotificationAfterPlacingOrder).toContain('Thank you for your purchase!')
 })
@@ -79,9 +86,10 @@ test("Place order @order", async ({ pm }) => {
 test("Quantity of Products in Basket Updates after Addition @order", async ({ pm }) => {
 
     await pm.onMainPage.inUiMenu.selectMenuItem("Women", "Tops")
-    await pm.onMainPage.inProductGrid.addToBasketReturnItsData(1)
-    await pm.onMainPage.inProductGrid.addToBasketReturnItsData(2)
+    const listProductData = await pm.onMainPage.inProductList.getProductData()
 
+    await pm.onProductListingPage.inProductList.addToCart(listProductData[0], 2, 2)
+    await pm.onProductListingPage.inProductList.addToCart(listProductData[1], 3, 1 )
     let basketCount = await pm.onMainPage.inHeader.getBasketCounter()
 
     expect(basketCount).toBe(2)
@@ -97,19 +105,18 @@ test("Quantity of Products in Basket Updates after Addition @order", async ({ pm
  *  3. Get the subtotal from the cart.
  *  4. Verify that the total price sum matches the cart subtotal.
  */
-test("Cart total is correctly calculated @order", async ({ pm }) => {
+test("Cart total is correctly calculated @order", async ({ pm }) => { ///////
+    const listProductData = await pm.onMainPage.inProductList.getProductData()
 
-    let productPrices: number[] = []
-    productPrices.push((await pm.onMainPage.inProductGrid.addToBasketReturnItsData(0)).priceInt)
-    productPrices.push((await pm.onMainPage.inProductGrid.addToBasketReturnItsData(1, 1, 2)).priceInt)
-    productPrices.push((await pm.onMainPage.inProductGrid.addToBasketReturnItsData(2, 2, 0)).priceInt)
-    productPrices.push((await pm.onMainPage.inProductGrid.addToBasketReturnItsData(3)).priceInt)
-    productPrices.push((await pm.onMainPage.inProductGrid.addToBasketReturnItsData(3)).priceInt)
+    await pm.onMainPage.inProductList.addToCart(listProductData[0])
+    await pm.onMainPage.inProductList.addToCart(listProductData[1], 1, 2)
+    await pm.onMainPage.inProductList.addToCart(listProductData[2], 2, 0)
+    await pm.onMainPage.inProductList.addToCart(listProductData[3])
 
-    const totalPriceSum = pm.sumArray(productPrices)
-    const cartSubtotal = await pm.onMainPage.inHeader.getCartSubtotalFromBasket()
+    const basketProductData = await pm.onMainPage.inHeader.getProductData()
+    const totalPrice = await pm.onMainPage.inHeader.calculateCartSubtotal(basketProductData)
 
-    expect(totalPriceSum).toBe(cartSubtotal)
+    expect(totalPrice).toBe(basketProductData.cartSubtotalInt)
 })
 
 /**
@@ -126,19 +133,21 @@ test("Cart total is correctly calculated @order", async ({ pm }) => {
  *   7. Verify that the previously added product name contains the product name in the basket.
  */
 test("Сart persistence across user sessions @order", async ({ pm }) => {
-    let userCredential = userData.UNIQUE_EMAIL_AND_PASS_USER()
+    const userCredential = userData.UNIQUE_EMAIL_AND_PASS_USER()
+    const listProductData = await pm.onMainPage.inProductList.getProductData()
+
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
     await pm.onSignUpPage.fillDataAndCreateAnAccount(userCredential)
     await pm.onMainPage.inHeader.clickLogoBtn()
-    await pm.onMainPage.inProductGrid.addToBasketReturnItsData(0)
-    await pm.onMainPage.inProductGrid.addToBasketReturnItsData(3)
-    let basketDataAfterFirstSignIn = await pm.onMainPage.inHeader.getBasketData()
+    await pm.onMainPage.inProductList.addToCart(listProductData[0])
+    await pm.onMainPage.inProductList.addToCart(listProductData[3])
+    const basketDataAfterFirstSignIn = await pm.onMainPage.inHeader.getProductData()
 
     await pm.onMainPage.inHeader.signOut()
     await pm.onMainPage.inHeader.clickSignInBtn()
-    await pm.onSignInPage.fillDataAndSignIn(userCredential, 'Clear Coockie')
-    let basketDataAfterSecondSignIn = await pm.onMainPage.inHeader.getBasketData()
+    await pm.onSignInPage.fillDataAndSignIn(userCredential, 'clearCoockie')
+    const basketDataAfterSecondSignIn = await pm.onMainPage.inHeader.getProductData()
 
     expect(basketDataAfterFirstSignIn).toEqual(basketDataAfterSecondSignIn);
 })
@@ -154,13 +163,16 @@ test("Сart persistence across user sessions @order", async ({ pm }) => {
  *   4. Verify the success alert message containing the new product name.
  */
 test("Check For a Confirmation Message After Adding Product @order", async ({ pm }) => {
-    let productName = (await pm.onMainPage.inProductGrid.addToBasketReturnItsData(0)).name
-    let successAllertMsg = await pm.onMainPage.inProductGrid.getSuccessAllertMsg()
-    expect(successAllertMsg).toContain(`You added ${productName} to your shopping cart.`)
 
-    productName = (await pm.onMainPage.inProductGrid.addToBasketReturnItsData(3)).name
-    successAllertMsg = await pm.onMainPage.inProductGrid.getSuccessAllertMsg()
-    expect(successAllertMsg).toContain(`You added ${productName} to your shopping cart.`)
+    const listProductData = await pm.onMainPage.inProductList.getProductData()
+    await pm.onMainPage.inProductList.addToCart(listProductData[0])
+
+    let successAllertMsg = await pm.onMainPage.inProductList.getSuccessAllertMsg()
+    expect(successAllertMsg).toContain(`You added ${listProductData[0].name} to your shopping cart.`)
+
+    await pm.onMainPage.inProductList.addToCart(listProductData[3])
+    successAllertMsg = await pm.onMainPage.inProductList.getSuccessAllertMsg()
+    expect(successAllertMsg).toContain(`You added ${listProductData[3].name} to your shopping cart.`)
 })
 
 /**
@@ -182,10 +194,11 @@ test("Add To Basket with Registered User @order", async ({ pm }) => {
     await pm.onSignUpPage.fillDataAndCreateAnAccount(userData.UNIQUE_EMAIL_AND_PASS_USER())
     await pm.onMainPage.inHeader.clickLogoBtn()
 
-    let productNameInGrid = (await pm.onMainPage.inProductGrid.addToBasketReturnItsData(0)).name
-    let productNameInBasket = (await pm.onMainPage.inHeader.getBasketData()).ItemsData[0].name
+    const listProductData = await pm.onMainPage.inProductList.getProductData()
+    await pm.onMainPage.inProductList.addToCart(listProductData[0])
+    const basketProductData = await pm.onMainPage.inHeader.getProductData()
 
-    expect(productNameInGrid).toContain(productNameInBasket)
+    expect(listProductData[0].name).toContain(basketProductData.basketItems[0].name)
 })
 
 /**
@@ -200,10 +213,12 @@ test("Add To Basket with Registered User @order", async ({ pm }) => {
  */
 test("Add To Basket with Guest User @order", async ({ pm }) => {
 
-    let productNameInGrid = (await pm.onMainPage.inProductGrid.addToBasketReturnItsData(0)).name
-    let productNameInBasket = (await pm.onMainPage.inHeader.getBasketData()).ItemsData[0].name
+    const listProductData = await pm.onMainPage.inProductList.getProductData()
 
-    expect(productNameInGrid).toContain(productNameInBasket)
+    await pm.onMainPage.inProductList.addToCart(listProductData[0])
+    const basketProductData = await pm.onMainPage.inHeader.getProductData()
+
+    expect(listProductData[0].name).toContain(basketProductData.basketItems[0].name)
 })
 
 /**
@@ -221,11 +236,12 @@ test("Add To Basket with Guest User @order", async ({ pm }) => {
  *  8. Verify that the basket count after ordering is 0, indicating that the basket is emptied.
  */
 test("Basket is Emptied after Placing an Order @order", async ({ pm }) => {
+    const listProductData = await pm.onMainPage.inProductList.getProductData()
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
     await pm.onSignUpPage.fillDataAndCreateAnAccount(userData.UNIQUE_EMAIL_AND_PASS_USER())
     await pm.onSignUpPage.inHeader.clickLogoBtn()
-    await pm.onMainPage.inProductGrid.addToBasketReturnItsData(0, 1, 0);
+    await pm.onMainPage.inProductList.addToCart(listProductData[0]);
     await pm.onCheckoutPage.inHeader.navigateToCheckoutPage()
     await pm.onCheckoutPage.fillShippingDetailsAndRerurnItsData(userData.STANDART_SHIPPING_ADDRESS_DATA)
     await pm.onCheckoutPage.placeOrder()
@@ -249,11 +265,12 @@ test("Basket is Emptied after Placing an Order @order", async ({ pm }) => {
  *  7. Verify that the entered shipping details match the provided data.
  */
 test("Users can Add Shipping Addresses @order", async ({ pm }) => {
+    const listProductData = await pm.onMainPage.inProductList.getProductData()
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
     await pm.onSignUpPage.fillDataAndCreateAnAccount(userData.UNIQUE_EMAIL_AND_PASS_USER())
     await pm.onSignUpPage.inHeader.clickLogoBtn()
-    await pm.onMainPage.inProductGrid.addToBasketReturnItsData(0, 1, 0);
+    await pm.onMainPage.inProductList.addToCart(listProductData[0]);
     await pm.onCheckoutPage.inHeader.navigateToCheckoutPage()
     let ShippingDetailsData = await pm.onCheckoutPage.fillShippingDetailsAndRerurnItsData(userData.STANDART_SHIPPING_ADDRESS_DATA)
 
@@ -285,11 +302,12 @@ test("Users can Add Shipping Addresses @order", async ({ pm }) => {
  * 13. Verify that the edited shipping details match the provided unique data.
  */
 test("Users can Edit Shipping Addresses @order", async ({ pm }) => {
+    const listProductData = await pm.onMainPage.inProductList.getProductData()
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
     await pm.onSignUpPage.fillDataAndCreateAnAccount(userData.UNIQUE_EMAIL_AND_PASS_USER())
     await pm.onSignUpPage.inHeader.clickLogoBtn()
-    await pm.onMainPage.inProductGrid.addToBasketReturnItsData(0, 1, 0)
+    await pm.onMainPage.inProductList.addToCart(listProductData[0])
     await pm.onCheckoutPage.inHeader.navigateToCheckoutPage()
     await pm.onCheckoutPage.fillShippingDetailsAndRerurnItsData(userData.STANDART_SHIPPING_ADDRESS_DATA)
     await pm.onCheckoutPage.visitCheckoutPage()
@@ -302,6 +320,27 @@ test("Users can Edit Shipping Addresses @order", async ({ pm }) => {
     expect(Object.values(userData.UNIQUE_SHIPPING_ADDRESS_DATA)).toEqual(editedShippingInformationDetails)
 })
 
+/**
+ * @testCase Clear Basket from Header @order
+ * @description Verifies that the basket can be cleared successfully from the header.
+ * STR:
+ *  0. "Before" steps are stored in the pm fixture.
+ *  1. Add products to the basket from the product grid.
+ *  2. Attempt to clear the basket from the header.
+ *  3. Verify that the count of items in the basket is 0.
+ */
+test("Remove All from Basket @order", async ({ pm }) => {
+    const listProductData = await pm.onMainPage.inProductList.getProductData()
+
+    await pm.onMainPage.inProductList.addToCart(listProductData[0])
+    await pm.onMainPage.inProductList.addToCart(listProductData[1], 2, 1)
+    await pm.onMainPage.inProductList.addToCart(listProductData[3], 3, 0)
+    const basketProductData = await pm.onCheckoutPage.inHeader.getProductData()
+    await pm.onMainPage.inHeader.removeAllFromBasket(basketProductData)
+    const basketCounter = await pm.onShoppingCartPage.inHeader.getBasketCounter()
+
+    expect(basketCounter).toBe(0)
+})
 
 /**
  * @testCase Clear Basket from Shopping Cart @order
@@ -313,14 +352,19 @@ test("Users can Edit Shipping Addresses @order", async ({ pm }) => {
  *  3. Remove all items from the shopping cart.
  *  4. Verify that the count of items in the basket is 0.
  */
-test("Clear Basket from Shopping Cart @order", async ({ pm }) => {
-    await pm.onMainPage.inProductGrid.addToBasketReturnItsData(0, 1, 0)
-    await pm.onMainPage.inProductGrid.addToBasketReturnItsData(1, 2, 1)
-    await pm.onMainPage.inProductGrid.addToBasketReturnItsData(3, 3, 0)
-    await pm.onMainPage.inHeader.navigateToShoppingCartPage()
-    let countOfItemsInABasket = await pm.onShoppingCartPage.clearShoppingCart()
+test("Remove All from Shopping Cart @order", async ({ pm }) => {
+    const listProductData = await pm.onMainPage.inProductList.getProductData()
 
-    expect(countOfItemsInABasket).toBe(0)
+    await pm.onMainPage.inProductList.addToCart(listProductData[0])
+    await pm.onMainPage.inProductList.addToCart(listProductData[1], 2, 1)
+    await pm.onMainPage.inProductList.addToCart(listProductData[3], 3, 0)
+    const basketProductData = await pm.onCheckoutPage.inHeader.getProductData()
+
+    await pm.onMainPage.inHeader.navigateToShoppingCartPage()
+    await pm.onShoppingCartPage.removeAll(basketProductData)
+    const basketCounter = await pm.onShoppingCartPage.inHeader.getBasketCounter()
+
+    expect(basketCounter).toBe(0)
 })
 
 /**
@@ -332,32 +376,20 @@ test("Clear Basket from Shopping Cart @order", async ({ pm }) => {
  *  2. Attempt to clear the basket from the header.
  *  3. Verify that the count of items in the basket is 0.
  */
-test("Clear Basket from Header @order", async ({ pm }) => {
-    await pm.onMainPage.inProductGrid.addToBasketReturnItsData(0, 1, 0)
-    await pm.onMainPage.inProductGrid.addToBasketReturnItsData(1, 2, 1)
-    await pm.onMainPage.inProductGrid.addToBasketReturnItsData(3, 3, 0)
-    let countOfItemsInABasket = await pm.onMainPage.inHeader.clearBasket()
+test("Remove Cheapest Item from Shopping Cart @order", async ({ pm }) => {
+    const listProductData = await pm.onMainPage.inProductList.getProductData()
 
-    expect(countOfItemsInABasket).toBe(0)
-})
+    await pm.onMainPage.inProductList.addToCart(listProductData[0])
+    await pm.onMainPage.inProductList.addToCart(listProductData[1], 2, 1)
+    await pm.onMainPage.inProductList.addToCart(listProductData[3], 3, 0)
+    const basketProductData = await pm.onCheckoutPage.inHeader.getProductData('price')
 
-/**
- * @testCase Clear Basket from Header @order
- * @description Verifies that the basket can be cleared successfully from the header.
- * STR:
- *  0. "Before" steps are stored in the pm fixture.
- *  1. Add products to the basket from the product grid.
- *  2. Attempt to clear the basket from the header.
- *  3. Verify that the count of items in the basket is 0.
- */
-test("Remove cheapest item @order", async ({ pm }) => {
-    await pm.onMainPage.inProductGrid.addToBasketReturnItsData(0, 1, 0)
-    await pm.onMainPage.inProductGrid.addToBasketReturnItsData(1, 2, 1)
-    await pm.onMainPage.inProductGrid.addToBasketReturnItsData(3, 3, 0)
     await pm.onMainPage.inHeader.navigateToShoppingCartPage()
-    let cheapestItemInTheBasketAfterRemoval = await pm.onShoppingCartPage.removeCheapestItem()
+    await pm.onShoppingCartPage.removeCheapestItem(basketProductData)
+    const status = await pm.onShoppingCartPage.visibleStatus(basketProductData.basketItems[0].name)
 
-    expect(cheapestItemInTheBasketAfterRemoval).toBe(34)
+    expect(status).toBeFalsy()
+    // expect(await pm.onShoppingCartPage.itemName.filter({ hasText: basketProductData.basketItems[0].name })).not.toBeVisible()
 })
 
 

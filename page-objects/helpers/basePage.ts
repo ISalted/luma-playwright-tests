@@ -1,10 +1,12 @@
-import { Page } from "@playwright/test"
+import { Page, Locator } from "@playwright/test"
 import { faker as oldFaker } from '@faker-js/faker'
 
+export { Locator };
 
 export abstract class BasePage {
     // constructor(protected page: Page) { }
     page: Page
+
     constructor(page: Page) {
         this.page = page;
     }
@@ -12,7 +14,7 @@ export abstract class BasePage {
 
     faker = oldFaker
 
-    async clearCookies(){
+    async clearCookies () {
         await this.page.context().clearCookies()
         await this.page.reload()
     }
@@ -41,3 +43,4 @@ export abstract class BasePage {
     // const Timestamp = Math.floor(Date.now() / 1000)
 
 }
+

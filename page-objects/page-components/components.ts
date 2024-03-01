@@ -11,5 +11,5 @@ export abstract class Components extends BasePage {
     inFooter = new FooterElements(this.page)
     inUiMenu = new UiMenuElements(this.page)
     inFilterSidebar = new FilterSidebar(this.page)
-    inProductGrid = new ProductGrid(this.page)
+    inProductList = new ProductGrid(this.page)
 }

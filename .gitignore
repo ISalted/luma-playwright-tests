@@ -11,7 +11,7 @@ node_modules/
 /page-objects/helpers/.DS_Store
 /page-objects/.DS_Store/
 /.DS_Store
-/tests/try.spec.ts
-/tests/mySetup.ts
+/tests/sendBox.spec.ts
+/tests/someClas.ts
 
 

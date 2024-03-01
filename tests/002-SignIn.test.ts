@@ -14,7 +14,7 @@ import * as userData from "../data/userData";
 test('Sign In from Main Header Validation @signin', async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickSignInBtn()
-    await pm.onSignInPage.fillDataAndSignIn(userData.EXISTING_USER, 'Clear Coockie')
+    await pm.onSignInPage.fillDataAndSignIn(userData.EXISTING_USER, 'clearCoockie')
     let welcomeMssgFromHeader = await pm.onMainPage.inHeader.getWelcomeMsg()
 
     expect(welcomeMssgFromHeader).toContain("Welcome")
@@ -32,9 +32,10 @@ test('Sign In from Main Header Validation @signin', async ({ pm }) => {
  *  5. Verify that the shipping address information contains "Pennsylvania Avenue NW".
  */
 test("Sign In from Checkout Page Validation @signin", async ({ pm }) => {
+    const listProductData = await pm.onMainPage.inProductList.getProductData()
 
-    await pm.onMainPage.inProductGrid.addToBasketReturnItsData(0, 2, 0)
-    await pm.onMainPage.inProductGrid.addToBasketReturnItsData(1, 3, 1)
+    await pm.onMainPage.inProductList.addToCart(listProductData[0])
+    await pm.onMainPage.inProductList.addToCart(listProductData[0], 3, 1)
     await pm.onMainPage.inHeader.navigateToCheckoutPage()
     await pm.onCheckoutPage.signInFromCheckout(userData.EXISTING_USER)
     const shippingAddressInformation = await pm.onCheckoutPage.getShippingAddressInformation()

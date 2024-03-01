@@ -13,8 +13,8 @@ export class SignInPage extends Components {
 
 
     @step()
-    async fillDataAndSignIn (signInData, clearCookie?) {
-        if (clearCookie == 'Clear Coockie') {
+    async fillDataAndSignIn(signInData, clearCookie?: 'clearCoockie') {
+        if (clearCookie == 'clearCoockie') {
             await this.clearCookies()
         }
         await this.loginFld.type(signInData.email, { delay: 30 })
@@ -36,22 +36,20 @@ export class SignInPage extends Components {
 
     @step()
     async getUnsuccessfulMsg () {
-        await this.alertMsg.waitFor({ state: 'visible' })
+        await this.alertMsg.waitFor()
         return await this.alertMsg.textContent()
     }
 
     @step()
     async getEmailErrorMsg() {
-        await this.emailErrorMsg.waitFor({ state: 'visible' })
+        await this.emailErrorMsg.waitFor()
         return await this.emailErrorMsg.textContent()
     }
 
     @step()
     async getPassErrorMsg() {
-        await this.passErrorMsg.waitFor({ state: 'visible' })
+        await this.passErrorMsg.waitFor()
         return await this.passErrorMsg.textContent()
     }
-
-
 
 }

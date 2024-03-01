@@ -1,17 +1,21 @@
 import { test, expect } from "../fixtures/baseFixtures"
 
 
-// test("Verify that the search result page displays products", async ({ pm }) => {
+test("Searching with Valid Keywords @search", async ({ pm }) => {
+    await pm.onMainPage.inHeader.searchEntireStore('Hoodie', 'autocomplete')
+    const searchedProductNames = await pm.onProductListingPage.inProductList.getProductName('all')
 
-// })
+    await expect(searchedProductNames).toEqual(expect.arrayContaining([expect.stringContaining('Hoodie')]));
+})
 
-// test("Test searching with valid keywords", async ({ pm }) => {
+test("Searching with Special Characters @search", async ({ pm }) => {
+    await pm.page.pause()
+    await pm.onMainPage.inHeader.searchEntireStore('H00dies!', 'all')
+    const noticeMessage = await pm.onProductListingPage.getNoticeMessage()
+    expect(noticeMessage).toContain('Your search returned no results.')
 
-// })
+})
 
-// test("Test searching with special characters in the query", async ({ pm }) => {
-
-// })
 
 // test("Test searching for out-of-stock products", async ({ pm }) => {
 

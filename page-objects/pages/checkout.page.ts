@@ -34,7 +34,7 @@ export class CheckoutPage extends Components {
         await this.page.goto("/checkout/#shipping")
         await this.page.waitForURL(/\/checkout/gm, { timeout: 3000 })
     }
-
+    @step()
     async signInFromCheckout (signInData, clearCookie?) {
         if (clearCookie == 'Clear Coockie'){
             await this.clearCookies()
@@ -75,7 +75,7 @@ export class CheckoutPage extends Components {
         await this.phoneFld.fill(shippingDetails.phone)
         await this.loader.waitFor({ state: 'hidden' })
         await this.nextBtn.click()
-        await this.paymentMethodTitle.waitFor({ state: 'visible' })
+        await this.paymentMethodTitle.waitFor()
         return await this.billingAddressDetails.textContent()
     }
 

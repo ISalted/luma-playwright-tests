@@ -1,36 +1,85 @@
 import { step } from "../helpers/step"
 import { BasePage } from "../helpers/basePage"
 
+interface Product {
+    itemInCart: string;
+    cartSubtotalCur: string;
+    cartSubtotalInt: number;
+    basketItems: {
+        name: string;
+        size: string;
+        color: string;
+        priceCur: string;
+        priceInt: number;
+        quantity: string;
+    }[];
+}
+
 export class HeaderElements extends BasePage {
 
-    public writeForUsBtn = this.page.getByRole('banner').locator('.not-logged-in', { hasText: "Write for us" })
-    public welcomeBtn = this.page.getByRole('banner').locator('.logged-in', { hasText: "Welcome, " })
-    private signInBtn = this.page.getByRole('link', { name: 'Sign In' })
-    private signOutBtn = this.page.getByRole('link', { name: 'Sign Out' })
-    private createAnAccountBtn = this.page.getByRole('link', { name: 'Create an Account' })
-    private changeDropDownBtn = this.page.locator('.customer-name').getByRole('button', { name: 'Change' })
+    private root = this.page.getByRole('banner')
 
-    private logoBtn = this.page.getByLabel('store logo')
+    private productList = this.root.locator('.minicart-items li')
 
-    private searchFld = this.page.getByPlaceholder('Search entire store here...')
-    private searchBtn = this.page.getByRole('button', { name: 'Search' })
+    public writeForUsBtn = this.root.locator('.not-logged-in', { hasText: "Write for us" })
+    public welcomeBtn = this.root.locator('.logged-in', { hasText: "Welcome, " })
+    private signInBtn = this.root.getByRole('link', { name: 'Sign In' })
+    private signOutBtn = this.root.getByRole('link', { name: 'Sign Out' })
+    private createAnAccountBtn = this.root.getByRole('link', { name: 'Create an Account' })
+    private changeDropDownBtn = this.root.locator('.customer-name').getByRole('button', { name: 'Change' })
 
-    private basketCounter: any = this.page.locator('.counter-number')
-    private basketCards: any = this.page.locator('#mini-cart')
-    private basketCartSubtotal: any = this.page.locator('.subtotal').locator('.price-wrapper')
+    private logoBtn = this.root.getByLabel('store logo')
 
-    private showBasketBtn = this.page.locator('.action.showcart')
-    private hideBasketBtn = this.page.locator('.action.showcart.active')
+    private searchFld = this.root.getByRole('combobox', { name: 'Search' })
+    private searchBtn = this.root.getByRole('button', { name: 'Search' })
+    private searchAutoComplete = (option) => this.root.locator('#search_autocomplete').getByRole('option', { name: option })
 
-    public proceedToCheckoutBtn = this.page.getByRole('button', { name: 'Proceed to Checkout' })
-    public viewAndEditCartBtn = this.page.getByRole('link', { name: 'View and Edit Cart' })
+    private basketCounter: any = this.root.locator('.counter-number')
+    private basketCards: any = this.root.locator('#mini-cart')
+    private basketCartSubtotal: any = this.root.locator('.subtotal').locator('.price-wrapper')
+
+    private showBasketBtn = this.root.locator('.action.showcart')
+    private hideBasketBtn = this.root.locator('.action.showcart.active')
+
+    public proceedToCheckoutBtn = this.root.getByRole('button', { name: 'Proceed to Checkout' })
+    public viewAndEditCartBtn = this.root.getByRole('link', { name: 'View and Edit Cart' })
 
     public acceptDeleteProductBtn = this.page.getByRole('button', { name: 'OK' })
 
-    private basketProductName: any = (index) =>  this.basketCards.locator('.product-item-name').nth(index)
-    private basketProductPrice: any = (index) => this.basketCards.locator('.price').nth(index)
-    private basketProductQuantity: any = (index) => this.basketCards.getByRole('spinbutton').nth(index)
+    public basketProductName = this.basketCards.locator('.product-item-name')
     private deleteProductBtn: any = (inputProductName?: string) =>  this.basketCards.locator('li', { hasText: inputProductName }).locator('.action.delete')
+
+
+    @step()
+    async getProductData(sortBy?:'name' | 'price'): Promise<Product> {
+        await this.openBasket();
+
+        const itemInCart = await this.page.locator('.items-total .count').textContent() || '';
+        const cartSubtotalCur = await this.basketCartSubtotal.textContent() || '';
+        const cartSubtotalInt = this.stringToNumb(cartSubtotalCur)
+
+
+        const allProductList = await this.productList.all();
+        let basketItems: Product['basketItems'] = [];
+
+        for (const productIndex of allProductList) {
+            const name = (await productIndex.locator('.product-item-name').innerText()) || '';
+            await productIndex.getByRole('tab', { name: 'See Details' }).click();
+            const size = (await productIndex.locator('.values').nth(0).innerText()) || '';
+            const color = (await productIndex.locator('.values').nth(1).innerText()) || '';
+            const priceCur = (await productIndex.locator('.price').innerText()) || '';
+            const priceInt = this.stringToNumb(priceCur)
+            const quantity = (await productIndex.getByRole('spinbutton').getAttribute('data-item-qty')) || '';
+
+            basketItems.push({ name, size, color, priceCur, priceInt, quantity });
+        }
+        if (sortBy === 'price') {
+            basketItems.sort((a, b) => a.priceInt - b.priceInt);
+        } else if (sortBy === 'name') {
+            basketItems.sort((a, b) => a.name.localeCompare(b.name));
+        }
+        return { itemInCart, cartSubtotalCur, cartSubtotalInt, basketItems };
+    }
 
     @step()
     async clickLogoBtn () {
@@ -47,7 +96,7 @@ export class HeaderElements extends BasePage {
     @step()
     async clickCreateAccountBtn () {
         await this.createAnAccountBtn.click()
-        await this.writeForUsBtn.waitFor({state: 'visible'})
+        await this.writeForUsBtn.waitFor()
     }
 
     @step()
@@ -60,8 +109,8 @@ export class HeaderElements extends BasePage {
 
     @step()
     async openBasket() {
-        await this.basketCounter.waitFor({ state: 'visible' })
-        if (await this.proceedToCheckoutBtn.isHidden({timeout:500}))
+        await this.basketCounter.waitFor()
+        if (await this.proceedToCheckoutBtn.isHidden({timeout:1000}))
             await this.showBasketBtn.click()
     }
 
@@ -71,27 +120,14 @@ export class HeaderElements extends BasePage {
     }
 
     @step()
-    async searchEntireStore (searchData: string) {
-        await this.searchFld.fill(searchData)
-        await this.searchBtn.click()
-    }
-
-    @step()
-    async getBasketProductName(index) {
-        await this.openBasket()
-        return (await this.basketProductName(index).textContent()).replace(/^[^a-zA-Z]*([a-zA-Z].*[a-zA-Z])[^a-zA-Z]*$/, '$1')
-    }
-
-    @step()
-    async getBasketProductPrice(index) {
-        await this.openBasket()
-        return await this.basketProductPrice(index).textContent()
-    }
-
-    @step()
-    async getBasketProductQuantity(index) {
-        await this.openBasket()
-        return await this.basketProductQuantity(index).getAttribute('data-item-qty')
+    async searchEntireStore(searchValue: string, option: 'all' | 'autocomplete') {
+        await this.searchFld.fill(searchValue)
+        let randomAutoCompleteIndex = this.getRandomNth(await this.searchAutoComplete(searchValue).count())
+        if (option === 'all') {
+            await this.searchBtn.click()
+        } else {
+            await this.searchAutoComplete(searchValue).nth(randomAutoCompleteIndex).click()
+        }
     }
 
     @step()
@@ -99,44 +135,6 @@ export class HeaderElements extends BasePage {
         let counter = await this.basketCounter.filter({ hasText: actualCounterNumber }).textContent({ timeout: 5000 })
         if (counter === '') counter = 0
         return parseInt(counter, 10)
-    }
-
-    @step()
-    async getCartSubtotalFromBasket() {
-        return parseFloat((await this.basketCartSubtotal.textContent()).replace("$", ""))
-    }
-
-    @step()
-    async getBasketData() {
-        await this.openBasket()
-
-        let itemInCart = await this.page.locator('.items-total .count').textContent()
-        let cartSubtotal = await this.getCartSubtotalFromBasket()
-
-        const productsData: {
-            name: any;
-            price: any;
-            quantity: any;
-        }[] = [];
-
-        let i = 0
-        let productsCount = await this.page.locator('#mini-cart li').locator('.product-item-name').count()
-
-        do {
-            const product = {
-            name: await this.getBasketProductName(i),
-            price: await this.getBasketProductPrice(i),
-            quantity: await this.getBasketProductQuantity(i)
-            }
-            productsData.push(product);
-            i++
-        } while (i < productsCount);
-
-        return {
-            itemInCart: itemInCart,
-            cartSubtotal: cartSubtotal,
-            ItemsData: productsData
-        }
     }
 
     @step()
@@ -153,32 +151,20 @@ export class HeaderElements extends BasePage {
     }
 
     @step()
-    async deleteProductFromTheBasket (inputProductName?: string) {
-        await this.showBasketBtn.click()
-        await this.deleteProductBtn(inputProductName).click()
+    async removeProductFromBasket (productName: string) {
+        await this.openBasket()
+        await this.basketProductName.filter({ hasText: productName }).locator('..').getByRole('link', { name: 'Remove' }).click()
         await this.acceptDeleteProductBtn.click()
-        await this.basketProductName(inputProductName).waitFor({ state: 'hidden' })
-        return await this.basketProductName(inputProductName).isVisible()
+        await this.basketProductName.filter({ hasText: productName }).waitFor({ state: 'hidden' })
     }
 
     @step()
-    async clearBasket () {
-        let countOfProducts = await this.basketCards.locator('li').count()
-        await this.showBasketBtn.click()
-        await this.basketCards.first().waitFor({ state: 'visible' })
-
-        while (countOfProducts !== 0) {
-            await this.deleteProductBtn().first().click()
-            await this.acceptDeleteProductBtn.click()
-            countOfProducts--
-            await this.page.waitForFunction(
-                (expectedCount) => {
-                    const liElements = Array.from(document.querySelectorAll('[id="mini-cart"] li'));
-                    return liElements.length === expectedCount;
-                }, countOfProducts
-            )
+    async removeAllFromBasket(product: Product) {
+        for (const item of product.basketItems) {
+            await this.removeProductFromBasket(item.name);
         }
-        countOfProducts = await this.basketCards.count()
-        return countOfProducts
     }
+
+    public calculateCartSubtotal = (basketData: { basketItems: { priceInt: number }[] }): number =>
+        basketData.basketItems.reduce((total, item) => total + item.priceInt, 0);
 }

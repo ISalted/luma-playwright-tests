@@ -40,8 +40,11 @@ type FilterOptions<T extends ShoppingOptions> =
 
 export class FilterSidebar extends BasePage {
 
-    private nowShoppingBy = this.page.locator('.filter-current')
-    public shoppingOption = (optionName: ShoppingOptions) => this.page.getByRole('tab', { name: `${optionName}` })
+    private root = this.page.locator('.sidebar-main')
+
+
+    private nowShoppingBy = this.root.locator('.filter-current')
+    public shoppingOption = (optionName: ShoppingOptions) => this.root.getByRole('tab', { name: `${optionName}` })
 
 
     @step()
@@ -53,7 +56,7 @@ export class FilterSidebar extends BasePage {
     async selectFilterOption<T extends ShoppingOptions>(optionName: T, filterOptions: FilterOptions<T>) {
         await this.shoppingOption(optionName).click()
         await this.shoppingOption(optionName).locator('..').getByRole('link', { name: filterOptions }).click({force:true})
-        await this.nowShoppingBy.locator('.filter-value', { hasText: filterOptions }).waitFor({state: 'visible'})
+        await this.nowShoppingBy.locator('.filter-value', { hasText: filterOptions }).waitFor()
     }
 
 

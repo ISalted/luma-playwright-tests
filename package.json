@@ -8,13 +8,15 @@
     "headed": "playwright test --headed",
     "ui": "playwright test --ui",
     "grep": "playwright test --grep",
-    "debug": "playwright test --debug" },
+    "debug": "playwright test --debug"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
     "@playwright/test": "^1.41.2",
+    "@testomatio/reporter": "^1.2.1",
     "@types/node": "^20.8.10"
   },
   "dependencies": {

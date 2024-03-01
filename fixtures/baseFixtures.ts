@@ -18,7 +18,3 @@ export const test = baseFixture.extend<{ pm: PageManager }>({
         await use(pm);
     }
 })
-
-
-
-

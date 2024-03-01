@@ -43,31 +43,31 @@ export class SinghUpPage extends Components {
 
     @step()
     async getExistingAccountMessage () {
-        await this.existingAccountMsg.waitFor({ state: 'visible' })
+        await this.existingAccountMsg.waitFor()
         return this.existingAccountMsg.textContent()
     }
 
     @step()
     async getInvalidEmailMessage () {
-        await this.emailErrorMsg.waitFor({ state: 'visible' })
+        await this.emailErrorMsg.waitFor()
         return this.emailErrorMsg.textContent()
     }
 
     @step()
     async getInvalidPasswordMessage () {
-        await this.passwordErrorMsg.waitFor({ state: 'visible' })
+        await this.passwordErrorMsg.waitFor()
         return this.passwordErrorMsg.textContent()
     }
 
     @step()
     async getInvalidConfirmPasswordMessage() {
-        await this.passwordCorfirmErrorMsg.waitFor({ state: 'visible' })
+        await this.passwordCorfirmErrorMsg.waitFor()
         return this.passwordCorfirmErrorMsg.textContent()
     }
 
     @step()
     async getPasswordStrengthMeter(expectedStrengt) {
-        await this.passwordStrengthMeter.getByText(expectedStrengt).waitFor({ state: 'visible' })
+        await this.passwordStrengthMeter.getByText(expectedStrengt).waitFor()
         return this.passwordStrengthMeter.textContent()
     }
 
