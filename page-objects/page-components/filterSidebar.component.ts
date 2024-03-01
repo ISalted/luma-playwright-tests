@@ -39,9 +39,7 @@ type FilterOptions<T extends ShoppingOptions> =
 
 
 export class FilterSidebar extends BasePage {
-
     private root = this.page.locator('.sidebar-main')
-
 
     private nowShoppingBy = this.root.locator('.filter-current')
     public shoppingOption = (optionName: ShoppingOptions) => this.root.getByRole('tab', { name: `${optionName}` })
