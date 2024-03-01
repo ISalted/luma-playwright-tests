@@ -11,7 +11,7 @@ import * as userData from "../data/userData";
  *  3. Get the welcome message from the header
  *  4. Verify that the welcome message contains the expected text
  */
-test('Sign In from Main Header Validation @signin', async ({ pm }) => {
+test('Sign In from Main Header Validation @signin @Tf771b398', async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickSignInBtn()
     await pm.onSignInPage.fillDataAndSignIn(userData.EXISTING_USER, 'clearCoockie')
@@ -31,7 +31,7 @@ test('Sign In from Main Header Validation @signin', async ({ pm }) => {
  *  4. Get the shipping address information.
  *  5. Verify that the shipping address information contains "Pennsylvania Avenue NW".
  */
-test("Sign In from Checkout Page Validation @signin", async ({ pm }) => {
+test("Sign In from Checkout Page Validation @signin @T5202493c", async ({ pm }) => {
     const listProductData = await pm.onMainPage.inProductList.getProductData()
 
     await pm.onMainPage.inProductList.addToCart(listProductData[0])
@@ -53,7 +53,7 @@ test("Sign In from Checkout Page Validation @signin", async ({ pm }) => {
  *  3. Get unsuccessful message after sign-in
  *  4. Verify that the unsuccessful message contains "The account sign-in was incorrect"
  */
-test("Sign In with Unregistered Email Validation @signin", async ({ pm }) => {
+test("Sign In with Unregistered Email Validation @signin @T88ea9c23", async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickSignInBtn()
     await pm.onSignInPage.fillWrongData(userData.UNREGISTERED_USER)
@@ -71,7 +71,7 @@ test("Sign In with Unregistered Email Validation @signin", async ({ pm }) => {
  *  3. Get unsuccessful message after sign-in
  *  4. Verify that the unsuccessful message contains "The account sign-in was incorrect"
  */
-test("Sign In with Invalid Email Validation @signin", async ({ pm }) => {
+test("Sign In with Invalid Email Validation @signin @T312e9f5a", async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickSignInBtn()
     await pm.onSignInPage.fillWrongData(userData.INVALID_EMAIL)
@@ -90,7 +90,7 @@ test("Sign In with Invalid Email Validation @signin", async ({ pm }) => {
  *  3. Get unsuccessful message after sign-in
  *  4. Verify that the unsuccessful message contains "The account sign-in was incorrect"
  */
-test("Sign In with Incorrect Pass Validation @signin", async ({ pm }) => {
+test("Sign In with Incorrect Pass Validation @signin @Td6e39774", async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickSignInBtn()
     await pm.onSignInPage.fillWrongData(userData.INCORRECT_PASS_USER)
@@ -108,7 +108,7 @@ test("Sign In with Incorrect Pass Validation @signin", async ({ pm }) => {
  *  3. Get the error message for the empty email
  *  4. Verify that the error message contains the expected text
  */
-test("Test login with empty email @signin", async ({ pm }) => {
+test("Test login with empty email @signin @Tbde9b9f9", async ({ pm }) => {
     await pm.onMainPage.inHeader.clickSignInBtn()
     await pm.onSignInPage.fillWrongData(userData.EMPTY_EMAIL_USER)
     let unsuccessfulMssg = await pm.onSignInPage.getEmailErrorMsg()
@@ -125,7 +125,7 @@ test("Test login with empty email @signin", async ({ pm }) => {
  *  3. Get the error message for the empty password
  *  4. Verify that the error message contains the expected text
  */
-test("Test Login with Empty Pass @signin", async ({ pm }) => {
+test("Test Login with Empty Pass @signin @T8cc86174", async ({ pm }) => {
     await pm.onMainPage.inHeader.clickSignInBtn()
     await pm.onSignInPage.fillWrongData(userData.EMPTY_PASS_USER)
     let unsuccessfulMssg = await pm.onSignInPage.getPassErrorMsg()

@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "sync": "TESTOMATIO=tstmt_R69WfgZh_b_s5lDJeHvzzG0ZfQTC1k0Ixg1709316812 npx check-tests@latest Playwright \"**/*{.,_}{test,spec,cy}.ts\" --update-ids ",
     "test": "playwright test",
     "headed": "playwright test --headed",
     "ui": "playwright test --ui",

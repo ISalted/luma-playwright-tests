@@ -12,7 +12,7 @@ import { th } from "@faker-js/faker";
  *  3. Get the name of the product item from the basket.
  *  4. Verify that the product name retrieved from the grid contains the product name from the basket.
  */
-test("AddToBasket Button Functionality @order", async ({ pm }) => {
+test("AddToBasket Button Functionality @order @T9cb92151", async ({ pm }) => {
 
     const listProductData = await pm.onMainPage.inProductList.getProductData()
     await pm.onMainPage.inProductList.addToCart(listProductData[3])
@@ -32,7 +32,7 @@ test("AddToBasket Button Functionality @order", async ({ pm }) => {
  *  3. Get the name of the product item from the basket.
  *  4. Verify that the product name retrieved from the grid contains the product name from the basket.
  */
-test("Remove Button Functionality in the Shopping Cart @order", async ({ pm }) => {
+test("Remove Button Functionality in the Shopping Cart @order @Te4d83d95", async ({ pm }) => {
     const listProductData = await pm.onMainPage.inProductList.getProductData()
 
     await pm.onMainPage.inProductList.addToCart(listProductData[3])
@@ -57,7 +57,7 @@ test("Remove Button Functionality in the Shopping Cart @order", async ({ pm }) =
  *  7. Place the order.
  *  8. Verify that a success notification is displayed after placing the order.
  */
-test("Place order @order", async ({ pm }) => {
+test("Place order @order @Td30ac75a", async ({ pm }) => {
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
     await pm.onSignUpPage.fillDataAndCreateAnAccount(userData.UNIQUE_EMAIL_AND_PASS_USER())
     await pm.onSignUpPage.inHeader.clickLogoBtn()
@@ -83,7 +83,7 @@ test("Place order @order", async ({ pm }) => {
  *  3. Get the item count displayed on the cart icon.
  *  4. Verify that the quantity of items in the basket is correct.
  */
-test("Quantity of Products in Basket Updates after Addition @order", async ({ pm }) => {
+test("Quantity of Products in Basket Updates after Addition @order @Te9c369da", async ({ pm }) => {
 
     await pm.onMainPage.inUiMenu.selectMenuItem("Women", "Tops")
     const listProductData = await pm.onMainPage.inProductList.getProductData()
@@ -105,7 +105,7 @@ test("Quantity of Products in Basket Updates after Addition @order", async ({ pm
  *  3. Get the subtotal from the cart.
  *  4. Verify that the total price sum matches the cart subtotal.
  */
-test("Cart total is correctly calculated @order", async ({ pm }) => { ///////
+test("Cart total is correctly calculated @order @T8089c666", async ({ pm }) => { ///////
     const listProductData = await pm.onMainPage.inProductList.getProductData()
 
     await pm.onMainPage.inProductList.addToCart(listProductData[0])
@@ -132,7 +132,7 @@ test("Cart total is correctly calculated @order", async ({ pm }) => { ///////
  *   6. Get the name of the product in the basket.
  *   7. Verify that the previously added product name contains the product name in the basket.
  */
-test("Сart persistence across user sessions @order", async ({ pm }) => {
+test("Сart persistence across user sessions @order @Tf94b302b", async ({ pm }) => {
     const userCredential = userData.UNIQUE_EMAIL_AND_PASS_USER()
     const listProductData = await pm.onMainPage.inProductList.getProductData()
 
@@ -162,7 +162,7 @@ test("Сart persistence across user sessions @order", async ({ pm }) => {
  *   3. Add another product to the shopping cart.
  *   4. Verify the success alert message containing the new product name.
  */
-test("Check For a Confirmation Message After Adding Product @order", async ({ pm }) => {
+test("Check For a Confirmation Message After Adding Product @order @Tac2df564", async ({ pm }) => {
 
     const listProductData = await pm.onMainPage.inProductList.getProductData()
     await pm.onMainPage.inProductList.addToCart(listProductData[0])
@@ -188,7 +188,7 @@ test("Check For a Confirmation Message After Adding Product @order", async ({ pm
  *  6. Get the name of the product in the basket.
  *  7. Verify that the previously added product name contains the product name in the basket.
  */
-test("Add To Basket with Registered User @order", async ({ pm }) => {
+test("Add To Basket with Registered User @order @T2f4f31a7", async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
     await pm.onSignUpPage.fillDataAndCreateAnAccount(userData.UNIQUE_EMAIL_AND_PASS_USER())
@@ -211,7 +211,7 @@ test("Add To Basket with Registered User @order", async ({ pm }) => {
  *  3. Get the name of the product in the basket.
  *  4. Verify that the previously added product name contains the product name in the basket.
  */
-test("Add To Basket with Guest User @order", async ({ pm }) => {
+test("Add To Basket with Guest User @order @Ta81639dc", async ({ pm }) => {
 
     const listProductData = await pm.onMainPage.inProductList.getProductData()
 
@@ -235,7 +235,7 @@ test("Add To Basket with Guest User @order", async ({ pm }) => {
  *  7. Get the current count of items in the basket after placing the order.
  *  8. Verify that the basket count after ordering is 0, indicating that the basket is emptied.
  */
-test("Basket is Emptied after Placing an Order @order", async ({ pm }) => {
+test("Basket is Emptied after Placing an Order @order @T04843b76", async ({ pm }) => {
     const listProductData = await pm.onMainPage.inProductList.getProductData()
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
@@ -264,7 +264,7 @@ test("Basket is Emptied after Placing an Order @order", async ({ pm }) => {
  *  6. Fill shipping details and retrieve the entered data.
  *  7. Verify that the entered shipping details match the provided data.
  */
-test("Users can Add Shipping Addresses @order", async ({ pm }) => {
+test("Users can Add Shipping Addresses @order @T550b82b5", async ({ pm }) => {
     const listProductData = await pm.onMainPage.inProductList.getProductData()
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
@@ -301,7 +301,7 @@ test("Users can Add Shipping Addresses @order", async ({ pm }) => {
  * 12. Verify that the shipping information details have been edited and are not the same as the original ones.
  * 13. Verify that the edited shipping details match the provided unique data.
  */
-test("Users can Edit Shipping Addresses @order", async ({ pm }) => {
+test("Users can Edit Shipping Addresses @order @T2e960bc7", async ({ pm }) => {
     const listProductData = await pm.onMainPage.inProductList.getProductData()
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
@@ -329,7 +329,7 @@ test("Users can Edit Shipping Addresses @order", async ({ pm }) => {
  *  2. Attempt to clear the basket from the header.
  *  3. Verify that the count of items in the basket is 0.
  */
-test("Remove All from Basket @order", async ({ pm }) => {
+test("Remove All from Basket @order @T41f44b68", async ({ pm }) => {
     const listProductData = await pm.onMainPage.inProductList.getProductData()
 
     await pm.onMainPage.inProductList.addToCart(listProductData[0])
@@ -352,7 +352,7 @@ test("Remove All from Basket @order", async ({ pm }) => {
  *  3. Remove all items from the shopping cart.
  *  4. Verify that the count of items in the basket is 0.
  */
-test("Remove All from Shopping Cart @order", async ({ pm }) => {
+test("Remove All from Shopping Cart @order @T8c6c5ff4", async ({ pm }) => {
     const listProductData = await pm.onMainPage.inProductList.getProductData()
 
     await pm.onMainPage.inProductList.addToCart(listProductData[0])
@@ -376,7 +376,7 @@ test("Remove All from Shopping Cart @order", async ({ pm }) => {
  *  2. Attempt to clear the basket from the header.
  *  3. Verify that the count of items in the basket is 0.
  */
-test("Remove Cheapest Item from Shopping Cart @order", async ({ pm }) => {
+test("Remove Cheapest Item from Shopping Cart @order @Tdc8594b2", async ({ pm }) => {
     const listProductData = await pm.onMainPage.inProductList.getProductData()
 
     await pm.onMainPage.inProductList.addToCart(listProductData[0])

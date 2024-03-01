@@ -11,7 +11,7 @@ import * as userData from "../data/userData";
  *  3. Get success message after registration from My Account page
  *  4. Verify that the success message contains "Thank you for registering"
  */
-test("Sign Up with Valid Information @signup", async ({ pm }) => {
+test("Sign Up with Valid Information @signup @Tc460bfc9", async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
     await pm.onSignUpPage.fillDataAndCreateAnAccount(userData.UNIQUE_EMAIL_AND_PASS_USER())
@@ -30,7 +30,7 @@ test("Sign Up with Valid Information @signup", async ({ pm }) => {
  *   3. Get unsuccessful message from sign up page indicating existing account
  *   4. Verify that the unsuccessful message contains "There is already an account with this email address"
  */
-test("Sign Up Existing User Validation @signup", async ({ pm }) => {
+test("Sign Up Existing User Validation @signup @T5a9989cd", async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
     await pm.onSignUpPage.fillDataAndCreateAnAccount(userData.EXISTING_USER)
@@ -48,7 +48,7 @@ test("Sign Up Existing User Validation @signup", async ({ pm }) => {
  *   2. Fill in data and create an account with incorrect email
  *   3. Check for invalid email message
  */
-test("Sign Up with Incorrect Email Validation @signup", async ({ pm }) => {
+test("Sign Up with Incorrect Email Validation @signup @T25b93ab3", async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
     await pm.onSignUpPage.fillDataAndCreateAnAccount(userData.INVALID_EMAIL)
@@ -66,7 +66,7 @@ test("Sign Up with Incorrect Email Validation @signup", async ({ pm }) => {
  *   3. Get invalid password message from sign up page
  *   4. Verify that the invalid password message contains the expected text
  */
-test("Sign Up with Incorrect Password Validation @signup", async ({ pm }) => {
+test("Sign Up with Incorrect Password Validation @signup @T6487d101", async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
     await pm.onSignUpPage.fillDataAndCreateAnAccount(userData.INCORRECT_PASS_USER)
@@ -85,7 +85,7 @@ test("Sign Up with Incorrect Password Validation @signup", async ({ pm }) => {
  *   3. Get the invalid confirm password message from the sign-up page
  *   4. Verify that the invalid confirm password message contains the expected text
  */
-test("Sign Up with Non same value Validation @signup", async ({ pm }) => {
+test("Sign Up with Non same value Validation @signup @Te80c3c2a", async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
     await pm.onSignUpPage.fillDataAndCreateAnAccount(userData.DIFFERENT_PASS_USER)
@@ -104,7 +104,7 @@ test("Sign Up with Non same value Validation @signup", async ({ pm }) => {
  *   3. Get the invalid email message from the sign-up page
  *   4. Verify that the invalid email message contains the expected text
  */
-test("Sign Up with Empty Email Validation @signup", async ({ pm }) => {
+test("Sign Up with Empty Email Validation @signup @T57940b3d", async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
     await pm.onSignUpPage.fillDataAndCreateAnAccount(userData.EMPTY_EMAIL_USER)
@@ -122,7 +122,7 @@ test("Sign Up with Empty Email Validation @signup", async ({ pm }) => {
  *   3. Get the invalid password message from the sign-up page
  *   4. Verify that the invalid password message contains the expected text
  */
-test("Sign Up with Empty Password Validation @signup", async ({ pm }) => {
+test("Sign Up with Empty Password Validation @signup @T79c08c84", async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
     await pm.onSignUpPage.fillDataAndCreateAnAccount(userData.EMPTY_PASS_USER)
@@ -146,7 +146,7 @@ test("Sign Up with Empty Password Validation @signup", async ({ pm }) => {
  *   9. Fill in registration data and create an account with a very strong password
  *   10. Get password strength meter value and verify it contains 'Very Strong'
  */
-test("Password Strength Validation During Registration @signup", async ({ pm }) => {
+test("Password Strength Validation During Registration @signup @Tbde9cb48", async ({ pm }) => {
 
     await pm.onMainPage.inHeader.clickCreateAccountBtn()
     let passwordStrengthMeter = await pm.onSignUpPage.getPasswordStrengthMeter('No Password')

@@ -8,7 +8,7 @@ import { test, expect } from "../fixtures/baseFixtures"
  *  2. Apply the 'Hooded' style filter.
  *  3. Verify that the 'Style' filter option is not visible in the 'Now Shopping' section.
  */
-test("Style Sorting Option on the Product Listing @listing", async ({ pm }) => {
+test("Style Sorting Option on the Product Listing @listing @Ta81a9203", async ({ pm }) => {
 
     await pm.onMainPage.inUiMenu.selectMenuItem('Men' ,'Tops' , 'Jackets')
     await pm.onProductListingPage.inFilterSidebar.selectFilterOption('Style', 'Hooded')
@@ -25,7 +25,7 @@ test("Style Sorting Option on the Product Listing @listing", async ({ pm }) => {
  *  3. Verify that products with size '33' are displayed in the product grid.
  *  4. Verify that the 'Size' filter option is not visible in the current shopping state.
  */
-test("Size Sorting Option on the Product Listing @listing", async ({ pm }) => {
+test("Size Sorting Option on the Product Listing @listing @Tf7f2a133", async ({ pm }) => {
 
     await pm.onMainPage.inUiMenu.selectMenuItem('Men', 'Bottoms', 'Pants')
 
@@ -44,7 +44,7 @@ test("Size Sorting Option on the Product Listing @listing", async ({ pm }) => {
  *  4. Verify that the 'Price' filter option is not visible in the current shopping state.
  *  5. Verify that all product prices fall within the selected price range.
  */
-test("Price Sorting Option on the Product Listing @listing", async ({ pm }) => {
+test("Price Sorting Option on the Product Listing @listing @T2c0ad8e0", async ({ pm }) => {
 
     await pm.onMainPage.inUiMenu.selectMenuItem('Gear', 'Bags')
 
@@ -64,7 +64,7 @@ test("Price Sorting Option on the Product Listing @listing", async ({ pm }) => {
  *  3. Verify that the 'Color' filter option is not visible in the current shopping state.
  *  4. Verify that all products displayed have the color 'Orange'.
  */
-test("Color sorting Option on the Product Listing @listing", async ({ pm }) => {
+test("Color sorting Option on the Product Listing @listing @T1780d5b7", async ({ pm }) => {
 
     await pm.onMainPage.inUiMenu.selectMenuItem('Men', 'Tops')
 
@@ -85,7 +85,7 @@ test("Color sorting Option on the Product Listing @listing", async ({ pm }) => {
  *  5. Verify that the 'Material' filter option is not visible in the current shopping state.
  *  6. Verify that the product list after applying the material filter is different from the initial list.
  */
-test("Material Sorting Option on the Product Listing @listing", async ({ pm }) => {
+test("Material Sorting Option on the Product Listing @listing @T3793221f", async ({ pm }) => {
 
     await pm.onMainPage.inUiMenu.selectMenuItem('Women', 'Tops')
 
@@ -108,7 +108,7 @@ test("Material Sorting Option on the Product Listing @listing", async ({ pm }) =
  *  5. Verify that the 'New' filter option is not visible in the current shopping state.
  *  6. Verify that the product list after applying the 'New' filter is different from the initial list.
  */
-test("New Sorting Option on the Product Listing @listing", async ({ pm }) => {
+test("New Sorting Option on the Product Listing @listing @T079154fb", async ({ pm }) => {
 
     await pm.onMainPage.inUiMenu.selectMenuItem('Men', 'Bottoms')
 
@@ -131,7 +131,7 @@ test("New Sorting Option on the Product Listing @listing", async ({ pm }) => {
  *  5. Verify that the 'Sale' filter option is not visible in the current shopping state.
  *  6. Verify that the product list after applying the 'Sale' filter is different from the initial list.
  */
-test("Sale Sorting Option on the Product Listing @listing", async ({ pm }) => {
+test("Sale Sorting Option on the Product Listing @listing @T2b505524", async ({ pm }) => {
 
     await pm.onMainPage.inUiMenu.selectMenuItem('Women', 'Tops', 'Hoodies & Sweatshirts')
 
@@ -154,7 +154,7 @@ test("Sale Sorting Option on the Product Listing @listing", async ({ pm }) => {
  *  5. Verify that the 'New' filter option is not visible in the current shopping state.
  *  6. Verify that the product list after applying the 'New' filter is different from the initial list.
  */
-test("Climat Style Sorting on the Product Listing @listing", async ({ pm }) => {
+test("Climat Style Sorting on the Product Listing @listing @Tdef525d7", async ({ pm }) => {
 
     await pm.onMainPage.inUiMenu.selectMenuItem('Gear', 'Fitness Equipment')
 
@@ -177,7 +177,7 @@ test("Climat Style Sorting on the Product Listing @listing", async ({ pm }) => {
  *  5. Verify that the product prices after sorting are not the same as before sorting.
  *  6. Verify that the product prices after sorting are in ascending order.
  */
-test("Sorting Products by Price @listing", async ({ pm }) => {
+test("Sorting Products by Price @listing @Tdeeb361b", async ({ pm }) => {
 
     await pm.onMainPage.inUiMenu.selectMenuItem('Men', 'Tops', 'Tees')
 
@@ -201,7 +201,7 @@ test("Sorting Products by Price @listing", async ({ pm }) => {
  *  5. Verify that the product names after sorting are not the same as before sorting.
  *  6. Verify that the product names after sorting are in alphabetical order.
  */
-test("Sorting Products by Name @listing", async ({ pm }) => {
+test("Sorting Products by Name @listing @T876dd079", async ({ pm }) => {
 
     await pm.onMainPage.inUiMenu.selectMenuItem('Men', 'Tops', 'Tees')
 
