@@ -2,7 +2,7 @@ name: Playwright Tests
 on:
     push:
         branches: [ main ]
-        
+
     pull_request:
         branches: [ main ]
 
@@ -30,5 +30,7 @@ jobs:
                 npm install
                 npx playwright install chromium
                 npm run test -- --grep "${{ github.event.inputs.grep }}"
+              env:
+                GH_PAT: ${{ github.token }}
 
 
