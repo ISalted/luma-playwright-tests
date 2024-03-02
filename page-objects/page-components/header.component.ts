@@ -73,11 +73,9 @@ export class HeaderElements extends BasePage {
 
             basketItems.push({ name, size, color, priceCur, priceInt, quantity });
         }
-        if (sortBy === 'price') {
-            basketItems.sort((a, b) => a.priceInt - b.priceInt);
-        } else if (sortBy === 'name') {
-            basketItems.sort((a, b) => a.name.localeCompare(b.name));
-        }
+        
+        basketItems.sort((a, b) => sortBy === 'price' ? a.priceInt - b.priceInt : (sortBy === 'name' ? a.name.localeCompare(b.name) : 0));
+
         return { itemInCart, cartSubtotalCur, cartSubtotalInt, basketItems };
     }
 

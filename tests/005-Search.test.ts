@@ -17,7 +17,3 @@ test("Searching with Special Characters @search @T0391dda4", async ({ pm }) => {
 })
 
 
-// test("Test searching for out-of-stock products", async ({ pm }) => {
-
-// })
-
