@@ -1,0 +1,2 @@
+old_email danil.chumak@megogo.net
+new_email danylochumak@gmail.com
